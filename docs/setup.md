@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- **Node.js** v20+
+- **Node.js** v22+
 - **npm** v10+
 - **Git**
 - A **Supabase** (or PostgreSQL) database

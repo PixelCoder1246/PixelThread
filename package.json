@@ -7,6 +7,9 @@
     "client",
     "server"
   ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "npm run dev --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
