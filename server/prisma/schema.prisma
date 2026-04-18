@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model User {
+  id              String    @id @default(cuid())
+  name            String?
+  email           String    @unique
+  password        String
+  image           String?
+
+  role            UserRole  @default(USER)
+
+  isEmailVerified Boolean   @default(false)
+  lastLoginAt     DateTime?
+
+  sessions        Session[]
+
+  posts           Post[]
+  comments        Comment[]
+  likes           Like[]
+  aiLogs          AIGeneration[]
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  expiresAt    DateTime
+
+  ipAddress    String?
+  userAgent    String?
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Post {
+  id            String      @id @default(cuid())
+  title         String
+  slug          String      @unique
+  content       String
+  excerpt       String?
+
+  status        PostStatus  @default(DRAFT)
+  visibility    Visibility  @default(PUBLIC)
+
+  authorId      String
+  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  seo           SeoMeta?
+  tags          PostTag[]
+  analytics     PostAnalytics?
+
+  comments      Comment[]
+  likes         Like[]
+  aiLogs        AIGeneration[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  publishedAt   DateTime?
+}
+
+model SeoMeta {
+  id              String  @id @default(cuid())
+  postId          String  @unique
+
+  metaTitle       String?
+  metaDescription String?
+  keywords        String?
+  canonicalUrl    String?
+
+  score           Int?
+
+  post            Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+
+  posts     PostTag[]
+}
+
+model PostTag {
+  postId String
+  tagId  String
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+
+  postId    String
+  userId    String
+  parentId  String?
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+
+  likes     Like[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String?
+  commentId String?
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+}
+
+model AIGeneration {
+  id          String            @id @default(cuid())
+  userId      String
+  postId      String?
+
+  type        AIGenerationType
+
+  prompt      String
+  response    String
+
+  createdAt   DateTime          @default(now())
+
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post        Post?             @relation(fields: [postId], references: [id], onDelete: SetNull)
+}
+
+model PostAnalytics {
+  id        String   @id @default(cuid())
+  postId    String   @unique
+
+  views     Int      @default(0)
+  likes     Int      @default(0)
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum AIGenerationType {
+  BLOG
+  SEO
+  REWRITE
+  TITLE
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}

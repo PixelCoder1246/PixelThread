@@ -1,0 +1,31 @@
+{
+  "name": "pixelthread-root",
+  "version": "0.0.0",
+  "private": true,
+  "description": "PixelThread Monorepo",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "npm run format --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "client/**/*.{js,jsx,ts,tsx}": [
+      "npm run lint --prefix client",
+      "npm run format --prefix client"
+    ],
+    "server/**/*.js": [
+      "npm run lint --prefix server",
+      "npm run format --prefix server"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0"
+  }
+}
