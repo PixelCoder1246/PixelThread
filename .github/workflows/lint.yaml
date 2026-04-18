@@ -22,19 +22,20 @@ jobs:
     defaults:
       run:
         working-directory: ${{ matrix.directory }}
-
+    
     steps:
       - uses: actions/checkout@v4
       
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
           cache: 'npm'
-          cache-dependency-path: '${{ matrix.directory }}/package-lock.json'
+          cache-dependency-path: 'package-lock.json' # Cache using the root lockfile
       
       - name: Install dependencies
+        working-directory: . # Run install at the root so Husky doesn't fail
         run: npm install
       
       - name: Run lint
-        run: npm run lint
+        run: npm run lint # Runs inside the specific matrix.directory
