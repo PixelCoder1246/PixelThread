@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0] - 2026-06-21
+
+### Added
+- Created `server/src/routes/post.routes.js` with mock posts and post creation endpoints.
+- Implemented `verifiedOnly` middleware in `server/src/middleware/auth.middleware.js` to restrict unverified users.
+- Added `cookie-parser` dependency to backend.
+- Created `createdAPIs.md` referencing HTTP-only cookie-based APIs and routes.
+
+### Changed
+- Migrated authentication token exchange from JSON bodies to HTTP-only secure cookies (`accessToken` and `refreshToken`).
+- Implemented refresh token rotation with atomic database session regeneration and session revocation on logout.
+- Hashed refresh tokens before storage in PostgreSQL using SHA-256.
+- Updated `protect` middleware to parse tokens from cookie headers.
+- Restricted login for accounts with unverified emails (`user.isEmailVerified === false`).
+- Cleaned up unused imports/variables and resolved all linter warnings.
+- Promoted all workspaces and root-level package versions to `0.1.0`.
+
 ## [0.0.0] - 2026-04-18
 
 ### Added

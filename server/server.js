@@ -1,12 +1,5 @@
 require('dotenv').config();
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
 const app = require('./src/app');
-
-app.use(helmet());
-app.use(cors());
-app.use(morgan('dev'));
 
 const PORT = process.env.PORT || 5000;
 

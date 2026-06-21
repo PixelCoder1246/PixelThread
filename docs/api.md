@@ -1,6 +1,6 @@
 # API Documentation
 
-> **Status**: Base structure initialized (v0.0.0). Routes are placeholders pending feature development.
+> **Status**: Authentication, Sessions, and Email Verification constraints implemented (v0.1.0). See [createdAPIs.md](../createdAPIs.md) for full setup instructions and Postman reference.
 
 ## Base URL
 

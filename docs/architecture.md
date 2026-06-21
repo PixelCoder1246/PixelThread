@@ -87,6 +87,9 @@ Husky runs `lint-staged` on every commit, applying ESLint and Prettier to only t
 ### CI via GitHub Actions
 The `lint.yaml` workflow uses a **matrix strategy** to lint `client` and `server` in parallel, with **path filters** so CI only runs when relevant directories are modified, and **dependency caching** for speed.
 
+### Secure Cookie-Based Authentication
+Access tokens (`15m` expiry) and refresh tokens (`30d` expiry) are issued as secure `HttpOnly` cookies. Refresh tokens are hashed via SHA-256 before being stored in the database. A token rotation strategy (revoking the old session and generating a new session upon refresh) mitigates replay attacks. Email verification status is enforced across restricted endpoints.
+
 ---
 
 ## Database Schema Overview
