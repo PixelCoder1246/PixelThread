@@ -5,7 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-06-22
+
+### Added
+- Implemented full V1 Post module at `server/src/modules/post/`:
+  - `slug.util.js` — `slugify()` converter and `generateUniqueSlug()` with numeric increment strategy and DB uniqueness enforcement.
+  - `post.validation.js` — `validateCreatePost`, `validateUpdatePost`, `validatePagination` helpers throwing `ApiError` for consistent error handling.
+  - `post.service.js` — All Prisma queries: tag upsert via `tag.upsert`, `PostAnalytics` auto-creation on post creation, `PostTag` delete-then-recreate on update, owner/admin authorization, formatted response shape.
+  - `post.controller.js` — Thin controllers delegating to service, returning `sendSuccess()` responses.
+  - `post.routes.js` — Route definitions: `GET /` (public), `GET /:slug` (public), `POST /` (auth+verified), `PUT /:id` (auth+verified), `DELETE /:id` (auth+verified).
+- 5 new API endpoints: `GET /api/posts`, `GET /api/posts/:slug`, `POST /api/posts`, `PUT /api/posts/:id`, `DELETE /api/posts/:id`.
+- Tag auto-creation: missing tags are created via `upsert` on `Tag.name` (normalized to lowercase), linked through `PostTag` join table.
+- `PostAnalytics` record (views=0, likes=0) created automatically alongside each new post.
+- Ownership enforcement: only post author or `ADMIN` role may update or delete posts (checked in service layer).
+- `ARCHIVED` status blocked during post creation; allowed only on update.
+- `upload.util.js` — Multer config, `uploadToS3Mock()`, and `deletePostImages()` utility for cleaning up uploaded files from disk.
+- **Silent token refresh**: `protect` middleware in `auth.middleware.js` now auto-refreshes expired access tokens via the refresh token cookie (with full session rotation) — users never see a 401 from token expiry.
+- **Orphaned image cleanup**: `deletePostImages()` called in `post.service.js` before deleting a post, removing all associated uploaded files from disk.
+- ESLint clean: 0 errors, 0 warnings across all new module files.
+
+### Changed
+- **Auth module refactored**: Auth routes and controller migrated from flat `controllers/` and `routes/` dirs to `modules/auth/`. Business logic extracted from `auth.controller.js` into new `auth.service.js` — matching the controller→service pattern established by the post module.
+- `server/src/app.js`: route imports switched from `./routes/` to `./modules/<feature>/`.
+- `server/src/routes/post.routes.js` and `server/src/routes/auth.routes.js`: deleted.
+- `createdAPIs.md`: fully rewritten with complete Postman-ready documentation for all 15 endpoints (10 auth + 5 posts), including validation tables and full example request/response bodies.
+- `docs/architecture.md`: updated to reflect the `modules/` structure and Post module design decisions.
+- Bumped all package versions to `0.2.0`.
+
 ## [0.1.0] - 2026-06-21
+
 
 ### Added
 - Created `server/src/routes/post.routes.js` with mock posts and post creation endpoints.

@@ -1,6 +1,6 @@
 # API Documentation
 
-> **Status**: Authentication, Sessions, and Email Verification constraints implemented (v0.1.0). See [createdAPIs.md](../createdAPIs.md) for full setup instructions and Postman reference.
+> **Status**: Auth and Post modules fully implemented (v0.2.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
 
 ## Base URL
 
@@ -20,37 +20,36 @@ Returns a welcome message to confirm the API is running.
 **Response**: `200 OK`
 ```json
 {
-  "message": "Welcome to PixelThread API"
+  "success": true,
+  "message": "PixelThread API is running!"
 }
 ```
 
 ---
 
-## Planned Endpoints
+## Implemented Endpoints
 
-The following endpoints will be implemented as features are developed. The server directory structure is pre-organized to support these routes:
+### Auth (`/api/auth`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | None | Register a new user |
+| `POST` | `/api/auth/verify-email` | None | Verify email with token |
+| `POST` | `/api/auth/resend-verification` | None | Resend verification email |
+| `POST` | `/api/auth/login` | None | Login, sets `accessToken` + `refreshToken` cookies |
+| `POST` | `/api/auth/logout` | `accessToken` cookie | Logout, clears cookies + deletes session |
+| `POST` | `/api/auth/refresh` | `refreshToken` cookie | Explicit token rotation |
+| `GET` | `/api/auth/me` | `accessToken` cookie | Get current authenticated user |
+| `POST` | `/api/auth/forgot-password` | None | Send password reset email |
+| `POST` | `/api/auth/reset-password` | None | Reset password with token |
 
-### Auth
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/api/auth/register` | Register a new user |
-| `POST` | `/api/auth/login` | Login and receive a session token |
-| `POST` | `/api/auth/logout` | Invalidate the current session |
-
-### Users
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/users/:id` | Get a user's public profile |
-| `PATCH` | `/api/users/:id` | Update user profile |
-
-### Posts
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/posts` | List all published blog posts |
-| `GET` | `/api/posts/:slug` | Get a single blog post by its slug |
-| `POST` | `/api/posts` | Create a new blog post (draft or published) |
-| `PATCH` | `/api/posts/:id` | Update an existing post (content, status, tags, etc.) |
-| `DELETE` | `/api/posts/:id` | Delete a post |
+### Posts (`/api/posts`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/posts` | None | List published posts (paginated) |
+| `GET` | `/api/posts/:slug` | None | Get a post by slug |
+| `POST` | `/api/posts` | `accessToken` + verified email | Create a post (multipart, supports images) |
+| `PUT` | `/api/posts/:id` | `accessToken` + verified email | Update a post (owner or admin) |
+| `DELETE` | `/api/posts/:id` | `accessToken` + verified email | Delete a post (owner or admin) — also removes uploaded images |
 
 ### SEO
 | Method | Path | Description |

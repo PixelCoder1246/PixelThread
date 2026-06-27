@@ -49,14 +49,21 @@ PixelThread/
 │   ├── src/
 │   │   ├── app.js              # Express app instance
 │   │   ├── config/             # DB and app config (db.js)
-│   │   ├── controllers/        # Route handler logic
-│   │   ├── routes/             # Express route definitions
-│   │   ├── middleware/         # Custom Express middleware
-│   │   ├── services/           # Business logic layer
+│   │   ├── middleware/         # Custom Express middleware (auth, errorHandler)
+│   │   ├── services/           # Shared services (email.service.js)
 │   │   ├── lib/
 │   │   │   └── ai/             # AI generation utilities (future)
-│   │   ├── modules/            # Feature modules
-│   │   └── utils/              # Utility/helper functions
+│   │   ├── modules/            # Feature modules (module-per-feature pattern)
+│   │   │   ├── auth/           # Auth feature module (v0.2.0)
+│   │   │   │   ├── auth.routes.js      # Route definitions
+│   │   │   │   ├── auth.controller.js  # Thin request handlers
+│   │   │   │   └── auth.service.js     # Business logic (register, login, tokens, etc.)
+│   │   │   └── post/           # Post feature module (v0.2.0)
+│   │   │       ├── post.routes.js      # Route definitions
+│   │   │       ├── post.controller.js  # Thin request handlers
+│   │   │       ├── post.service.js     # Prisma queries + business logic
+│   │   │       └── post.validation.js  # Input validation (throws ApiError)
+│   │   └── utils/              # Utility/helper functions (ApiError, ApiResponse, jwt, slug.util.js, upload.util.js)
 │   ├── prisma.config.ts        # Prisma 7 configuration file
 │   └── server.js               # Entry point (bootstraps Express)
 ├── docs/                       # Project documentation
@@ -89,6 +96,18 @@ The `lint.yaml` workflow uses a **matrix strategy** to lint `client` and `server
 
 ### Secure Cookie-Based Authentication
 Access tokens (`15m` expiry) and refresh tokens (`30d` expiry) are issued as secure `HttpOnly` cookies. Refresh tokens are hashed via SHA-256 before being stored in the database. A token rotation strategy (revoking the old session and generating a new session upon refresh) mitigates replay attacks. Email verification status is enforced across restricted endpoints.
+
+### Silent Token Refresh
+The `protect` middleware automatically refreshes expired access tokens using the refresh token cookie — no 401 responses are returned due to token expiry. The middleware verifies the refresh token, checks the DB session, generates a new access + refresh token pair (with full session rotation), sets the new cookies, and continues the request to the route handler seamlessly.
+
+### Module-Per-Feature Architecture
+All features are implemented as self-contained modules under `src/modules/<feature>/`. Each module owns its routes, controller, service, validation, and utilities — making it easy to isolate, test, and extend each domain. This pattern ensures a clean, organized, and scalable codebase.
+
+### Post Slug Strategy
+Slugs are auto-generated from the post title using a `slugify()` function (lowercase, hyphenated, stripped special chars). If the base slug conflicts with an existing post, a numeric suffix is appended (`-2`, `-3`, …). On title updates, the slug is regenerated and uniqueness is re-enforced, excluding the post being updated from the conflict check.
+
+### Tag Upsert Pattern
+Tags are normalised to lowercase and stored with a unique `name` constraint. When a post is created or updated, the service calls `prisma.tag.upsert()` for each tag name — creating missing tags and retrieving IDs for existing ones — then links them to the post via the `PostTag` junction table. On update, all existing `PostTag` rows are deleted first, then recreated.
 
 ---
 

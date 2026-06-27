@@ -14,10 +14,8 @@ const sendVerificationEmail = async (to, token) => {
   const verifyUrl = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
 
   await transporter.verify();
-  console.log("SMTP Working...")
+  console.log('SMTP Working...');
 
-
-  console.log("Before sendMail");
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to,
@@ -34,7 +32,6 @@ const sendVerificationEmail = async (to, token) => {
       </div>
     `,
   });
-  console.log("After sendMail");
 };
 
 const sendPasswordResetEmail = async (to, token) => {

@@ -9,8 +9,8 @@ const {
   resetPassword,
   verifyEmail,
   resendVerification,
-} = require('../controllers/auth.controller');
-const { protect } = require('../middleware/auth.middleware');
+} = require('./auth.controller');
+const { protect } = require('../../middleware/auth.middleware');
 
 const router = Router();
 
