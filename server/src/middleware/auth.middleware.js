@@ -51,7 +51,6 @@ const protect = async (req, res, next) => {
       decoded = verifyAccessToken(token);
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
-        // Attempt silent refresh
         const rt = req.cookies.refreshToken;
         if (!rt) {
           return sendError(res, 401, 'Session expired. Please log in again.');
@@ -116,7 +115,6 @@ const protect = async (req, res, next) => {
       return next(err);
     }
 
-    // Access token was valid — normal path
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
       select: userSelect,
@@ -157,4 +155,22 @@ const restrictTo = (...roles) => {
   };
 };
 
-module.exports = { protect, restrictTo, verifiedOnly };
+const optionalAuth = async (req, res, next) => {
+  try {
+    const token = req.cookies.accessToken;
+    if (!token) return next();
+
+    const decoded = verifyAccessToken(token);
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+      select: userSelect,
+    });
+
+    if (user) req.user = user;
+    next();
+  } catch {
+    next();
+  }
+};
+
+module.exports = { protect, restrictTo, verifiedOnly, optionalAuth };

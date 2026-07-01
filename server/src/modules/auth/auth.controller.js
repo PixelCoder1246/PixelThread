@@ -9,12 +9,12 @@ const cookieOptions = {
 
 const accessTokenCookieOptions = {
   ...cookieOptions,
-  maxAge: 15 * 60 * 1000, // 15 minutes
+  maxAge: 15 * 60 * 1000,
 };
 
 const refreshTokenCookieOptions = {
   ...cookieOptions,
-  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  maxAge: 30 * 24 * 60 * 60 * 1000,
 };
 
 const register = async (req, res, next) => {

@@ -54,15 +54,20 @@ PixelThread/
 │   │   ├── lib/
 │   │   │   └── ai/             # AI generation utilities (future)
 │   │   ├── modules/            # Feature modules (module-per-feature pattern)
-│   │   │   ├── auth/           # Auth feature module (v0.2.0)
+│   │   │   ├── auth/           # Auth feature module (v0.2.1)
 │   │   │   │   ├── auth.routes.js      # Route definitions
 │   │   │   │   ├── auth.controller.js  # Thin request handlers
 │   │   │   │   └── auth.service.js     # Business logic (register, login, tokens, etc.)
-│   │   │   └── post/           # Post feature module (v0.2.0)
-│   │   │       ├── post.routes.js      # Route definitions
-│   │   │       ├── post.controller.js  # Thin request handlers
-│   │   │       ├── post.service.js     # Prisma queries + business logic
-│   │   │       └── post.validation.js  # Input validation (throws ApiError)
+│   │   │   ├── post/           # Post feature module (v0.2.1)
+│   │   │   │   ├── post.routes.js      # Route definitions
+│   │   │   │   ├── post.controller.js  # Thin request handlers
+│   │   │   │   ├── post.service.js     # Prisma queries + business logic
+│   │   │   │   └── post.validation.js  # Input validation (throws ApiError)
+│   │   │   └── user/           # User feature module (v0.2.1)
+│   │   │       ├── user.routes.js      # Route definitions
+│   │   │       ├── user.controller.js  # Thin request handlers
+│   │   │       ├── user.service.js     # Business logic (fetch user posts)
+│   │   │       └── user.validation.js  # Input validation (throws ApiError)
 │   │   └── utils/              # Utility/helper functions (ApiError, ApiResponse, jwt, slug.util.js, upload.util.js)
 │   ├── prisma.config.ts        # Prisma 7 configuration file
 │   └── server.js               # Entry point (bootstraps Express)

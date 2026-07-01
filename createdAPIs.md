@@ -388,6 +388,127 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
+## User Endpoints — `/api/users`
+
+---
+
+### 16. Get Posts by User
+*   **Method**: `GET`
+*   **Endpoint**: `/api/users/:id/posts`
+*   **Auth**: Optional — uses `optionalAuth` middleware
+    *   **Authenticated as the target user**: Includes `DRAFT` + `PRIVATE` posts
+    *   **Not authenticated / other user**: Only `PUBLISHED` + `PUBLIC` posts
+*   **Params**: `id` — user CUID
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+    *   `sort` (optional, default: `newest`, options: `newest`, `oldest`)
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "User posts fetched successfully.",
+      "data": {
+        "posts": [
+          {
+            "id": "clxxx...",
+            "title": "My First Post",
+            "slug": "my-first-post",
+            "content": "Post content here...",
+            "excerpt": "Short summary",
+            "status": "PUBLISHED",
+            "visibility": "PUBLIC",
+            "authorId": "cl...",
+            "createdAt": "2026-06-22T06:00:00.000Z",
+            "updatedAt": "2026-06-22T06:00:00.000Z",
+            "publishedAt": null,
+            "author": { "id": "cl...", "name": "John Doe", "image": null },
+            "tags": [{ "id": "cl...", "name": "react" }, { "id": "cl...", "name": "nodejs" }],
+            "analytics": { "views": 0, "likes": 0 }
+          }
+        ],
+        "pagination": {
+          "totalItems": 1,
+          "totalPages": 1,
+          "currentPage": 1,
+          "hasNextPage": false,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "User not found." }
+    ```
+
+---
+
+## Post Search Endpoint — `/api/posts/search`
+
+---
+
+### 17. Search Posts
+*   **Method**: `GET`
+*   **Endpoint**: `/api/posts/search`
+*   **Auth**: None required
+*   **Query Params**:
+    *   `q` (required) — case-insensitive search across `title`, `excerpt`, `content` (JSON), tag names, and author name
+    *   `tag` (optional) — filter by exact tag name (case-insensitive)
+    *   `authorId` (optional) — filter by author CUID
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+    *   `sort` (optional, default: `relevance`, options: `relevance`, `newest`, `oldest`, `mostViewed`, `mostLiked`)
+*   **Sort Modes**:
+    | Mode | Behaviour |
+    |---|---|
+    | `relevance` | Title matches ranked first (score 3), then excerpt matches (score 2), then newest as tiebreaker |
+    | `newest` | `createdAt` descending |
+    | `oldest` | `createdAt` ascending |
+    | `mostViewed` | `analytics.views` descending |
+    | `mostLiked` | `analytics.likes` descending |
+*   **Description**: Searches only `PUBLISHED` + `PUBLIC` posts. Returns matching posts with full metadata.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Posts searched successfully.",
+      "data": {
+        "posts": [
+          {
+            "id": "clxxx...",
+            "title": "My First Post",
+            "slug": "my-first-post",
+            "content": "Post content here...",
+            "excerpt": "Short summary",
+            "status": "PUBLISHED",
+            "visibility": "PUBLIC",
+            "authorId": "cl...",
+            "createdAt": "2026-06-22T06:00:00.000Z",
+            "updatedAt": "2026-06-22T06:00:00.000Z",
+            "publishedAt": null,
+            "author": { "id": "cl...", "name": "John Doe", "image": null },
+            "tags": [{ "id": "cl...", "name": "react" }, { "id": "cl...", "name": "nodejs" }],
+            "analytics": { "views": 0, "likes": 0 }
+          }
+        ],
+        "pagination": {
+          "totalItems": 1,
+          "totalPages": 1,
+          "currentPage": 1,
+          "hasNextPage": false,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Validation (400)**:
+    ```json
+    { "success": false, "message": "Search query (q) is required." }
+    ```
+
+---
+
 ## Common Error Responses
 
 | Status | Scenario | Message |
@@ -396,6 +517,6 @@ This file documents all API endpoints created in the project. You can copy the U
 | `401` | Missing/expired/invalid token | `"No token provided. Please log in."` or `"Session expired. Please log in again."` |
 | `403` | Email not verified | `"Please verify your email before accessing this feature."` |
 | `403` | Not owner or admin | `"You do not have permission to update/delete this post."` |
-| `404` | Resource not found | `"Post not found."` |
+| `404` | Resource not found | `"Post not found."` or `"User not found."` |
 | `409` | Duplicate unique field | `"A record with this <field> already exists."` |
 | `500` | Unhandled server error | `"Something went wrong. Please try again later."` (prod) |

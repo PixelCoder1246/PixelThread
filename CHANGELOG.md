@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-07-01
+
+### Added
+- **User module** at `server/src/modules/user/`:
+  - `user.service.js` — `getUserPosts()` with ownership-based visibility filtering (DRAFT/PRIVATE for owner, PUBLISHED/PUBLIC for others), pagination, and ordering.
+  - `user.controller.js` — Thin controller delegating to user service, returning `sendSuccess()`.
+  - `user.routes.js` — Route definition: `GET /:id/posts` (optional auth).
+  - `user.validation.js` — `validateUserPostsQuery` helper for pagination and sort params.
+- **Post search** at `server/src/modules/post/`:
+  - `searchPosts()` in `post.controller.js` — New controller for searching posts.
+  - `searchPosts()` in `post.service.js` — Full-text search across title, excerpt, content (JSON), tags, and author name with `relevance`, `newest`, `oldest`, `mostViewed`, `mostLiked` sort modes.
+  - `validateSearchPosts()` in `post.validation.js` — Input validation for search query, tag, authorId filters, pagination, and sort.
+  - Route `GET /api/posts/search` (public).
+- **`optionalAuth` middleware** in `auth.middleware.js` — Attaches user to `req` if a valid token is present, silently continues if not. Used by user posts endpoint.
+- `GET /api/users/:id/posts` — New endpoint returning user's posts with visibility gating.
+- `GET /api/posts/search` — New endpoint for searching published public posts.
+
+### Changed
+- `server/src/app.js`: registered `userRoutes` at `/api/users`.
+- `docs/api.md`: updated status to v0.3.0.
+- `docs/architecture.md`: updated module version markers to v0.3.0.
+- `createdAPIs.md`: added documentation for user and search endpoints.
+- Bumped all package versions to `0.2.1`.
+
 ## [0.2.0] - 2026-06-22
 
 ### Added

@@ -6,17 +6,17 @@ const {
   getPostBySlug,
   updatePost,
   deletePost,
+  searchPosts,
 } = require('./post.controller');
 
 const router = Router();
 
-// Public — no auth required
 router.get('/', getAllPosts);
+router.get('/search', searchPosts);
 router.get('/:slug', getPostBySlug);
 
 const { upload } = require('../../utils/upload.util');
 
-// Auth + email verification required for write operations
 router.post('/', protect, verifiedOnly, upload.array('files', 10), createPost);
 router.put(
   '/:id',

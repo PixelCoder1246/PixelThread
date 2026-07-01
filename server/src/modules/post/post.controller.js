@@ -4,16 +4,15 @@ const {
   validateCreatePost,
   validateUpdatePost,
   validatePagination,
+  validateSearchPosts,
 } = require('./post.validation');
 const postService = require('./post.service');
 const { uploadToS3Mock } = require('../../utils/upload.util');
 
-// Helper to parse multipart/form-data text fields and map files to content blocks
 const parseFormDataAndMapFiles = async (req) => {
   let content = req.body.content;
   let tags = req.body.tags;
 
-  // Parse JSON strings if they are sent as strings
   if (typeof content === 'string') {
     try {
       content = JSON.parse(content);
@@ -30,29 +29,23 @@ const parseFormDataAndMapFiles = async (req) => {
     }
   }
 
-  // Map uploaded files to their respective content blocks
   if (Array.isArray(content) && req.files && req.files.length > 0) {
     for (let i = 0; i < content.length; i++) {
       const block = content[i];
       if (block.fileIndex !== undefined) {
         const file = req.files[block.fileIndex];
         if (file) {
-          // Upload file (mock S3) and get URL
           block.url = await uploadToS3Mock(file);
-          delete block.fileIndex; // Remove index to keep schema clean
+          delete block.fileIndex;
         }
       }
     }
   }
 
-  // Update req.body so validation can run normally
   req.body.content = content;
   req.body.tags = tags;
 };
 
-// ---------------------------------------------------------------------------
-// POST /api/posts — Create post
-// ---------------------------------------------------------------------------
 const createPost = async (req, res, next) => {
   try {
     await parseFormDataAndMapFiles(req);
@@ -76,9 +69,6 @@ const createPost = async (req, res, next) => {
   }
 };
 
-// ---------------------------------------------------------------------------
-// GET /api/posts — Get all posts (public, paginated)
-// ---------------------------------------------------------------------------
 const getAllPosts = async (req, res, next) => {
   try {
     const { page, limit } = validatePagination(req.query);
@@ -89,9 +79,6 @@ const getAllPosts = async (req, res, next) => {
   }
 };
 
-// ---------------------------------------------------------------------------
-// GET /api/posts/:slug — Get single post by slug
-// ---------------------------------------------------------------------------
 const getPostBySlug = async (req, res, next) => {
   try {
     const { slug } = req.params;
@@ -102,9 +89,6 @@ const getPostBySlug = async (req, res, next) => {
   }
 };
 
-// ---------------------------------------------------------------------------
-// PUT /api/posts/:id — Update post (owner or admin)
-// ---------------------------------------------------------------------------
 const updatePost = async (req, res, next) => {
   try {
     await parseFormDataAndMapFiles(req);
@@ -126,14 +110,32 @@ const updatePost = async (req, res, next) => {
   }
 };
 
-// ---------------------------------------------------------------------------
-// DELETE /api/posts/:id — Delete post (owner or admin)
-// ---------------------------------------------------------------------------
 const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
     await postService.deletePost(id, req.user.id, req.user.role);
     return sendSuccess(res, 200, 'Post deleted successfully.');
+  } catch (err) {
+    next(err);
+  }
+};
+
+const searchPosts = async (req, res, next) => {
+  try {
+    const { q, tag, authorId, page, limit, sort } = validateSearchPosts(
+      req.query
+    );
+
+    const result = await postService.searchPosts({
+      q,
+      tag,
+      authorId,
+      page,
+      limit,
+      sort,
+    });
+
+    return sendSuccess(res, 200, 'Posts searched successfully.', result);
   } catch (err) {
     next(err);
   }
@@ -145,4 +147,5 @@ module.exports = {
   getPostBySlug,
   updatePost,
   deletePost,
+  searchPosts,
 };

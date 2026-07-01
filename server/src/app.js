@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./modules/auth/auth.routes');
 const postRoutes = require('./modules/post/post.routes');
+const userRoutes = require('./modules/user/user.routes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/users', userRoutes);
 app.use((req, res) => {
   res
     .status(404)

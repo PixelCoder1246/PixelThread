@@ -1,6 +1,6 @@
 # API Documentation
 
-> **Status**: Auth and Post modules fully implemented (v0.2.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
+> **Status**: Auth, Post, and User modules fully implemented (v0.2.1). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
 
 ## Base URL
 

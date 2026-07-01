@@ -171,7 +171,6 @@ const forgotPassword = async (email) => {
 
   const user = await prisma.user.findUnique({ where: { email } });
 
-  // Always return success to avoid email enumeration
   if (!user) {
     return { rawToken: null };
   }
@@ -180,7 +179,7 @@ const forgotPassword = async (email) => {
 
   const rawToken = generateSecureToken();
   const hashedToken = hashToken(rawToken);
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
   await prisma.passwordResetToken.create({
     data: { userId: user.id, token: hashedToken, expiresAt },
@@ -273,7 +272,7 @@ const resendVerification = async (email) => {
 
   const rawToken = generateSecureToken();
   const hashedToken = hashToken(rawToken);
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
   await prisma.emailVerificationToken.create({
     data: { userId: user.id, token: hashedToken, expiresAt },
