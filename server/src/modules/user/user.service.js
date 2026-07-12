@@ -17,7 +17,7 @@ const postInclude = {
     },
   },
   analytics: {
-    select: { views: true, likes: true },
+    select: { views: true },
   },
 };
 

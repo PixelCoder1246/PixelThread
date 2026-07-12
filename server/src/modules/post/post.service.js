@@ -20,7 +20,7 @@ const postInclude = {
     },
   },
   analytics: {
-    select: { views: true, likes: true },
+    select: { views: true },
   },
 };
 
@@ -72,7 +72,7 @@ const createPost = async ({
       authorId,
 
       analytics: {
-        create: { views: 0, likes: 0 },
+        create: { views: 0 },
       },
 
       tags: {
@@ -212,7 +212,7 @@ const searchPostInclude = {
     },
   },
   analytics: {
-    select: { views: true, likes: true },
+    select: { views: true },
   },
 };
 
@@ -259,7 +259,7 @@ const getOrderBy = (sort) => {
     case 'mostViewed':
       return { analytics: { views: 'desc' } };
     case 'mostLiked':
-      return { analytics: { likes: 'desc' } };
+      return { likes: { _count: 'desc' } };
     case 'newest':
     default:
       return { createdAt: 'desc' };

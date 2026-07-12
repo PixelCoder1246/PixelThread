@@ -6,6 +6,9 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./modules/auth/auth.routes');
 const postRoutes = require('./modules/post/post.routes');
 const userRoutes = require('./modules/user/user.routes');
+const analyticsRoutes = require('./modules/analytics/analytics.routes');
+const commentRoutes = require('./modules/comment/comment.routes');
+const likeRoutes = require('./modules/like/like.routes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -30,6 +33,9 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api', analyticsRoutes);
+app.use('/api', commentRoutes);
+app.use('/api', likeRoutes);
 app.use((req, res) => {
   res
     .status(404)
