@@ -1,0 +1,58 @@
+const NOTIFICATION_TYPES = {
+  LIKE: 'LIKE',
+  COMMENT: 'COMMENT',
+  COMMENT_REPLY: 'COMMENT_REPLY',
+  FOLLOW: 'FOLLOW',
+  POST_PUBLISHED: 'POST_PUBLISHED',
+  POST_FEATURED: 'POST_FEATURED',
+  MENTION: 'MENTION',
+  SYSTEM: 'SYSTEM',
+};
+
+const NOTIFICATION_REFERENCE_TYPES = {
+  POST: 'POST',
+  COMMENT: 'COMMENT',
+  USER: 'USER',
+  SYSTEM: 'SYSTEM',
+};
+
+const NOTIFICATION_MESSAGES = {
+  [NOTIFICATION_TYPES.LIKE]: (actorName) => `${actorName} liked your post`,
+  [NOTIFICATION_TYPES.COMMENT]: (actorName) =>
+    `${actorName} commented on your post`,
+  [NOTIFICATION_TYPES.COMMENT_REPLY]: (actorName) =>
+    `${actorName} replied to your comment`,
+  [NOTIFICATION_TYPES.FOLLOW]: (actorName) =>
+    `${actorName} started following you`,
+  [NOTIFICATION_TYPES.POST_PUBLISHED]: (actorName) =>
+    `${actorName} published a new post`,
+  [NOTIFICATION_TYPES.POST_FEATURED]: () => 'Your post has been featured',
+  [NOTIFICATION_TYPES.MENTION]: (actorName) =>
+    `${actorName} mentioned you in a post`,
+  [NOTIFICATION_TYPES.SYSTEM]: () => '',
+};
+
+const NOTIFICATION_TITLES = {
+  [NOTIFICATION_TYPES.LIKE]: 'New Like',
+  [NOTIFICATION_TYPES.COMMENT]: 'New Comment',
+  [NOTIFICATION_TYPES.COMMENT_REPLY]: 'New Reply',
+  [NOTIFICATION_TYPES.FOLLOW]: 'New Follower',
+  [NOTIFICATION_TYPES.POST_PUBLISHED]: 'New Post Published',
+  [NOTIFICATION_TYPES.POST_FEATURED]: 'Post Featured',
+  [NOTIFICATION_TYPES.MENTION]: 'You were mentioned',
+  [NOTIFICATION_TYPES.SYSTEM]: 'System Update',
+};
+
+const NOTIFICATION_TYPE_VALUES = Object.values(NOTIFICATION_TYPES);
+const NOTIFICATION_REFERENCE_TYPE_VALUES = Object.values(
+  NOTIFICATION_REFERENCE_TYPES
+);
+
+module.exports = {
+  NOTIFICATION_TYPES,
+  NOTIFICATION_REFERENCE_TYPES,
+  NOTIFICATION_MESSAGES,
+  NOTIFICATION_TITLES,
+  NOTIFICATION_TYPE_VALUES,
+  NOTIFICATION_REFERENCE_TYPE_VALUES,
+};

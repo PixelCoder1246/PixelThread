@@ -1,12 +1,13 @@
 const prisma = require('../../config/db');
 const ApiError = require('../../utils/ApiError');
+const notificationService = require('../notifications/notification.service');
 
 const userSelect = { id: true, name: true, image: true };
 
 const togglePostLike = async (postId, userId) => {
   const post = await prisma.post.findUnique({
     where: { id: postId },
-    select: { id: true },
+    select: { id: true, authorId: true },
   });
 
   if (!post) {
@@ -25,6 +26,8 @@ const togglePostLike = async (postId, userId) => {
     await prisma.like.create({
       data: { userId, postId },
     });
+
+    await notificationService.createLikeNotification(postId, userId);
   }
 
   const likeCount = await prisma.like.count({

@@ -2,6 +2,8 @@ const prisma = require('../../config/db');
 const ApiError = require('../../utils/ApiError');
 const { generateUniqueSlug } = require('../../utils/slug.util');
 const { deletePostImages } = require('../../utils/upload.util');
+const { resolveTagIds } = require('../tag/tag.service');
+const { recalculateForPost } = require('../../services/seo/seo.service');
 
 const authorSelect = {
   id: true,
@@ -22,25 +24,6 @@ const postInclude = {
   analytics: {
     select: { views: true },
   },
-};
-
-const resolveTagIds = async (tagNames) => {
-  if (!tagNames || tagNames.length === 0) return [];
-
-  const ids = await Promise.all(
-    tagNames.map(async (name) => {
-      const normalised = name.trim().toLowerCase();
-      const tag = await prisma.tag.upsert({
-        where: { name: normalised },
-        create: { name: normalised },
-        update: {},
-        select: { id: true },
-      });
-      return tag.id;
-    })
-  );
-
-  return ids;
 };
 
 const formatPost = (post) => ({
@@ -184,6 +167,14 @@ const updatePost = async (postId, data, userId, userRole) => {
     data: updateData,
     include: postInclude,
   });
+
+  if (
+    data.title !== undefined ||
+    data.content !== undefined ||
+    data.excerpt !== undefined
+  ) {
+    await recalculateForPost(postId);
+  }
 
   return formatPost(updated);
 };

@@ -50,9 +50,8 @@ PixelThread/
 │   │   ├── app.js              # Express app instance
 │   │   ├── config/             # DB and app config (db.js)
 │   │   ├── middleware/         # Custom Express middleware (auth, errorHandler)
-│   │   ├── services/           # Shared services (email.service.js)
+│   │   ├── services/           # Shared services (email.service.js, seo/)
 │   │   ├── lib/
-│   │   │   └── ai/             # AI generation utilities (future)
 │   │   ├── modules/            # Feature modules (module-per-feature pattern)
 │   │   │   ├── auth/           # Auth feature module (v0.3.0)
 │   │   │   │   ├── auth.routes.js      # Route definitions
@@ -72,15 +71,27 @@ PixelThread/
 │   │   │   │   ├── analytics.routes.js    # Route definitions
 │   │   │   │   ├── analytics.controller.js # Thin request handlers
 │   │   │   │   └── analytics.service.js   # Business logic (views, analytics queries)
+│   │   │   ├── seo/            # SEO feature module (v0.3.0)
+│   │   │   │   ├── seo.routes.js          # Route definitions
+│   │   │   │   ├── seo.controller.js      # Thin request handlers
+│   │   │   │   └── seo.validation.js      # Input validation (throws ApiError)
 │   │   │   ├── comment/        # Comment feature module (v0.3.0)
 │   │   │   │   ├── comment.routes.js      # Route definitions
 │   │   │   │   ├── comment.controller.js  # Thin request handlers
 │   │   │   │   ├── comment.service.js     # Business logic (CRUD, tree builder, recursive delete)
 │   │   │   │   └── comment.validation.js  # Input validation (throws ApiError)
-│   │   │   └── like/          # Like feature module (v0.3.0)
-│   │   │       ├── like.routes.js        # Route definitions
-│   │   │       ├── like.controller.js    # Thin request handlers
-│   │   │       └── like.service.js       # Business logic (toggle, query likes)
+│   │   │   ├── like/          # Like feature module (v0.3.0)
+│   │   │   │   ├── like.routes.js        # Route definitions
+│   │   │   │   ├── like.controller.js    # Thin request handlers
+│   │   │   │   └── like.service.js       # Business logic (toggle, query likes)
+│   │   │   └── ai/            # AI feature module (v0.4.0)
+│   │   │       ├── ai.routes.js          # Route definitions (15 endpoints)
+│   │   │       ├── ai.controller.js      # Thin request handlers
+│   │   │       ├── ai.service.js         # NVIDIA API integration + generation logic
+│   │   │       ├── ai.validation.js      # Input validation (throws ApiError)
+│   │   │       ├── ai.constants.js       # Tone, category, length constants
+│   │   │       ├── ai.prompts.js         # System/user prompt templates
+│   │   │       └── ai.utils.js           # JSON extraction, token usage builder
 │   │   └── utils/              # Utility/helper functions (ApiError, ApiResponse, jwt, slug.util.js, upload.util.js)
 │   ├── prisma.config.ts        # Prisma 7 configuration file
 │   └── server.js               # Entry point (bootstraps Express)
@@ -138,6 +149,9 @@ Tags are normalised to lowercase and stored with a unique `name` constraint. Whe
 ### Post Search
 Full-text search across `title`, `excerpt`, `content` (JSON blocks), tag names, and author name via `GET /api/posts/search`. Supports multiple sort modes: `relevance` (title→excerpt match scoring with newest tiebreaker), `newest`, `oldest`, `mostViewed`, `mostLiked`. Only returns `PUBLISHED` + `PUBLIC` posts. Uses Prisma's `contains` with `mode: 'insensitive'` for case-insensitive matching.
 
+### AI Content Generation
+The AI module (`/api/ai`) provides 15 endpoints for content generation via NVIDIA's API (OpenAI-compatible). All endpoints are rate-limited to 10 req/min per user and require authentication. Every request is logged to the `AIGeneration` table with the user ID, generation type, and truncated prompt/response for audit and analytics. The backend uses a modular prompt system with separate system prompts and user prompt builders for each generation type, extracted to `ai.prompts.js`.
+
 ---
 
 ## Database Schema Overview
@@ -151,5 +165,5 @@ Full-text search across `title`, `excerpt`, `content` (JSON blocks), tag names, 
 | `Tag` / `PostTag` | Tagging system (many-to-many) |
 | `Comment` | Nested comments with self-referential `parent` relation |
 | `Like` | Likes on posts and comments |
-| `AIGeneration` | Log of AI generation requests (type, prompt, response) |
+| `AIGeneration` | Log of AI generation requests (type, prompt, response) — supports 14 generation types |
 | `PostAnalytics` | Views and likes count per post |

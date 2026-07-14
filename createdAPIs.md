@@ -388,11 +388,110 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
+## SEO Endpoints — `/api/posts`
+
+> **Read endpoint** (`GET`) is fully public — no auth required.
+>
+> **Write endpoint** (`PATCH`) requires `accessToken` cookie + ownership or `ADMIN` role.
+>
+> SEO score (0–100) is automatically calculated based on title length, meta title/description length, keywords, canonical URL, excerpt, and focus keyword presence. Suggestions are generated dynamically for any missing or underperforming fields.
+
+---
+
+### 16. Get SEO Metadata
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/posts/:id/seo`
+*   **Auth**: None required
+*   **Params**: `id` — post CUID
+*   **Description**: Returns the post's SEO metadata, computed SEO score (0–100), and actionable improvement suggestions. If no `SeoMeta` record exists, one is created automatically with default values.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "SEO metadata fetched successfully.",
+      "data": {
+        "metaTitle": "Understanding React Hooks | PixelThread",
+        "metaDescription": "A comprehensive guide to React Hooks including useState, useEffect, and custom hooks. Learn how to build better components.",
+        "keywords": ["react", "hooks", "javascript", "frontend", "web development"],
+        "canonicalUrl": "https://pixelthread.example.com/understanding-react-hooks",
+        "score": 85,
+        "suggestions": [
+          "Meta title is too long (aim for 50–60 characters).",
+          "Focus keyword is missing from the meta description."
+        ]
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Post not found." }
+    ```
+
+---
+
+### 17. Update SEO Metadata
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/posts/:id/seo`
+*   **Auth**: `accessToken` cookie. Only the **post owner** or an **ADMIN** may update.
+*   **Params**: `id` — post CUID
+*   **Headers**: `Content-Type: application/json`
+*   **Description**: Updates one or more SEO fields. The SEO score is automatically recalculated after every update.
+
+*   **Body**:
+    ```json
+    {
+      "metaTitle": "Understanding React Hooks | PixelThread",
+      "metaDescription": "A comprehensive guide to React Hooks including useState, useEffect, and custom hooks.",
+      "keywords": ["react", "hooks", "javascript"],
+      "canonicalUrl": "https://pixelthread.example.com/understanding-react-hooks"
+    }
+    ```
+
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `metaTitle` | Optional, string, 1–200 characters (trimmed) |
+    | `metaDescription` | Optional, string, 1–350 characters (trimmed) |
+    | `keywords` | Optional, array of strings. 1–50 entries, each 1–100 characters. Trimmed, deduplicated, lowercased. |
+    | `canonicalUrl` | Optional, valid HTTP(S) URL, max 500 characters |
+
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "SEO metadata updated successfully.",
+      "data": {
+        "metaTitle": "Understanding React Hooks | PixelThread",
+        "metaDescription": "A comprehensive guide to React Hooks including useState, useEffect, and custom hooks.",
+        "keywords": ["react", "hooks", "javascript"],
+        "canonicalUrl": "https://pixelthread.example.com/understanding-react-hooks",
+        "score": 90,
+        "suggestions": [
+          "Add at least three keywords for better SEO."
+        ]
+      }
+    }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You do not have permission to update SEO for this post." }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Post not found." }
+    ```
+
+> **Note**: Keywords are stored lowercase and deduplicated. Duplicate entries in the request are silently collapsed. The `score` is recalculated using a weighted algorithm (title length, meta title, meta description, keywords, canonical URL, excerpt, focus keyword presence in title/meta/content). `suggestions` provides human-readable improvement tips.
+
+---
+
 ## User Endpoints — `/api/users`
 
 ---
 
-### 16. Get Posts by User
+### 18. Get Posts by User
 *   **Method**: `GET`
 *   **Endpoint**: `/api/users/:id/posts`
 *   **Auth**: Optional — uses `optionalAuth` middleware
@@ -448,7 +547,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 17. Search Posts
+### 19. Search Posts
 *   **Method**: `GET`
 *   **Endpoint**: `/api/posts/search`
 *   **Auth**: None required
@@ -513,7 +612,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 18. Record a View
+### 20. Record a View
 
 *   **Method**: `POST`
 *   **Endpoint**: `/api/posts/:id/view`
@@ -531,7 +630,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 19. Get Analytics for a Post
+### 21. Get Analytics for a Post
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/posts/:id/analytics`
@@ -553,7 +652,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 20. Get My Overall Analytics
+### 22. Get My Overall Analytics
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/me/analytics`
@@ -576,7 +675,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 21. Get Analytics for All My Posts
+### 23. Get Analytics for All My Posts
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/me/posts/analytics`
@@ -617,7 +716,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 22. Top Performing Posts
+### 24. Top Performing Posts
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/me/posts/top`
@@ -646,7 +745,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 23. Admin Platform Analytics
+### 25. Admin Platform Analytics
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/admin/analytics`
@@ -682,7 +781,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 24. Toggle Post Like
+### 26. Toggle Post Like
 
 *   **Method**: `POST`
 *   **Endpoint**: `/api/posts/:id/like`
@@ -712,7 +811,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 25. Toggle Comment Like
+### 27. Toggle Comment Like
 
 *   **Method**: `POST`
 *   **Endpoint**: `/api/comments/:id/like`
@@ -742,7 +841,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 26. Get Post Likes
+### 28. Get Post Likes
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/posts/:id/likes`
@@ -768,7 +867,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 27. Get Comment Likes
+### 29. Get Comment Likes
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/comments/:id/likes`
@@ -794,7 +893,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 28. Get Post Like Status
+### 30. Get Post Like Status
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/posts/:id/like-status`
@@ -816,7 +915,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 29. Get Comment Like Status
+### 31. Get Comment Like Status
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/comments/:id/like-status`
@@ -852,7 +951,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 30. Get Threaded Comments (Root + All Nested Replies)
+### 32. Get Threaded Comments (Root + All Nested Replies)
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/posts/:postId/comments`
@@ -923,7 +1022,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 31. Create Root Comment
+### 33. Create Root Comment
 
 *   **Method**: `POST`
 *   **Endpoint**: `/api/posts/:postId/comments`
@@ -966,7 +1065,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 32. Reply to Any Comment (Unlimited Depth)
+### 34. Reply to Any Comment (Unlimited Depth)
 
 *   **Method**: `POST`
 *   **Endpoint**: `/api/comments/:id/replies`
@@ -1010,7 +1109,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 33. Get Full Reply Subtree
+### 35. Get Full Reply Subtree
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/comments/:id/replies`
@@ -1077,7 +1176,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 34. Update Comment
+### 36. Update Comment
 
 *   **Method**: `PATCH`
 *   **Endpoint**: `/api/comments/:id`
@@ -1128,7 +1227,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 35. Delete Comment (Cascading)
+### 37. Delete Comment (Cascading)
 
 *   **Method**: `DELETE`
 *   **Endpoint**: `/api/comments/:id`
@@ -1161,7 +1260,947 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-## Common Error Responses
+## Tags Endpoints — `/api/tags`
+
+> **Admin-only endpoints** (`POST`, `DELETE`) require:
+> 1. Valid `accessToken` cookie (authenticated)
+> 2. `ADMIN` role
+>
+> **Read endpoints** (`GET`) are fully public — no auth required.
+
+---
+
+### 38. Get All Tags
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/tags`
+*   **Auth**: None required
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+    *   `sort` (optional, default: `alphabetical`, options: `alphabetical`, `mostUsed`)
+*   **Description**: Returns paginated list of all tags with the number of posts associated with each tag.
+*   **Sort Modes**:
+    | Mode | Behaviour |
+    |---|---|
+    | `alphabetical` | Tag names in ascending alphabetical order (default) |
+    | `mostUsed` | Tags with the most posts first |
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Tags fetched successfully.",
+      "data": {
+        "tags": [
+          { "id": "clx...", "name": "javascript", "postCount": 5 },
+          { "id": "clx...", "name": "react", "postCount": 3 }
+        ],
+        "pagination": {
+          "total": 2,
+          "page": 1,
+          "limit": 10,
+          "totalPages": 1,
+          "hasNextPage": false,
+          "hasPrevPage": false
+        }
+      }
+    }
+    ```
+
+---
+
+### 39. Get Posts by Tag
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/tags/:name/posts`
+*   **Auth**: None required
+*   **Params**: `name` — tag name (case-insensitive, e.g. `react` or `React`)
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+*   **Description**: Returns only `PUBLIC` + `PUBLISHED` posts associated with the specified tag, with author, tags, and analytics.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Tag posts fetched successfully.",
+      "data": {
+        "tag": { "id": "clx...", "name": "react" },
+        "posts": [
+          {
+            "id": "clxxx...",
+            "title": "My First Post",
+            "slug": "my-first-post",
+            "content": "Post content here...",
+            "excerpt": "Short summary",
+            "status": "PUBLISHED",
+            "visibility": "PUBLIC",
+            "authorId": "cl...",
+            "createdAt": "2026-06-22T06:00:00.000Z",
+            "updatedAt": "2026-06-22T06:00:00.000Z",
+            "publishedAt": null,
+            "author": { "id": "cl...", "name": "John Doe", "email": "john@example.com", "image": null },
+            "tags": [{ "id": "cl...", "name": "react" }],
+            "analytics": { "views": 0, "likes": 0 }
+          }
+        ],
+        "pagination": {
+          "total": 1,
+          "page": 1,
+          "limit": 10,
+          "totalPages": 1,
+          "hasNextPage": false,
+          "hasPrevPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Tag not found." }
+    ```
+
+---
+
+### 40. Create Tag
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/tags`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "name": "React"
+    }
+    ```
+*   **Description**: Creates a new tag. Name is trimmed of whitespace and stored in lowercase. Duplicate names are rejected.
+*   **Response (201 Created)**:
+    ```json
+    {
+      "success": true,
+      "message": "Tag created successfully.",
+      "data": {
+        "tag": { "id": "clx...", "name": "react" }
+      }
+    }
+    ```
+*   **Error — Duplicate (409)**:
+    ```json
+    { "success": false, "message": "Tag already exists." }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You do not have permission to perform this action." }
+    ```
+
+---
+
+### 41. Delete Tag
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/tags/:id`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Params**: `id` — tag CUID
+*   **Description**: Deletes a tag. Cannot delete a tag that is currently attached to any posts.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Tag deleted successfully."
+    }
+    ```
+*   **Error — Attached to Posts (400)**:
+    ```json
+    { "success": false, "message": "Cannot delete tag that is attached to posts." }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Tag not found." }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You do not have permission to perform this action." }
+    ```
+
+---
+
+---
+
+## AI Endpoints — `/api/ai`
+
+> **All AI endpoints require**:
+> 1. Valid `accessToken` cookie (authenticated)
+> 2. Rate-limited to **10 requests per minute** per user
+>
+> **Token usage** is returned with every response: `model`, `promptTokens`, `completionTokens`, `totalTokens`, `responseTime`, `finishReason`.
+>
+> **AI Generation Logging**: Every AI request is logged to the `AIGeneration` table (user ID, type, truncated prompt/response) for audit and analytics.
+
+---
+
+### 42. Generate Complete Blog Post
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/generate-post`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "topic": "Understanding React Server Components",
+      "targetAudience": "Intermediate React developers",
+      "tone": "technical",
+      "category": "technology",
+      "keywords": "React, Server Components, RSC, Next.js",
+      "approximateLength": "medium"
+    }
+    ```
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `topic` | Required, max 500 characters |
+    | `targetAudience` | Optional |
+    | `tone` | Optional — `professional`, `friendly`, `casual`, `technical`, `academic`, `storytelling` |
+    | `category` | Optional — `technology`, `lifestyle`, `health`, `business`, `education`, `entertainment`, `science`, `travel`, `food`, `finance`, `sports`, `politics`, `culture`, `other` |
+    | `keywords` | Optional |
+    | `approximateLength` | Optional — `short`, `medium`, `long`, `comprehensive` |
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Blog post generated successfully.",
+      "data": {
+        "title": "Understanding React Server Components: A Complete Guide",
+        "excerpt": "Learn how React Server Components work, their benefits, and how to implement them in your Next.js applications.",
+        "content": "# Understanding React Server Components\n\n...full markdown content...",
+        "suggestedTags": ["react", "server-components", "nextjs", "frontend", "javascript"],
+        "seoTitle": "Understanding React Server Components: Complete Guide",
+        "seoDescription": "Learn how React Server Components work, their benefits, and how to implement them in your Next.js applications.",
+        "tokenUsage": {
+          "model": "nvidia/nemotron-3-ultra-550b-a55b",
+          "promptTokens": 120,
+          "completionTokens": 850,
+          "totalTokens": 970,
+          "responseTime": "3420ms",
+          "finishReason": "stop"
+        }
+      }
+    }
+    ```
+---
+
+### 43. Generate Title Suggestions
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/title`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "content": "Full blog post content (at least 50 characters)...",
+      "keywords": "optional, comma-separated keywords"
+    }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Titles generated successfully.",
+      "data": {
+        "titles": ["Title Option 1", "Title Option 2", "Title Option 3"],
+        "tokenUsage": {
+          "model": "nvidia/nemotron-3-ultra-550b-a55b",
+          "promptTokens": 85,
+          "completionTokens": 120,
+          "totalTokens": 205,
+          "responseTime": "1800ms",
+          "finishReason": "stop"
+        }
+      }
+    }
+    ```
+
+---
+
+### 44. Improve Existing Title
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/title/improve`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "currentTitle": "My Original Title",
+      "targetKeyword": "optional focus keyword"
+    }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Title improved successfully.",
+      "data": {
+        "improvedTitle": "Improved: My Original Title - Better SEO",
+        "suggestions": ["Alternative: A More Catchy Version", "Another Option"],
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 50, "completionTokens": 80, "totalTokens": 130, "responseTime": "900ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 45. Generate Excerpt
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/excerpt`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Full blog post content..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Excerpt generated successfully.",
+      "data": {
+        "excerpt": "A concise summary of the blog post content...",
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 40, "totalTokens": 100, "responseTime": "800ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 46. Generate Tags
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/tags`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Full blog post content..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Tags generated successfully.",
+      "data": {
+        "tags": ["react", "javascript", "web-development", "frontend", "tutorial"],
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 55, "completionTokens": 30, "totalTokens": 85, "responseTime": "700ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 47. Generate SEO Metadata
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/seo`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "title": "My Blog Post Title",
+      "content": "Full blog post content..."
+    }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "SEO metadata generated successfully.",
+      "data": {
+        "metaTitle": "My Blog Post Title | PixelThread",
+        "metaDescription": "A compelling meta description for search results...",
+        "keywords": ["react", "hooks", "tutorial"],
+        "canonicalUrl": "https://pixelthread.example.com/my-blog-post",
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 90, "completionTokens": 110, "totalTokens": 200, "responseTime": "1500ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 48. Improve Writing
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/improve`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Content to improve..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Content improved successfully.",
+      "data": {
+        "improvedContent": "The improved version of the content...",
+        "changes": ["Fixed grammar issues", "Improved sentence structure", "Enhanced readability"],
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 70, "completionTokens": 200, "totalTokens": 270, "responseTime": "2200ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 49. Rewrite Content (Change Tone)
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/rewrite`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "content": "Content to rewrite...",
+      "tone": "professional"
+    }
+    ```
+*   **Validation**: `tone` must be one of: `professional`, `friendly`, `casual`, `technical`, `academic`, `storytelling`
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Content rewritten successfully.",
+      "data": {
+        "rewrittenContent": "The rewritten content in the requested tone...",
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 75, "completionTokens": 250, "totalTokens": 325, "responseTime": "2800ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 50. Expand Content
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/expand`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Content to expand..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Content expanded successfully.",
+      "data": {
+        "expandedContent": "The expanded version of the content with more detail...",
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 65, "completionTokens": 400, "totalTokens": 465, "responseTime": "3500ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 51. Shorten Content
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/shorten`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Content to shorten..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Content shortened successfully.",
+      "data": {
+        "shortenedContent": "The condensed version of the content...",
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 65, "completionTokens": 150, "totalTokens": 215, "responseTime": "1600ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 52. Continue Writing
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/continue`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Partial content to continue from..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Content continuation generated successfully.",
+      "data": {
+        "continuation": "The AI-generated continuation of the content...",
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 300, "totalTokens": 360, "responseTime": "3000ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 53. Summarize Content
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/summarize`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Content to summarize..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Summary generated successfully.",
+      "data": {
+        "summary": "A concise summary of the content...",
+        "keyPoints": ["Key point 1", "Key point 2", "Key point 3"],
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 100, "totalTokens": 160, "responseTime": "1200ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 54. Generate FAQ
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/faq`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Content to generate FAQs from..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "FAQs generated successfully.",
+      "data": {
+        "faqs": [
+          { "question": "What is React?", "answer": "React is a JavaScript library for building user interfaces." },
+          { "question": "What are hooks?", "answer": "Hooks are functions that let you use state in functional components." }
+        ],
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 65, "completionTokens": 180, "totalTokens": 245, "responseTime": "2000ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 55. Generate Social Posts
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/social`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Content to generate social media posts from..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Social posts generated successfully.",
+      "data": {
+        "twitter": "Tweet-length version of the content...",
+        "linkedin": "LinkedIn-optimized post...",
+        "facebook": "Facebook-optimized post...",
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 70, "completionTokens": 200, "totalTokens": 270, "responseTime": "2500ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+### 56. Generate Suggestions
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/suggestions`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "content": "Content to generate suggestions from..." }
+    ```
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Suggestions generated successfully.",
+      "data": {
+        "suggestions": [
+          "Consider adding a section about...",
+          "You might want to expand on...",
+          "This topic could benefit from..."
+        ],
+        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 150, "totalTokens": 210, "responseTime": "1800ms", "finishReason": "stop" }
+      }
+    }
+    ```
+
+---
+
+## Notifications Endpoints — `/api/notifications`
+
+> **All notification endpoints require**:
+> 1. Valid `accessToken` cookie (authenticated)
+> 2. Users can only read, delete, or mark their own notifications
+>
+> **Admin-only**: `POST /api/notifications/broadcast` requires `ADMIN` role.
+
+---
+
+### 57. Get My Notifications
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/notifications`
+*   **Auth**: `accessToken` cookie
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `20`, range: `1`–`100`)
+    *   `type` (optional) — filter by notification type: `LIKE`, `COMMENT`, `COMMENT_REPLY`, `FOLLOW`, `POST_PUBLISHED`, `POST_FEATURED`, `MENTION`, `SYSTEM`
+    *   `read` (optional) — filter by read status: `true` or `false`
+*   **Description**: Returns paginated list of notifications for the authenticated user, sorted newest first. Each notification includes the actor info and reference type for frontend navigation.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Notifications fetched successfully.",
+      "data": {
+        "notifications": [
+          {
+            "id": "clx...",
+            "type": "LIKE",
+            "title": "New Like",
+            "message": "John Doe liked your post",
+            "isRead": false,
+            "referenceId": "clx...",
+            "referenceType": "POST",
+            "createdAt": "2026-07-14T10:00:00.000Z",
+            "actor": {
+              "id": "clx...",
+              "name": "John Doe",
+              "image": null
+            }
+          }
+        ],
+        "pagination": {
+          "totalItems": 1,
+          "totalPages": 1,
+          "currentPage": 1,
+          "hasNextPage": false,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Invalid Type (400)**:
+    ```json
+    { "success": false, "message": "Invalid notification type. Must be one of: LIKE, COMMENT, COMMENT_REPLY, FOLLOW, POST_PUBLISHED, POST_FEATURED, MENTION, SYSTEM" }
+    ```
+
+---
+
+### 58. Get Unread Count
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/notifications/unread-count`
+*   **Auth**: `accessToken` cookie
+*   **Description**: Returns the count of unread notifications for the authenticated user.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Unread count fetched successfully.",
+      "data": { "count": 12 }
+    }
+    ```
+
+---
+
+### 59. Mark Notification as Read
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/notifications/:id/read`
+*   **Auth**: `accessToken` cookie (recipient only)
+*   **Params**: `id` — notification CUID
+*   **Description**: Marks a single notification as read. Only the recipient can perform this action.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Notification marked as read.",
+      "data": {
+        "notification": {
+          "id": "clx...",
+          "isRead": true,
+          "actor": { "id": "clx...", "name": "John Doe", "image": null }
+        }
+      }
+    }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You can only mark your own notifications as read." }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Notification not found." }
+    ```
+
+---
+
+### 60. Mark All Notifications as Read
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/notifications/read-all`
+*   **Auth**: `accessToken` cookie
+*   **Description**: Marks every unread notification for the authenticated user as read.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "All notifications marked as read.",
+      "data": { "count": 5 }
+    }
+    ```
+
+---
+
+### 61. Delete Notification
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/notifications/:id`
+*   **Auth**: `accessToken` cookie (recipient only)
+*   **Params**: `id` — notification CUID
+*   **Description**: Deletes a single notification. Only the recipient can perform this action.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Notification deleted successfully."
+    }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You can only delete your own notifications." }
+    ```
+
+---
+
+### 62. Delete All Read Notifications
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/notifications/read`
+*   **Auth**: `accessToken` cookie
+*   **Description**: Deletes all read notifications for the authenticated user.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Read notifications deleted successfully.",
+      "data": { "count": 3 }
+    }
+    ```
+
+---
+
+### 63. Broadcast System Notification (Admin)
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/notifications/broadcast`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "title": "Maintenance Scheduled",
+      "message": "The platform will be down for maintenance on July 20th from 2-4 AM UTC.",
+      "userIds": [] 
+    }
+    ```
+*   **Description**: Sends a system notification. If `userIds` is provided (non-empty array), only those users receive it. If omitted or empty, all users receive it.
+*   **Response (201 Created)**:
+    ```json
+    {
+      "success": true,
+      "message": "System notification sent successfully.",
+      "data": { "count": 42 }
+    }
+    ```
+*   **Error — Validation (400)**:
+    ```json
+    { "success": false, "message": "Title and message are required." }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You do not have permission to perform this action." }
+    ```
+
+---
+
+## Follow Endpoints — `/api/users`
+
+> **Follow/unfollow** (`POST`, `DELETE`) require `accessToken` cookie.
+>
+> **Reading** followers/following (`GET`) is public (optional auth).
+
+---
+
+### 64. Follow User
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/users/:userId/follow`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `userId` — target user CUID
+*   **Description**: Follows the specified user. Automatically creates a `FOLLOW` notification for the followed user. You cannot follow yourself.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "User followed successfully.",
+      "data": {
+        "following": true,
+        "followerCount": 150,
+        "followingCount": 42
+      }
+    }
+    ```
+*   **Error — Self-follow (400)**:
+    ```json
+    { "success": false, "message": "You cannot follow yourself." }
+    ```
+*   **Error — Already Following (409)**:
+    ```json
+    { "success": false, "message": "You are already following this user." }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "User not found." }
+    ```
+
+---
+
+### 65. Unfollow User
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/users/:userId/follow`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `userId` — target user CUID
+*   **Description**: Unfollows the specified user. You cannot unfollow yourself.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "User unfollowed successfully.",
+      "data": {
+        "following": false,
+        "followerCount": 149,
+        "followingCount": 42
+      }
+    }
+    ```
+*   **Error — Not Following (404)**:
+    ```json
+    { "success": false, "message": "You are not following this user." }
+    ```
+
+---
+
+### 66. Get Followers
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/users/:userId/followers`
+*   **Auth**: Optional (public read)
+*   **Params**: `userId` — user CUID
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `20`, range: `1`–`100`)
+*   **Description**: Returns a paginated list of users who follow the specified user.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Followers fetched successfully.",
+      "data": {
+        "users": [
+          { "id": "clx...", "name": "Jane Smith", "image": null }
+        ],
+        "pagination": {
+          "totalItems": 150,
+          "totalPages": 8,
+          "currentPage": 1,
+          "hasNextPage": true,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "User not found." }
+    ```
+
+---
+
+### 67. Get Following
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/users/:userId/following`
+*   **Auth**: Optional (public read)
+*   **Params**: `userId` — user CUID
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `20`, range: `1`–`100`)
+*   **Description**: Returns a paginated list of users that the specified user follows.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Following fetched successfully.",
+      "data": {
+        "users": [
+          { "id": "clx...", "name": "John Doe", "image": null }
+        ],
+        "pagination": {
+          "totalItems": 42,
+          "totalPages": 3,
+          "currentPage": 1,
+          "hasNextPage": true,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "User not found." }
+    ```
+
+---
+
+## Error Responses
 
 | Status | Scenario | Message |
 |---|---|---|

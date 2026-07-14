@@ -1,5 +1,6 @@
 const prisma = require('../../config/db');
 const ApiError = require('../../utils/ApiError');
+const notificationService = require('../notifications/notification.service');
 
 const authorSelect = { id: true, name: true, image: true };
 
@@ -97,7 +98,7 @@ const getThreadedComments = async (postId, userId) => {
 const createRootComment = async (postId, userId, content) => {
   const post = await prisma.post.findUnique({
     where: { id: postId },
-    select: { id: true },
+    select: { id: true, authorId: true },
   });
 
   if (!post) {
@@ -116,6 +117,18 @@ const createRootComment = async (postId, userId, content) => {
       _count: { select: { likes: true } },
     },
   });
+
+  await notificationService.createCommentNotification(
+    postId,
+    comment.id,
+    userId
+  );
+  await notificationService.createMentionNotifications(
+    content,
+    userId,
+    comment.id,
+    'COMMENT'
+  );
 
   return {
     id: comment.id,
@@ -151,6 +164,18 @@ const createReply = async (commentId, userId, content) => {
       _count: { select: { likes: true } },
     },
   });
+
+  await notificationService.createCommentReplyNotification(
+    commentId,
+    comment.id,
+    userId
+  );
+  await notificationService.createMentionNotifications(
+    content,
+    userId,
+    comment.id,
+    'COMMENT'
+  );
 
   return {
     id: comment.id,
