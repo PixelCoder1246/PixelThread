@@ -16,6 +16,7 @@ const {
   validateFAQ,
   validateSocial,
   validateSuggestions,
+  validateApplySuggestions,
 } = require('./ai.validation');
 const { sanitizeObject } = require('./ai.utils');
 
@@ -199,6 +200,17 @@ const generateSuggestions = async (req, res, next) => {
   }
 };
 
+const applySuggestions = async (req, res, next) => {
+  try {
+    validateApplySuggestions(req.body);
+    const sanitized = sanitizeObject(req.body);
+    const result = await aiService.applySuggestions(sanitized, req.user.id);
+    return sendSuccess(res, 200, 'Suggestions applied successfully.', result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   generatePost,
   generateTitles,
@@ -215,4 +227,5 @@ module.exports = {
   generateFAQ,
   generateSocialPosts,
   generateSuggestions,
+  applySuggestions,
 };

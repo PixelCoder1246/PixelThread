@@ -240,6 +240,27 @@ model Notification {
   @@index([recipientId, type])
 }
 
+model SearchHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  query     String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([query])
+  @@index([createdAt])
+}
+
+model TrendingSearch {
+  id        String   @id @default(cuid())
+  keyword   String   @unique
+  count     Int      @default(1)
+  updatedAt DateTime @updatedAt
+
+  @@index([count])
+  @@index([keyword])
+}
+
 enum PostStatus {
   DRAFT
   PUBLISHED
@@ -256,6 +277,17 @@ enum AIGenerationType {
   SEO
   REWRITE
   TITLE
+  EXCERPT
+  TAGS
+  IMPROVE
+  EXPAND
+  SHORTEN
+  CONTINUE
+  SUMMARIZE
+  FAQ
+  SOCIAL
+  SUGGESTIONS
+  APPLY_SUGGESTIONS
 }
 
 enum UserRole {

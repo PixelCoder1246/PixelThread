@@ -460,6 +460,34 @@ const generateSocialPosts = async ({ content }, userId) => {
   };
 };
 
+const applySuggestions = async ({ content, suggestions }, userId) => {
+  const systemPrompt = SYSTEM_PROMPTS.applySuggestions;
+  const userPrompt = USER_PROMPT_BUILDERS.applySuggestions({
+    content,
+    suggestions,
+  });
+
+  const result = await generateAIResponse({
+    systemPrompt,
+    userPrompt,
+    temperature: 0.4,
+    maxTokens: 4096,
+  });
+
+  const parsed = extractJSON(result.content);
+  await logAIGeneration({
+    userId,
+    type: AI_GENERATION_TYPES.APPLY_SUGGESTIONS,
+    prompt: userPrompt,
+    response: result.content,
+  });
+
+  return {
+    ...parsed,
+    tokenUsage: result.tokenUsage,
+  };
+};
+
 const generateSuggestions = async ({ content }, userId) => {
   const systemPrompt = SYSTEM_PROMPTS.suggestions;
   const userPrompt = USER_PROMPT_BUILDERS.suggestions({ content });
@@ -502,4 +530,5 @@ module.exports = {
   generateFAQ,
   generateSocialPosts,
   generateSuggestions,
+  applySuggestions,
 };

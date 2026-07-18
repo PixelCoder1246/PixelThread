@@ -14,6 +14,7 @@ const tagRoutes = require('./modules/tag/tag.routes');
 const aiRoutes = require('./modules/ai/ai.routes');
 const notificationRoutes = require('./modules/notifications/notification.routes');
 const followRoutes = require('./modules/follow/follow.routes');
+const searchRoutes = require('./modules/search/search.routes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -46,6 +47,7 @@ app.use('/api/tags', tagRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', followRoutes);
+app.use('/api/search', searchRoutes);
 app.use((req, res) => {
   res
     .status(404)

@@ -17,6 +17,7 @@ const {
   generateFAQ,
   generateSocialPosts,
   generateSuggestions,
+  applySuggestions,
 } = require('./ai.controller');
 
 const router = Router();
@@ -50,5 +51,6 @@ router.post('/summarize', summarizeContent);
 router.post('/faq', generateFAQ);
 router.post('/social', generateSocialPosts);
 router.post('/suggestions', generateSuggestions);
+router.post('/suggestions/apply', applySuggestions);
 
 module.exports = router;

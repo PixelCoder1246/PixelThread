@@ -28,6 +28,8 @@ const SYSTEM_PROMPTS = {
   social: `You are an expert social media content strategist. Generate platform-specific posts for LinkedIn, X (Twitter), and Facebook based on the given blog content. Include relevant hashtags. Return ONLY valid JSON. Do not include any analysis, reasoning, or explanation.`,
 
   suggestions: `You are an expert writing coach. Analyze the given draft and provide actionable suggestions to improve it. Focus on structure, readability, engagement, and SEO. Return ONLY valid JSON. Do not include any analysis, reasoning, or explanation.`,
+
+  applySuggestions: `You are an expert editor and content optimizer. Given a piece of content and a set of suggestions, apply each suggestion directly to improve the content. Rewrite, restructure, and enhance the content as needed. Preserve the author's voice, factual accuracy, and original intent. Return ONLY valid JSON with no markdown formatting or code blocks. Do not include any analysis, reasoning, or explanation.`,
 };
 
 const USER_PROMPT_BUILDERS = {
@@ -124,6 +126,17 @@ Return ONLY valid JSON with these exact keys. No analysis, reasoning, explanatio
 
   suggestions: ({ content }) => {
     return `Analyze the following blog draft and provide actionable writing suggestions. Look for: overly long paragraphs, passive voice, missing introduction or conclusion, weak call-to-action, repeated words, readability issues, and transition problems.\n\nDraft:\n${content}\n\nReturn ONLY valid JSON — an array of objects. No analysis, reasoning, explanation, or formatting. Each object must have: type, suggestion, severity ('low'/'medium'/'high'), location.\n\n[\n  {\n    "type": "",\n    "suggestion": "",\n    "severity": "",\n    "location": ""\n  }\n]`;
+  },
+
+  applySuggestions: ({ content, suggestions }) => {
+    const suggestionsText = Array.isArray(suggestions)
+      ? suggestions
+          .map(
+            (s, i) => `${i + 1}. [${s.type || 'general'}] ${s.suggestion || s}`
+          )
+          .join('\n')
+      : suggestions || 'Improve overall quality';
+    return `Apply the following suggestions to improve the content. Rewrite the content incorporating each suggestion directly.\n\nOriginal Content:\n${content}\n\nSuggestions to Apply:\n${suggestionsText}\n\nReturn ONLY valid JSON. No analysis, reasoning, explanation, or formatting.\n\n{\n  "improvedContent": "",\n  "changesApplied": [],\n  "originalWordCount": 0,\n  "newWordCount": 0\n}`;
   },
 };
 

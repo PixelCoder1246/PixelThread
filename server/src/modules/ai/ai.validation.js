@@ -143,6 +143,24 @@ const validateSuggestions = (body) => {
   }
 };
 
+const validateApplySuggestions = (body) => {
+  const { content, suggestions } = body;
+  if (!content || typeof content !== 'string' || content.trim().length === 0) {
+    throw new ApiError(400, 'Content is required.');
+  }
+  if (content.trim().length < 50) {
+    throw new ApiError(400, 'Content must be at least 50 characters.');
+  }
+  if (suggestions !== undefined) {
+    if (!Array.isArray(suggestions)) {
+      throw new ApiError(400, 'Suggestions must be an array.');
+    }
+    if (suggestions.length === 0) {
+      throw new ApiError(400, 'Suggestions array must not be empty.');
+    }
+  }
+};
+
 module.exports = {
   validateGeneratePost,
   validateTitle,
@@ -159,4 +177,5 @@ module.exports = {
   validateFAQ,
   validateSocial,
   validateSuggestions,
+  validateApplySuggestions,
 };

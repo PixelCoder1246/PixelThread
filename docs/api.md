@@ -1,6 +1,6 @@
 # API Documentation
 
-> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI, Notification, and Follow modules fully implemented (v0.5.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
+> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI (16 endpoints), Notification, Follow, and Search modules fully implemented (v0.5.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
 
 ## Base URL
 
@@ -119,6 +119,7 @@ Returns a welcome message to confirm the API is running.
 | `POST` | `/api/ai/faq` | `accessToken` cookie + rate-limited | Generate FAQ entries from content |
 | `POST` | `/api/ai/social` | `accessToken` cookie + rate-limited | Generate social-media posts from content |
 | `POST` | `/api/ai/suggestions` | `accessToken` cookie + rate-limited | Generate topic/content suggestions |
+| `POST` | `/api/ai/suggestions/apply` | `accessToken` cookie + rate-limited | Apply AI suggestions directly to content |
 
 All AI endpoints are rate-limited to **10 requests per minute** per user. Token usage (`model`, `promptTokens`, `completionTokens`, `totalTokens`, `responseTime`, `finishReason`) is returned with every response. Every request is logged to the `AIGeneration` table for audit and analytics.
 
@@ -140,6 +141,19 @@ All AI endpoints are rate-limited to **10 requests per minute** per user. Token 
 | `DELETE` | `/api/users/:userId/follow` | `accessToken` cookie | Unfollow a user |
 | `GET` | `/api/users/:userId/followers` | Optional | List followers of a user (paginated) |
 | `GET` | `/api/users/:userId/following` | Optional | List who a user is following (paginated) |
+
+### Search (`/api/search`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/search` | Optional | Global search across posts, users, and tags |
+| `GET` | `/api/search/suggestions` | None | Autocomplete suggestions (posts, users, tags) |
+| `GET` | `/api/search/trending` | None | Trending search keywords |
+| `GET` | `/api/search/history` | `accessToken` cookie | User's recent search history |
+| `DELETE` | `/api/search/history` | `accessToken` cookie | Clear user's search history |
+| `GET` | `/api/search/popular-tags` | None | Popular tags by post count |
+| `GET` | `/api/search/authors` | None | Discover authors (paginated, sorted by followers) |
+
+All search endpoints are rate-limited to **30 requests per minute** per IP.
 
 ---
 

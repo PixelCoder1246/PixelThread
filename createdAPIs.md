@@ -1478,7 +1478,7 @@ This file documents all API endpoints created in the project. You can copy the U
         "seoTitle": "Understanding React Server Components: Complete Guide",
         "seoDescription": "Learn how React Server Components work, their benefits, and how to implement them in your Next.js applications.",
         "tokenUsage": {
-          "model": "nvidia/nemotron-3-ultra-550b-a55b",
+          "model": "nvidia/llama-3.1-nemotron-70b-instruct",
           "promptTokens": 120,
           "completionTokens": 850,
           "totalTokens": 970,
@@ -1511,7 +1511,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "data": {
         "titles": ["Title Option 1", "Title Option 2", "Title Option 3"],
         "tokenUsage": {
-          "model": "nvidia/nemotron-3-ultra-550b-a55b",
+          "model": "nvidia/llama-3.1-nemotron-70b-instruct",
           "promptTokens": 85,
           "completionTokens": 120,
           "totalTokens": 205,
@@ -1545,7 +1545,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "data": {
         "improvedTitle": "Improved: My Original Title - Better SEO",
         "suggestions": ["Alternative: A More Catchy Version", "Another Option"],
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 50, "completionTokens": 80, "totalTokens": 130, "responseTime": "900ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 50, "completionTokens": 80, "totalTokens": 130, "responseTime": "900ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1569,7 +1569,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "message": "Excerpt generated successfully.",
       "data": {
         "excerpt": "A concise summary of the blog post content...",
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 40, "totalTokens": 100, "responseTime": "800ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 60, "completionTokens": 40, "totalTokens": 100, "responseTime": "800ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1593,7 +1593,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "message": "Tags generated successfully.",
       "data": {
         "tags": ["react", "javascript", "web-development", "frontend", "tutorial"],
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 55, "completionTokens": 30, "totalTokens": 85, "responseTime": "700ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 55, "completionTokens": 30, "totalTokens": 85, "responseTime": "700ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1623,7 +1623,7 @@ This file documents all API endpoints created in the project. You can copy the U
         "metaDescription": "A compelling meta description for search results...",
         "keywords": ["react", "hooks", "tutorial"],
         "canonicalUrl": "https://pixelthread.example.com/my-blog-post",
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 90, "completionTokens": 110, "totalTokens": 200, "responseTime": "1500ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 90, "completionTokens": 110, "totalTokens": 200, "responseTime": "1500ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1648,7 +1648,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "data": {
         "improvedContent": "The improved version of the content...",
         "changes": ["Fixed grammar issues", "Improved sentence structure", "Enhanced readability"],
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 70, "completionTokens": 200, "totalTokens": 270, "responseTime": "2200ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 70, "completionTokens": 200, "totalTokens": 270, "responseTime": "2200ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1676,7 +1676,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "message": "Content rewritten successfully.",
       "data": {
         "rewrittenContent": "The rewritten content in the requested tone...",
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 75, "completionTokens": 250, "totalTokens": 325, "responseTime": "2800ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 75, "completionTokens": 250, "totalTokens": 325, "responseTime": "2800ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1700,7 +1700,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "message": "Content expanded successfully.",
       "data": {
         "expandedContent": "The expanded version of the content with more detail...",
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 65, "completionTokens": 400, "totalTokens": 465, "responseTime": "3500ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 65, "completionTokens": 400, "totalTokens": 465, "responseTime": "3500ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1724,7 +1724,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "message": "Content shortened successfully.",
       "data": {
         "shortenedContent": "The condensed version of the content...",
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 65, "completionTokens": 150, "totalTokens": 215, "responseTime": "1600ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 65, "completionTokens": 150, "totalTokens": 215, "responseTime": "1600ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1748,7 +1748,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "message": "Content continuation generated successfully.",
       "data": {
         "continuation": "The AI-generated continuation of the content...",
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 300, "totalTokens": 360, "responseTime": "3000ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 60, "completionTokens": 300, "totalTokens": 360, "responseTime": "3000ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1773,7 +1773,7 @@ This file documents all API endpoints created in the project. You can copy the U
       "data": {
         "summary": "A concise summary of the content...",
         "keyPoints": ["Key point 1", "Key point 2", "Key point 3"],
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 100, "totalTokens": 160, "responseTime": "1200ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 60, "completionTokens": 100, "totalTokens": 160, "responseTime": "1200ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1800,7 +1800,7 @@ This file documents all API endpoints created in the project. You can copy the U
           { "question": "What is React?", "answer": "React is a JavaScript library for building user interfaces." },
           { "question": "What are hooks?", "answer": "Hooks are functions that let you use state in functional components." }
         ],
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 65, "completionTokens": 180, "totalTokens": 245, "responseTime": "2000ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 65, "completionTokens": 180, "totalTokens": 245, "responseTime": "2000ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1826,7 +1826,7 @@ This file documents all API endpoints created in the project. You can copy the U
         "twitter": "Tweet-length version of the content...",
         "linkedin": "LinkedIn-optimized post...",
         "facebook": "Facebook-optimized post...",
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 70, "completionTokens": 200, "totalTokens": 270, "responseTime": "2500ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 70, "completionTokens": 200, "totalTokens": 270, "responseTime": "2500ms", "finishReason": "stop" }
       }
     }
     ```
@@ -1854,9 +1854,52 @@ This file documents all API endpoints created in the project. You can copy the U
           "You might want to expand on...",
           "This topic could benefit from..."
         ],
-        "tokenUsage": { "model": "nvidia/nemotron-3-ultra-550b-a55b", "promptTokens": 60, "completionTokens": 150, "totalTokens": 210, "responseTime": "1800ms", "finishReason": "stop" }
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 60, "completionTokens": 150, "totalTokens": 210, "responseTime": "1800ms", "finishReason": "stop" }
       }
     }
+    ```
+
+---
+
+### 57. Apply Suggestions
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/ai/suggestions/apply`
+*   **Auth**: `accessToken` cookie (rate-limited: 10 req/min)
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "content": "Original blog post content...",
+      "suggestions": [
+        { "type": "structure", "suggestion": "Add a more engaging introduction", "severity": "high", "location": "opening" },
+        { "type": "readability", "suggestion": "Break long paragraphs into shorter ones", "severity": "medium", "location": "body" }
+      ]
+    }
+    ```
+*   **Description**: Takes the original content and an array of suggestions (as generated by `/api/ai/suggestions`) and applies them directly to produce improved content. Returns the rewritten version along with a summary of changes applied and word count comparison.
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `content` | Required, string, min 50 characters |
+    | `suggestions` | Optional, array of strings or objects. If provided, must be a non-empty array. |
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Suggestions applied successfully.",
+      "data": {
+        "improvedContent": "The rewritten content with all suggestions incorporated...",
+        "changesApplied": ["Added engaging introduction", "Broke up long paragraphs", "Improved sentence flow"],
+        "originalWordCount": 850,
+        "newWordCount": 920,
+        "tokenUsage": { "model": "nvidia/llama-3.1-nemotron-70b-instruct", "promptTokens": 75, "completionTokens": 350, "totalTokens": 425, "responseTime": "3200ms", "finishReason": "stop" }
+      }
+    }
+    ```
+*   **Error — Validation (400)**:
+    ```json
+    { "success": false, "message": "Content must be at least 50 characters." }
     ```
 
 ---
@@ -1871,7 +1914,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 57. Get My Notifications
+### 58. Get My Notifications
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/notifications`
@@ -1922,7 +1965,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 58. Get Unread Count
+### 59. Get Unread Count
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/notifications/unread-count`
@@ -1939,7 +1982,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 59. Mark Notification as Read
+### 60. Mark Notification as Read
 
 *   **Method**: `PATCH`
 *   **Endpoint**: `/api/notifications/:id/read`
@@ -1971,7 +2014,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 60. Mark All Notifications as Read
+### 61. Mark All Notifications as Read
 
 *   **Method**: `PATCH`
 *   **Endpoint**: `/api/notifications/read-all`
@@ -1988,7 +2031,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 61. Delete Notification
+### 62. Delete Notification
 
 *   **Method**: `DELETE`
 *   **Endpoint**: `/api/notifications/:id`
@@ -2009,7 +2052,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 62. Delete All Read Notifications
+### 63. Delete All Read Notifications
 
 *   **Method**: `DELETE`
 *   **Endpoint**: `/api/notifications/read`
@@ -2026,7 +2069,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 63. Broadcast System Notification (Admin)
+### 64. Broadcast System Notification (Admin)
 
 *   **Method**: `POST`
 *   **Endpoint**: `/api/notifications/broadcast`
@@ -2068,7 +2111,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 64. Follow User
+### 65. Follow User
 
 *   **Method**: `POST`
 *   **Endpoint**: `/api/users/:userId/follow`
@@ -2102,7 +2145,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 65. Unfollow User
+### 66. Unfollow User
 
 *   **Method**: `DELETE`
 *   **Endpoint**: `/api/users/:userId/follow`
@@ -2128,7 +2171,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 66. Get Followers
+### 67. Get Followers
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/users/:userId/followers`
@@ -2164,7 +2207,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 67. Get Following
+### 68. Get Following
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/users/:userId/following`
@@ -2196,6 +2239,248 @@ This file documents all API endpoints created in the project. You can copy the U
 *   **Error — Not Found (404)**:
     ```json
     { "success": false, "message": "User not found." }
+    ```
+
+---
+
+## Search Endpoints — `/api/search`
+
+> **Global search** (`GET /api/search`) is rate-limited to **30 requests per minute** per IP. Uses `optionalAuth` — authenticated users get search history recording; anonymous users can still search.
+>
+> **Suggestions, trending, popular-tags, and authors** are fully public — no auth required.
+>
+> **History endpoints** require `accessToken` cookie.
+
+---
+
+### 69. Global Search (Posts, Users, Tags)
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/search`
+*   **Auth**: Optional (`optionalAuth` — if authenticated, search query is saved to history)
+*   **Rate Limit**: 30 req/min per IP
+*   **Query Params**:
+    *   `q` (required) — search query, min 2 characters
+    *   `type` (optional, default: `all`) — filter scope: `all`, `posts`, `users`, `tags`
+    *   `sort` (optional, default: `relevance`) — `relevance`, `newest`, `oldest`, `mostViewed`, `mostLiked`
+    *   `tag` (optional) — filter posts by exact tag name (case-insensitive)
+    *   `author` (optional) — filter posts by author name/email
+    *   `dateFrom` (optional) — filter posts by published date (ISO 8601)
+    *   `dateTo` (optional) — filter posts by published date (ISO 8601)
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+*   **Description**: Searches across posts (title, excerpt, content, tags), users (name), and tags (name). Only searches `PUBLISHED` + `PUBLIC` posts. Relevance sort ranks title matches first, then excerpt matches, then content/tag matches, with newest as tiebreaker.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Search completed successfully.",
+      "data": {
+        "posts": [
+          {
+            "id": "clxxx...",
+            "title": "Understanding React Server Components",
+            "slug": "understanding-react-server-components",
+            "excerpt": "Learn how RSC works...",
+            "tags": [{ "id": "clx...", "name": "react" }],
+            "author": { "id": "clx...", "name": "John Doe", "image": null },
+            "views": 245,
+            "likesCount": 31,
+            "createdAt": "2026-06-22T06:00:00.000Z",
+            "publishedAt": "2026-06-22T06:00:00.000Z"
+          }
+        ],
+        "users": [
+          {
+            "id": "clx...",
+            "name": "John Doe",
+            "image": null,
+            "postsCount": 18,
+            "followersCount": 150,
+            "createdAt": "2026-01-15T10:00:00.000Z"
+          }
+        ],
+        "tags": [
+          { "id": "clx...", "name": "react", "postCount": 12 }
+        ],
+        "pagination": {
+          "totalItems": 25,
+          "totalPages": 3,
+          "currentPage": 1,
+          "hasNextPage": true,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Validation (400)**:
+    ```json
+    { "success": false, "message": "Search query must be at least 2 characters." }
+    ```
+
+---
+
+### 70. Get Search Suggestions (Autocomplete)
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/search/suggestions`
+*   **Auth**: None required
+*   **Rate Limit**: 30 req/min per IP
+*   **Query Params**:
+    *   `q` (required) — prefix query, min 2 characters
+*   **Description**: Returns up to 5 matching posts (title starts with query), 5 users (name starts with query), and 5 tags (name starts with query) for autocomplete dropdowns.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Suggestions fetched successfully.",
+      "data": {
+        "posts": [
+          { "id": "clx...", "title": "Understanding React", "slug": "understanding-react", "excerpt": "A complete guide..." }
+        ],
+        "users": [
+          { "id": "clx...", "name": "John Doe", "image": null }
+        ],
+        "tags": [
+          { "id": "clx...", "name": "react" }
+        ]
+      }
+    }
+    ```
+*   **Error — Validation (400)**:
+    ```json
+    { "success": false, "message": "Query must be at least 2 characters." }
+    ```
+
+---
+
+### 71. Get Trending Searches
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/search/trending`
+*   **Auth**: None required
+*   **Rate Limit**: 30 req/min per IP
+*   **Description**: Returns the top 10 most searched keywords, ranked by search count descending. Automatically recorded when users perform global searches.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Trending searches fetched successfully.",
+      "data": [
+        { "keyword": "react", "count": 245 },
+        { "keyword": "typescript", "count": 180 },
+        { "keyword": "node.js", "count": 120 }
+      ]
+    }
+    ```
+
+---
+
+### 72. Get Search History
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/search/history`
+*   **Auth**: `accessToken` cookie
+*   **Rate Limit**: 30 req/min per IP
+*   **Description**: Returns the last 20 search queries performed by the authenticated user, sorted newest first.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Search history fetched successfully.",
+      "data": [
+        { "id": "clx...", "query": "react hooks", "createdAt": "2026-07-14T10:00:00.000Z" },
+        { "id": "clx...", "query": "typescript tutorial", "createdAt": "2026-07-14T09:30:00.000Z" }
+      ]
+    }
+    ```
+
+---
+
+### 73. Clear Search History
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/search/history`
+*   **Auth**: `accessToken` cookie
+*   **Rate Limit**: 30 req/min per IP
+*   **Description**: Deletes all search history entries for the authenticated user.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Search history deleted successfully."
+    }
+    ```
+
+---
+
+### 74. Get Popular Tags
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/search/popular-tags`
+*   **Auth**: None required
+*   **Rate Limit**: 30 req/min per IP
+*   **Description**: Returns the top 10 tags by post count, for use in tag clouds or browse-by-tag sections.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Popular tags fetched successfully.",
+      "data": [
+        { "id": "clx...", "name": "react", "postCount": 12 },
+        { "id": "clx...", "name": "typescript", "postCount": 8 },
+        { "id": "clx...", "name": "nodejs", "postCount": 6 }
+      ]
+    }
+    ```
+
+---
+
+### 75. Discover Authors
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/search/authors`
+*   **Auth**: None required
+*   **Rate Limit**: 30 req/min per IP
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+*   **Description**: Returns paginated list of authors who have published at least one post, sorted by follower count (descending), then by post count (descending).
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Authors fetched successfully.",
+      "data": {
+        "authors": [
+          {
+            "id": "clx...",
+            "name": "Jane Smith",
+            "image": null,
+            "postsCount": 25,
+            "followersCount": 320
+          },
+          {
+            "id": "clx...",
+            "name": "John Doe",
+            "image": null,
+            "postsCount": 18,
+            "followersCount": 150
+          }
+        ],
+        "pagination": {
+          "totalItems": 42,
+          "totalPages": 5,
+          "currentPage": 1,
+          "hasNextPage": true,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "No authors found." }
     ```
 
 ---

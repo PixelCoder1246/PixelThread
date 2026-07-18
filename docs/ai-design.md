@@ -27,6 +27,7 @@ All AI endpoints are fully implemented and available at `/api/ai`. Each endpoint
 | 13 | `POST /api/ai/faq` | Generate FAQ entries from content (type: `FAQ`) |
 | 14 | `POST /api/ai/social` | Generate social-media posts from content (type: `SOCIAL`) |
 | 15 | `POST /api/ai/suggestions` | Generate topic/content suggestions (type: `SUGGESTIONS`) |
+| 16 | `POST /api/ai/suggestions/apply` | Apply AI suggestions directly to content (type: `APPLY_SUGGESTIONS`) |
 
 ---
 
@@ -39,7 +40,7 @@ model AIGeneration {
   id        String           @id @default(cuid())
   userId    String
   postId    String?
-  type      AIGenerationType  // BLOG | SEO | REWRITE | TITLE | EXCERPT | TAGS | IMPROVE | EXPAND | SHORTEN | CONTINUE | SUMMARIZE | FAQ | SOCIAL | SUGGESTIONS
+  type      AIGenerationType  // BLOG | SEO | REWRITE | TITLE | EXCERPT | TAGS | IMPROVE | EXPAND | SHORTEN | CONTINUE | SUMMARIZE | FAQ | SOCIAL | SUGGESTIONS | APPLY_SUGGESTIONS
   prompt    String
   response  String
   createdAt DateTime         @default(now())
@@ -60,6 +61,7 @@ enum AIGenerationType {
   FAQ
   SOCIAL
   SUGGESTIONS
+  APPLY_SUGGESTIONS
 }
 ```
 
