@@ -1,6 +1,6 @@
 # API Documentation
 
-> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI (16 endpoints), Notification, Follow, and Search modules fully implemented (v0.5.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
+> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI (16 endpoints), Notification, Follow, Search, Bookmark (4 endpoints), Reading History (3 endpoints), and Reports (9 endpoints) modules fully implemented (v0.6.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
 
 ## Base URL
 
@@ -142,6 +142,23 @@ All AI endpoints are rate-limited to **10 requests per minute** per user. Token 
 | `GET` | `/api/users/:userId/followers` | Optional | List followers of a user (paginated) |
 | `GET` | `/api/users/:userId/following` | Optional | List who a user is following (paginated) |
 
+### Bookmarks (`/api`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/posts/:id/bookmark` | `accessToken` cookie | Bookmark a post (public + published only) |
+| `DELETE` | `/api/posts/:id/bookmark` | `accessToken` cookie | Remove a bookmark |
+| `GET` | `/api/me/bookmarks` | `accessToken` cookie | Get my bookmarked posts (paginated, sortable) |
+| `GET` | `/api/posts/:id/bookmark/status` | `accessToken` cookie | Check if post is bookmarked |
+
+### Reading History (`/api`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/me/history` | `accessToken` cookie | Get reading history (paginated, newest first) |
+| `DELETE` | `/api/me/history/:id` | `accessToken` cookie | Delete a single history entry |
+| `DELETE` | `/api/me/history` | `accessToken` cookie | Clear all reading history |
+
+Reading history is automatically recorded when authenticated users view a post via `GET /api/posts/:slug`.
+
 ### Search (`/api/search`)
 | Method | Path | Auth | Description |
 |---|---|---|---|
@@ -154,6 +171,19 @@ All AI endpoints are rate-limited to **10 requests per minute** per user. Token 
 | `GET` | `/api/search/authors` | None | Discover authors (paginated, sorted by followers) |
 
 All search endpoints are rate-limited to **30 requests per minute** per IP.
+
+### Reports (`/api`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/posts/:id/report` | `accessToken` cookie | Report a post |
+| `POST` | `/api/comments/:id/report` | `accessToken` cookie | Report a comment |
+| `POST` | `/api/users/:id/report` | `accessToken` cookie | Report a user |
+| `GET` | `/api/admin/reports` | `accessToken` + `ADMIN` role | Get all reports (paginated, filterable) |
+| `GET` | `/api/admin/reports/:id` | `accessToken` + `ADMIN` role | Get report by ID |
+| `PATCH` | `/api/admin/reports/:id/status` | `accessToken` + `ADMIN` role | Change report status |
+| `PATCH` | `/api/admin/reports/:id/resolve` | `accessToken` + `ADMIN` role | Resolve a report with action |
+| `PATCH` | `/api/admin/reports/:id/reject` | `accessToken` + `ADMIN` role | Reject a report |
+| `GET` | `/api/admin/reports/analytics` | `accessToken` + `ADMIN` role | Get report analytics/dashboard data |
 
 ---
 

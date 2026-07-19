@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-07-19
+
+### Added
+- **Reports module** at `server/src/modules/reports/`:
+  - 9 endpoints for content moderation: report post/comment/user, admin get/list/change/resolve/reject/analytics.
+  - Reporting with reason classification (`SPAM`, `HARASSMENT`, `HATE_SPEECH`, `MISINFORMATION`, `COPYRIGHT`, `ADULT_CONTENT`, `VIOLENCE`, `IMPERSONATION`, `OTHER`).
+  - Report workflow: `PENDING` → `UNDER_REVIEW` → `RESOLVED` / `REJECTED` with resolution actions.
+  - Unique constraint per reporter + referenceId + reportType (no duplicate reports).
+  - `report.constants.js` — All enums and validation constants.
+  - `report.validation.js` — Input validation for all report endpoints.
+- **Notifications module** at `server/src/modules/notifications/`:
+  - 7 endpoints: list, unread count, mark read, mark all read, delete, delete read, admin broadcast.
+  - 8 notification types: `LIKE`, `COMMENT`, `COMMENT_REPLY`, `FOLLOW`, `POST_PUBLISHED`, `POST_FEATURED`, `MENTION`, `SYSTEM`.
+  - Automatic notification creation on like, comment, reply, and follow actions.
+- **Follow module** at `server/src/modules/follow/`:
+  - 4 endpoints: follow, unfollow, get followers, get following.
+  - Self-follow prevention and duplicate follow detection.
+  - Automatic `FOLLOW` notification on follow.
+- **Search module** at `server/src/modules/search/`:
+  - 7 endpoints: global search, suggestions, trending, history, clear history, popular tags, discover authors.
+  - Cross-entity search (posts, users, tags) with relevance sorting.
+  - Autocomplete suggestions, trending keywords, and user search history.
+  - Rate-limited to 30 req/min per IP.
+- **Bookmarks module** at `server/src/modules/bookmarks/`:
+  - 4 endpoints: bookmark, remove bookmark, get my bookmarks, check status.
+  - Only public published posts can be bookmarked.
+- **Reading History module** at `server/src/modules/history/`:
+  - 3 endpoints: get history, delete entry, clear all.
+  - Automatic tracking when authenticated users view posts.
+  - Tracks `lastReadAt` and `readCount` per post.
+
+### Changed
+- All documentation updated to reflect new modules.
+- `createdAPIs.md`: renumbered search endpoints (69-75 → 76-82), added reports section (83-91).
+- Bumped all package versions to `0.6.0`.
+
 ## [0.2.1] - 2026-07-01
 
 ### Added

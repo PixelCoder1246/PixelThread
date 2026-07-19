@@ -16,14 +16,14 @@ PixelThread/
 ├── server/          # Express backend API + Prisma + AI services (runs on http://localhost:5000)
 ├── docs/            # Extensive documentation (Architecture, API, Setup, AI design)
 ├── .github/         # CI workflows and pull request templates
-├── createdAPIs.md   # Comprehensive documentation of all existing API endpoints
+├── createdAPIs.md   # Comprehensive documentation of all 91 API endpoints
 └── package.json     # Root workspace configuration
 ```
 
 ## Key Files to Reference
-- **API Documentation**: Always check `createdAPIs.md` at the project root for the latest REST API endpoints, request/response structures, and authentication requirements.
+- **API Documentation**: Always check `createdAPIs.md` at the project root for the latest REST API endpoints (91 total — Auth, Posts, SEO, Users, Analytics, Comments, Likes, Tags, AI, Notifications, Follow, Search, Bookmarks, Reading History, Reports), request/response structures, and authentication requirements.
 - **Architecture & Design**: Check the `docs/` folder for `architecture.md`, `ai-design.md`, and `setup.md`.
-- **Database Schema**: Located in `server/prisma/schema.prisma` (inferred from Prisma usage).
+- **Database Schema**: Located in `server/prisma/schema.prisma` (16 models + 8 enums).
 
 ## Authentication & Authorization
 - **Method**: Session-based auth using `HttpOnly` cookies (`accessToken` and `refreshToken`).

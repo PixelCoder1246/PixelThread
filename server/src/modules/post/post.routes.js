@@ -1,5 +1,9 @@
 const { Router } = require('express');
-const { protect, verifiedOnly } = require('../../middleware/auth.middleware');
+const {
+  protect,
+  verifiedOnly,
+  optionalAuth,
+} = require('../../middleware/auth.middleware');
 const {
   createPost,
   getAllPosts,
@@ -13,7 +17,7 @@ const router = Router();
 
 router.get('/', getAllPosts);
 router.get('/search', searchPosts);
-router.get('/:slug', getPostBySlug);
+router.get('/:slug', optionalAuth, getPostBySlug);
 
 const { upload } = require('../../utils/upload.util');
 

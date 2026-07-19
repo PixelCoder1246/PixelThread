@@ -89,7 +89,7 @@ This file documents all API endpoints created in the project. You can copy the U
     ```
 *   **Cookies Set**:
     *   `accessToken` — JWT, 15 min, HttpOnly, Secure, SameSite=Strict
-    *   `refreshToken` — JWT, 30 days, HttpOnly, Secure, SameSite=Strict
+    *   `refreshToken` — JWT, 7 days, HttpOnly, Secure, SameSite=Strict
 *   **Response (200 OK)**:
     ```json
     {
@@ -2243,6 +2243,215 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
+## Bookmark Endpoints — `/api`
+
+> **All bookmark endpoints require** `accessToken` cookie (authenticated). Users can only access their own bookmarks.
+>
+> Users can bookmark only **public, published** posts. Private, archived, or deleted posts cannot be bookmarked.
+
+---
+
+### 69. Bookmark a Post
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/posts/:id/bookmark`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `id` — post CUID
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Post bookmarked successfully."
+    }
+    ```
+*   **Error — Already Bookmarked (409)**:
+    ```json
+    { "success": false, "message": "Post already bookmarked." }
+    ```
+*   **Error — Post Not Found (404)**:
+    ```json
+    { "success": false, "message": "Post not found." }
+    ```
+*   **Error — Cannot Bookmark (400)**:
+    ```json
+    { "success": false, "message": "Cannot bookmark this post." }
+    ```
+
+---
+
+### 70. Remove Bookmark
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/posts/:id/bookmark`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `id` — post CUID
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Bookmark removed successfully."
+    }
+    ```
+*   **Error — Bookmark Not Found (404)**:
+    ```json
+    { "success": false, "message": "Bookmark not found." }
+    ```
+
+---
+
+### 71. Get My Bookmarks
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/me/bookmarks`
+*   **Auth**: `accessToken` cookie
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+    *   `sort` (optional, default: `newest`, options: `newest`, `oldest`)
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Bookmarks fetched successfully.",
+      "data": {
+        "posts": [
+          {
+            "id": "clxxx...",
+            "title": "My First Post",
+            "slug": "my-first-post",
+            "excerpt": "Short summary",
+            "author": { "id": "clx...", "name": "John Doe", "image": null },
+            "publishedAt": "2026-06-22T06:00:00.000Z",
+            "views": 245,
+            "likes": 31,
+            "comments": 12,
+            "bookmarkedAt": "2026-07-14T10:00:00.000Z"
+          }
+        ],
+        "pagination": {
+          "totalItems": 1,
+          "totalPages": 1,
+          "currentPage": 1,
+          "hasNextPage": false,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+
+---
+
+### 72. Check Bookmark Status
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/posts/:id/bookmark/status`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `id` — post CUID
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Bookmark status fetched successfully.",
+      "data": { "isBookmarked": true }
+    }
+    ```
+*   **Error — Post Not Found (404)**:
+    ```json
+    { "success": false, "message": "Post not found." }
+    ```
+
+---
+
+## Reading History Endpoints — `/api`
+
+> **All history endpoints require** `accessToken` cookie (authenticated). Reading history is automatically recorded when an authenticated user views a post via `GET /api/posts/:slug`. Guests are never tracked.
+>
+> Users can only access or delete their own history.
+
+---
+
+### 73. Get Reading History
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/me/history`
+*   **Auth**: `accessToken` cookie
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+*   **Description**: Returns paginated reading history sorted by most recently read first. Each entry shows the post info plus `lastReadAt` and `readCount`.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Reading history fetched successfully.",
+      "data": {
+        "posts": [
+          {
+            "id": "clx...",
+            "postId": "clxxx...",
+            "title": "Understanding React",
+            "slug": "understanding-react",
+            "excerpt": "A comprehensive guide...",
+            "author": { "id": "clx...", "name": "John Doe", "image": null },
+            "publishedAt": "2026-06-22T06:00:00.000Z",
+            "views": 1200,
+            "lastReadAt": "2026-07-15T14:30:00.000Z",
+            "readCount": 5
+          }
+        ],
+        "pagination": {
+          "totalItems": 1,
+          "totalPages": 1,
+          "currentPage": 1,
+          "hasNextPage": false,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+
+---
+
+### 74. Delete a History Entry
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/me/history/:id`
+*   **Auth**: `accessToken` cookie (owner only)
+*   **Params**: `id` — history entry CUID
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "History entry deleted successfully."
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "History entry not found." }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You can only delete your own history." }
+    ```
+
+---
+
+### 75. Clear All Reading History
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/me/history`
+*   **Auth**: `accessToken` cookie
+*   **Description**: Deletes all reading history entries for the authenticated user.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Reading history cleared successfully."
+    }
+    ```
+
+---
+
 ## Search Endpoints — `/api/search`
 
 > **Global search** (`GET /api/search`) is rate-limited to **30 requests per minute** per IP. Uses `optionalAuth` — authenticated users get search history recording; anonymous users can still search.
@@ -2253,7 +2462,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 69. Global Search (Posts, Users, Tags)
+### 76. Global Search (Posts, Users, Tags)
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/search`
@@ -2320,7 +2529,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 70. Get Search Suggestions (Autocomplete)
+### 77. Get Search Suggestions (Autocomplete)
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/search/suggestions`
@@ -2354,7 +2563,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 71. Get Trending Searches
+### 78. Get Trending Searches
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/search/trending`
@@ -2376,7 +2585,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 72. Get Search History
+### 79. Get Search History
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/search/history`
@@ -2397,7 +2606,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 73. Clear Search History
+### 80. Clear Search History
 
 *   **Method**: `DELETE`
 *   **Endpoint**: `/api/search/history`
@@ -2414,7 +2623,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 74. Get Popular Tags
+### 81. Get Popular Tags
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/search/popular-tags`
@@ -2436,7 +2645,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-### 75. Discover Authors
+### 82. Discover Authors
 
 *   **Method**: `GET`
 *   **Endpoint**: `/api/search/authors`
@@ -2481,6 +2690,351 @@ This file documents all API endpoints created in the project. You can copy the U
 *   **Error — Not Found (404)**:
     ```json
     { "success": false, "message": "No authors found." }
+    ```
+
+---
+
+## Reports Endpoints — `/api` (reports) and `/api/admin/reports` (admin)
+
+> **Creating reports** (`POST`) requires `accessToken` cookie (authenticated). Any authenticated user can report content.
+>
+> **Managing reports** (`GET`, `PATCH`) requires `accessToken` cookie + `ADMIN` role.
+>
+> Users cannot report the same resource twice (unique constraint on `[reporterId, referenceId, reportType]`).
+
+---
+
+### 83. Report a Post
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/posts/:id/report`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `id` — post CUID
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "reason": "SPAM",
+      "description": "This post contains misleading affiliate links."
+    }
+    ```
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `reason` | Required — one of: `SPAM`, `HARASSMENT`, `HATE_SPEECH`, `MISINFORMATION`, `COPYRIGHT`, `ADULT_CONTENT`, `VIOLENCE`, `IMPERSONATION`, `OTHER` |
+    | `description` | Optional, string, max 1000 characters |
+*   **Response (201 Created)**:
+    ```json
+    {
+      "success": true,
+      "message": "Post reported successfully.",
+      "data": {
+        "report": {
+          "id": "clx...",
+          "reportType": "POST",
+          "reason": "SPAM",
+          "description": "This post contains misleading affiliate links.",
+          "status": "PENDING",
+          "createdAt": "2026-07-19T10:00:00.000Z"
+        }
+      }
+    }
+    ```
+*   **Error — Duplicate (409)**:
+    ```json
+    { "success": false, "message": "You have already reported this resource." }
+    ```
+
+---
+
+### 84. Report a Comment
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/comments/:id/report`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `id` — comment CUID
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "reason": "HARASSMENT",
+      "description": "This comment contains offensive language."
+    }
+    ```
+*   **Response (201 Created)**:
+    ```json
+    {
+      "success": true,
+      "message": "Comment reported successfully.",
+      "data": {
+        "report": {
+          "id": "clx...",
+          "reportType": "COMMENT",
+          "reason": "HARASSMENT",
+          "description": "This comment contains offensive language.",
+          "status": "PENDING",
+          "createdAt": "2026-07-19T10:00:00.000Z"
+        }
+      }
+    }
+    ```
+
+---
+
+### 85. Report a User
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/users/:id/report`
+*   **Auth**: `accessToken` cookie
+*   **Params**: `id` — user CUID
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "reason": "IMPERSONATION",
+      "description": "This user is pretending to be someone else."
+    }
+    ```
+*   **Response (201 Created)**:
+    ```json
+    {
+      "success": true,
+      "message": "User reported successfully.",
+      "data": {
+        "report": {
+          "id": "clx...",
+          "reportType": "USER",
+          "reason": "IMPERSONATION",
+          "description": "This user is pretending to be someone else.",
+          "status": "PENDING",
+          "createdAt": "2026-07-19T10:00:00.000Z"
+        }
+      }
+    }
+    ```
+
+---
+
+### 86. Get All Reports (Admin)
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/admin/reports`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `10`, range: `1`–`100`)
+    *   `status` (optional) — filter by status: `PENDING`, `UNDER_REVIEW`, `RESOLVED`, `REJECTED`
+    *   `type` (optional) — filter by type: `POST`, `COMMENT`, `USER`
+    *   `sort` (optional, default: `newest`, options: `newest`, `oldest`)
+*   **Description**: Returns paginated list of all reports for admin moderation.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Reports fetched successfully.",
+      "data": {
+        "reports": [
+          {
+            "id": "clx...",
+            "reportType": "POST",
+            "reason": "SPAM",
+            "description": "Spam content",
+            "status": "PENDING",
+            "referenceId": "clx...",
+            "createdAt": "2026-07-19T10:00:00.000Z",
+            "reporter": { "id": "clx...", "name": "John Doe", "image": null }
+          }
+        ],
+        "pagination": {
+          "totalItems": 25,
+          "totalPages": 3,
+          "currentPage": 1,
+          "hasNextPage": true,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+
+---
+
+### 87. Get Report by ID (Admin)
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/admin/reports/:id`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Params**: `id` — report CUID
+*   **Description**: Returns full report details including reporter and resolver info.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Report fetched successfully.",
+      "data": {
+        "report": {
+          "id": "clx...",
+          "reportType": "POST",
+          "reason": "SPAM",
+          "description": "Spam content",
+          "status": "PENDING",
+          "referenceId": "clx...",
+          "createdAt": "2026-07-19T10:00:00.000Z",
+          "resolvedAt": null,
+          "resolutionNote": null,
+          "reporter": { "id": "clx...", "name": "John Doe", "image": null },
+          "resolver": null
+        }
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Report not found." }
+    ```
+
+---
+
+### 88. Change Report Status (Admin)
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/admin/reports/:id/status`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Params**: `id` — report CUID
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "status": "UNDER_REVIEW"
+    }
+    ```
+*   **Validation**: `status` must be one of: `PENDING`, `UNDER_REVIEW`, `RESOLVED`, `REJECTED`
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Report status updated successfully.",
+      "data": {
+        "report": {
+          "id": "clx...",
+          "status": "UNDER_REVIEW"
+        }
+      }
+    }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Report not found." }
+    ```
+
+---
+
+### 89. Resolve Report (Admin)
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/admin/reports/:id/resolve`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Params**: `id` — report CUID
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "action": "DELETE_POST",
+      "note": "Post removed for violating spam policy."
+    }
+    ```
+*   **Validation**:
+    | Field | Rule |
+    |---|---|
+    | `action` | One of: `NO_ACTION`, `DELETE_POST`, `DELETE_COMMENT`, `WARN_USER`, `SUSPEND_USER`, `BAN_USER` |
+    | `note` | Optional, string, max 2000 characters |
+*   **Description**: Resolves the report with a specific action. Sets status to `RESOLVED` and records the resolver and timestamp.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Report resolved successfully.",
+      "data": {
+        "report": {
+          "id": "clx...",
+          "status": "RESOLVED",
+          "resolutionAction": "DELETE_POST",
+          "resolutionNote": "Post removed for violating spam policy.",
+          "resolvedAt": "2026-07-19T12:00:00.000Z",
+          "resolver": { "id": "clx...", "name": "Admin User", "image": null }
+        }
+      }
+    }
+    ```
+
+---
+
+### 90. Reject Report (Admin)
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/admin/reports/:id/reject`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Params**: `id` — report CUID
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "note": "Report reviewed — content does not violate guidelines."
+    }
+    ```
+*   **Description**: Rejects the report (sets status to `REJECTED`) with an optional note explaining why.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Report rejected successfully.",
+      "data": {
+        "report": {
+          "id": "clx...",
+          "status": "REJECTED",
+          "resolutionNote": "Report reviewed — content does not violate guidelines.",
+          "resolvedAt": "2026-07-19T12:00:00.000Z",
+          "resolver": { "id": "clx...", "name": "Admin User", "image": null }
+        }
+      }
+    }
+    ```
+
+---
+
+### 91. Get Report Analytics (Admin)
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/admin/reports/analytics`
+*   **Auth**: `accessToken` cookie + `ADMIN` role
+*   **Description**: Returns aggregate statistics about reports for the admin dashboard.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Report analytics fetched successfully.",
+      "data": {
+        "totalReports": 150,
+        "pendingReports": 45,
+        "underReviewReports": 12,
+        "resolvedReports": 70,
+        "rejectedReports": 23,
+        "reportsByType": {
+          "POST": 80,
+          "COMMENT": 50,
+          "USER": 20
+        },
+        "reportsByReason": {
+          "SPAM": 60,
+          "HARASSMENT": 30,
+          "HATE_SPEECH": 15,
+          "COPYRIGHT": 10,
+          "OTHER": 35
+        },
+        "reportsToday": 5,
+        "reportsThisWeek": 28,
+        "reportsThisMonth": 120
+      }
+    }
     ```
 
 ---

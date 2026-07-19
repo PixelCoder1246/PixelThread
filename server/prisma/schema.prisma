@@ -7,46 +7,50 @@ datasource db {
 }
 
 model User {
-  id              String    @id @default(cuid())
-  name            String?
-  email           String    @unique
-  password        String
-  image           String?
+  id       String  @id @default(cuid())
+  name     String?
+  email    String  @unique
+  password String
+  image    String?
 
-  role            UserRole  @default(USER)
+  role UserRole @default(USER)
 
   isEmailVerified Boolean   @default(false)
   lastLoginAt     DateTime?
 
-  sessions              Session[]
-  passwordResetTokens   PasswordResetToken[]
-  emailVerifyTokens     EmailVerificationToken[]
+  sessions            Session[]
+  passwordResetTokens PasswordResetToken[]
+  emailVerifyTokens   EmailVerificationToken[]
 
-  posts           Post[]
-  comments        Comment[]
-  likes           Like[]
-  aiLogs          AIGeneration[]
-  notifications       Notification[]  @relation("NotificationRecipient")
-  actedNotifications  Notification[]  @relation("NotificationActor")
-  followers           Follow[]        @relation("Following")
-  following           Follow[]        @relation("Follower")
+  posts              Post[]
+  comments           Comment[]
+  likes              Like[]
+  aiLogs             AIGeneration[]
+  notifications      Notification[] @relation("NotificationRecipient")
+  actedNotifications Notification[] @relation("NotificationActor")
+  followers          Follow[]       @relation("Following")
+  following          Follow[]       @relation("Follower")
+  bookmarks          Bookmark[]
+  histories          History[]
+  reports            Report[]   @relation("ReportReporter")
+  resolvedReports    Report[]   @relation("ReportResolver")
 
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  userId       String
-  token        String   @unique
-  expiresAt    DateTime
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
 
-  ipAddress    String?
-  userAgent    String?
+  ipAddress String?
+  userAgent String?
 
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt    DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([token])
@@ -59,7 +63,7 @@ model PasswordResetToken {
   expiresAt DateTime
   used      Boolean  @default(false)
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -73,7 +77,7 @@ model EmailVerificationToken {
   token     String   @unique
   expiresAt DateTime
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -82,77 +86,80 @@ model EmailVerificationToken {
 }
 
 model Post {
-  id            String      @id @default(cuid())
-  title         String
-  slug          String      @unique
-  content       Json
-  excerpt       String?
+  id      String  @id @default(cuid())
+  title   String
+  slug    String  @unique
+  content Json
+  excerpt String?
 
-  status        PostStatus  @default(DRAFT)
-  visibility    Visibility  @default(PUBLIC)
+  status     PostStatus @default(DRAFT)
+  visibility Visibility @default(PUBLIC)
 
-  authorId      String
-  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  seo           SeoMeta?
-  tags          PostTag[]
-  analytics     PostAnalytics?
+  seo       SeoMeta?
+  tags      PostTag[]
+  analytics PostAnalytics?
 
-  comments      Comment[]
-  likes         Like[]
-  aiLogs        AIGeneration[]
+  comments Comment[]
+  likes    Like[]
+  aiLogs   AIGeneration[]
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  publishedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  bookmarks Bookmark[]
+  histories History[]
 }
 
 model SeoMeta {
-  id              String  @id @default(cuid())
-  postId          String  @unique
+  id     String @id @default(cuid())
+  postId String @unique
 
   metaTitle       String?
   metaDescription String?
   keywords        Json?
   canonicalUrl    String?
 
-  score           Int?
+  score Int?
 
-  post            Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Tag {
-  id        String    @id @default(cuid())
-  name      String    @unique
+  id   String @id @default(cuid())
+  name String @unique
 
-  posts     PostTag[]
+  posts PostTag[]
 }
 
 model PostTag {
   postId String
   tagId  String
 
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([postId, tagId])
 }
 
 model Comment {
-  id        String   @id @default(cuid())
-  content   String
+  id      String @id @default(cuid())
+  content String
 
-  postId    String
-  userId    String
-  parentId  String?
+  postId   String
+  userId   String
+  parentId String?
 
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-  replies   Comment[] @relation("CommentReplies")
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies Comment[] @relation("CommentReplies")
 
-  likes     Like[]
+  likes Like[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -161,14 +168,14 @@ model Comment {
 }
 
 model Like {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   userId    String
   postId    String?
   commentId String?
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -179,39 +186,39 @@ model Like {
 }
 
 model AIGeneration {
-  id          String            @id @default(cuid())
-  userId      String
-  postId      String?
+  id     String  @id @default(cuid())
+  userId String
+  postId String?
 
-  type        AIGenerationType
+  type AIGenerationType
 
-  prompt      String
-  response    String
+  prompt   String
+  response String
 
-  createdAt   DateTime          @default(now())
+  createdAt DateTime @default(now())
 
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post        Post?             @relation(fields: [postId], references: [id], onDelete: SetNull)
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post? @relation(fields: [postId], references: [id], onDelete: SetNull)
 }
 
 model PostAnalytics {
-  id        String   @id @default(cuid())
-  postId    String   @unique
+  id     String @id @default(cuid())
+  postId String @unique
 
-  views     Int      @default(0)
+  views Int @default(0)
 
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Follow {
-  id          String   @id @default(cuid())
+  id          String @id @default(cuid())
   followerId  String
   followingId String
 
-  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
-  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@unique([followerId, followingId])
   @@index([followerId])
@@ -219,7 +226,7 @@ model Follow {
 }
 
 model Notification {
-  id            String                  @id @default(cuid())
+  id            String                     @id @default(cuid())
   recipientId   String
   actorId       String?
   type          NotificationType
@@ -227,12 +234,12 @@ model Notification {
   message       String
   referenceId   String?
   referenceType NotificationReferenceType?
-  isRead        Boolean                 @default(false)
+  isRead        Boolean                    @default(false)
 
-  recipient     User                    @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
-  actor         User?                   @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  recipient User  @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  actor     User? @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
 
-  createdAt     DateTime                @default(now())
+  createdAt DateTime @default(now())
 
   @@index([recipientId])
   @@index([recipientId, isRead])
@@ -259,6 +266,41 @@ model TrendingSearch {
 
   @@index([count])
   @@index([keyword])
+}
+
+model Bookmark {
+  id     String @id @default(cuid())
+  userId String
+  postId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+  @@index([createdAt])
+}
+
+model History {
+  id         String   @id @default(cuid())
+  userId     String
+  postId     String
+  lastReadAt DateTime @default(now())
+  readCount  Int      @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+  @@index([lastReadAt])
 }
 
 enum PostStatus {
@@ -293,6 +335,56 @@ enum AIGenerationType {
 enum UserRole {
   USER
   ADMIN
+}
+
+enum ReportType {
+  POST
+  COMMENT
+  USER
+}
+
+enum ReportReason {
+  SPAM
+  HARASSMENT
+  HATE_SPEECH
+  MISINFORMATION
+  COPYRIGHT
+  ADULT_CONTENT
+  VIOLENCE
+  IMPERSONATION
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  UNDER_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+model Report {
+  id        String       @id @default(cuid())
+  reporterId String
+  reportType  ReportType
+  reportReason ReportReason
+  description String?
+  status     ReportStatus @default(PENDING)
+  referenceId String
+  resolvedBy  String?
+  resolutionNote String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  resolvedAt DateTime?
+
+  reporter User  @relation("ReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  resolver User? @relation("ReportResolver", fields: [resolvedBy], references: [id], onDelete: SetNull)
+
+  @@unique([reporterId, referenceId, reportType])
+  @@index([reporterId])
+  @@index([reportType])
+  @@index([referenceId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 enum NotificationType {

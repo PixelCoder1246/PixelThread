@@ -15,6 +15,9 @@ const aiRoutes = require('./modules/ai/ai.routes');
 const notificationRoutes = require('./modules/notifications/notification.routes');
 const followRoutes = require('./modules/follow/follow.routes');
 const searchRoutes = require('./modules/search/search.routes');
+const bookmarkRoutes = require('./modules/bookmarks/bookmark.routes');
+const historyRoutes = require('./modules/history/history.routes');
+const reportRoutes = require('./modules/reports/report.routes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -48,6 +51,9 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', followRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api', bookmarkRoutes);
+app.use('/api', historyRoutes);
+app.use('/api', reportRoutes);
 app.use((req, res) => {
   res
     .status(404)

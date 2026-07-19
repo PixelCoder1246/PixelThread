@@ -8,6 +8,7 @@ const {
 } = require('./post.validation');
 const postService = require('./post.service');
 const { uploadToS3Mock } = require('../../utils/upload.util');
+const historyService = require('../history/history.service');
 
 const parseFormDataAndMapFiles = async (req) => {
   let content = req.body.content;
@@ -83,6 +84,11 @@ const getPostBySlug = async (req, res, next) => {
   try {
     const { slug } = req.params;
     const post = await postService.getPostBySlug(slug);
+
+    if (req.user) {
+      historyService.recordReading(post.id, req.user.id).catch(() => {});
+    }
+
     return sendSuccess(res, 200, 'Post fetched successfully.', { post });
   } catch (err) {
     next(err);

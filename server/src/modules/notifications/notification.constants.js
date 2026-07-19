@@ -7,6 +7,9 @@ const NOTIFICATION_TYPES = {
   POST_FEATURED: 'POST_FEATURED',
   MENTION: 'MENTION',
   SYSTEM: 'SYSTEM',
+  REPORT: 'REPORT',
+  REPORT_RESOLVED: 'REPORT_RESOLVED',
+  REPORT_REJECTED: 'REPORT_REJECTED',
 };
 
 const NOTIFICATION_REFERENCE_TYPES = {
@@ -30,6 +33,10 @@ const NOTIFICATION_MESSAGES = {
   [NOTIFICATION_TYPES.MENTION]: (actorName) =>
     `${actorName} mentioned you in a post`,
   [NOTIFICATION_TYPES.SYSTEM]: () => '',
+  [NOTIFICATION_TYPES.REPORT]: (actorName) =>
+    `${actorName} submitted a new report`,
+  [NOTIFICATION_TYPES.REPORT_RESOLVED]: () => 'Your report has been resolved',
+  [NOTIFICATION_TYPES.REPORT_REJECTED]: () => 'Your report has been rejected',
 };
 
 const NOTIFICATION_TITLES = {
@@ -41,6 +48,9 @@ const NOTIFICATION_TITLES = {
   [NOTIFICATION_TYPES.POST_FEATURED]: 'Post Featured',
   [NOTIFICATION_TYPES.MENTION]: 'You were mentioned',
   [NOTIFICATION_TYPES.SYSTEM]: 'System Update',
+  [NOTIFICATION_TYPES.REPORT]: 'New Report',
+  [NOTIFICATION_TYPES.REPORT_RESOLVED]: 'Report Resolved',
+  [NOTIFICATION_TYPES.REPORT_REJECTED]: 'Report Rejected',
 };
 
 const NOTIFICATION_TYPE_VALUES = Object.values(NOTIFICATION_TYPES);
