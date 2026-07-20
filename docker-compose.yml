@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  pixelthread-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pixelthread-api
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DATABASE_URL=${DATABASE_URL}
+      - DIRECT_URL=${DIRECT_URL}
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - JWT_ACCESS_EXPIRES_IN=15m
+      - JWT_REFRESH_EXPIRES_IN=7d
+      - CLIENT_URL=${CLIENT_URL}
+      - API_URL=${API_URL}
+      - STORAGE_PROVIDER=local
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}
+      - NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
+      - AI_MODEL=nvidia/llama-3.1-nemotron-70b-instruct
+      - LOG_LEVEL=info
+    volumes:
+      - uploads_data:/app/public/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  uploads_data:

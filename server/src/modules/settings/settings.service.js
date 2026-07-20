@@ -14,6 +14,25 @@ const {
   generateSecureToken,
   hashToken,
 } = require('./settings.utils');
+const logger = require('../../config/logger');
+
+const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,128}$/;
+
+const validatePassword = (password) => {
+  if (!password || password.length < 8) {
+    throw new ApiError(400, 'Password must be at least 8 characters.');
+  }
+  if (password.length > 128) {
+    throw new ApiError(400, 'Password must not exceed 128 characters.');
+  }
+  if (!PASSWORD_REGEX.test(password)) {
+    throw new ApiError(
+      400,
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+    );
+  }
+};
 
 const getMySettings = async (userId) => {
   const user = await prisma.user.findUnique({
@@ -94,7 +113,7 @@ const changeEmail = async (userId, { newEmail, password }) => {
     data: { userId, token: hashedToken, expiresAt },
   });
 
-  await notificationService
+  notificationService
     .createSystemNotification({
       recipientId: userId,
       title: 'Email Change Initiated',
@@ -102,11 +121,13 @@ const changeEmail = async (userId, { newEmail, password }) => {
         'A request to change your email was made. Please verify your new email address.',
       referenceType: 'SYSTEM',
     })
-    .catch(() => {});
+    .catch((err) =>
+      logger.warn('Failed to send email change notification', {
+        error: err.message,
+      })
+    );
 
-  sendEmailChangeVerification(newEmail, rawToken).catch((err) =>
-    console.error('Failed to send email change verification:', err)
-  );
+  sendEmailChangeVerification(newEmail, rawToken);
 
   return {
     message:
@@ -150,14 +171,18 @@ const verifyNewEmail = async (token) => {
     prisma.emailVerificationToken.delete({ where: { id: record.id } }),
   ]);
 
-  await notificationService
+  notificationService
     .createSystemNotification({
       recipientId: user.id,
       title: 'Email Changed',
       message: 'Your email address has been updated successfully.',
       referenceType: 'SYSTEM',
     })
-    .catch(() => {});
+    .catch((err) =>
+      logger.warn('Failed to send email change notification', {
+        error: err.message,
+      })
+    );
 };
 
 const changePassword = async (userId, { currentPassword, newPassword }) => {
@@ -183,6 +208,8 @@ const changePassword = async (userId, { currentPassword, newPassword }) => {
     );
   }
 
+  validatePassword(newPassword);
+
   const hashedNewPassword = await hashPassword(newPassword);
 
   await prisma.$transaction([
@@ -193,7 +220,7 @@ const changePassword = async (userId, { currentPassword, newPassword }) => {
     prisma.session.deleteMany({ where: { userId } }),
   ]);
 
-  await notificationService
+  notificationService
     .createSystemNotification({
       recipientId: userId,
       title: 'Password Changed',
@@ -201,7 +228,11 @@ const changePassword = async (userId, { currentPassword, newPassword }) => {
         'Your password has been updated successfully. If you did not make this change, please contact support immediately.',
       referenceType: 'SYSTEM',
     })
-    .catch(() => {});
+    .catch((err) =>
+      logger.warn('Failed to send password change notification', {
+        error: err.message,
+      })
+    );
 };
 
 const updatePrivacy = async (userId, updates) => {
@@ -279,7 +310,9 @@ const uploadAvatar = async (userId, file) => {
   });
 
   if (oldImage) {
-    await deleteFile(oldImage).catch(() => {});
+    await deleteFile(oldImage).catch((err) =>
+      logger.warn('Failed to delete old avatar', { error: err.message })
+    );
   }
 
   return { url };
@@ -306,7 +339,9 @@ const uploadCoverImage = async (userId, file) => {
   });
 
   if (oldCover) {
-    await deleteFile(oldCover).catch(() => {});
+    await deleteFile(oldCover).catch((err) =>
+      logger.warn('Failed to delete old cover image', { error: err.message })
+    );
   }
 
   return { url };
@@ -321,7 +356,9 @@ const deleteAvatar = async (userId) => {
   if (!user) throw new ApiError(404, 'User not found.');
 
   if (user.image) {
-    await deleteFile(user.image).catch(() => {});
+    await deleteFile(user.image).catch((err) =>
+      logger.warn('Failed to delete avatar', { error: err.message })
+    );
   }
 
   await prisma.user.update({
@@ -339,7 +376,9 @@ const deleteCoverImage = async (userId) => {
   if (!user) throw new ApiError(404, 'User not found.');
 
   if (user.coverImage) {
-    await deleteFile(user.coverImage).catch(() => {});
+    await deleteFile(user.coverImage).catch((err) =>
+      logger.warn('Failed to delete cover image', { error: err.message })
+    );
   }
 
   await prisma.user.update({
@@ -362,20 +401,32 @@ const deleteAccount = async (userId, password) => {
   }
 
   if (user.image) {
-    await deleteFile(user.image).catch(() => {});
+    await deleteFile(user.image).catch((err) =>
+      logger.warn('Failed to delete avatar during account deletion', {
+        error: err.message,
+      })
+    );
   }
   if (user.coverImage) {
-    await deleteFile(user.coverImage).catch(() => {});
+    await deleteFile(user.coverImage).catch((err) =>
+      logger.warn('Failed to delete cover during account deletion', {
+        error: err.message,
+      })
+    );
   }
 
-  await notificationService
+  notificationService
     .createSystemNotification({
       recipientId: userId,
       title: 'Account Deleted',
       message: 'Your PixelThread account has been permanently deleted.',
       referenceType: 'SYSTEM',
     })
-    .catch(() => {});
+    .catch((err) =>
+      logger.warn('Failed to send account deletion notification', {
+        error: err.message,
+      })
+    );
 
   await prisma.$transaction([
     prisma.session.deleteMany({ where: { userId } }),

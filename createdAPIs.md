@@ -3560,6 +3560,88 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
+## Monitoring Endpoints
+
+> **All monitoring endpoints are fully public** — no authentication required. These endpoints are used by Docker health checks, load balancers, and monitoring systems.
+
+---
+
+### 109. Health Check
+
+*   **Method**: `GET`
+*   **Endpoint**: `/health`
+*   **Auth**: None required
+*   **Description**: Quick health check returning `200 OK` if the server is up. Used by Docker `HEALTHCHECK` instruction and load balancer health probes.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "status": "ok",
+      "uptime": 3600,
+      "timestamp": "2026-07-20T12:00:00.000Z"
+    }
+    ```
+
+---
+
+### 110. Readiness Probe
+
+*   **Method**: `GET`
+*   **Endpoint**: `/ready`
+*   **Auth**: None required
+*   **Description**: Readiness probe that checks database connectivity, storage availability, and AI provider configuration. Returns `200` when all services are healthy, `503` when degraded. Used by Kubernetes readiness probes and orchestrators.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "status": "ok",
+      "checks": {
+        "database": true,
+        "storage": true,
+        "ai": true
+      },
+      "uptime": 3600,
+      "timestamp": "2026-07-20T12:00:00.000Z"
+    }
+    ```
+*   **Response (503 Service Unavailable)**:
+    ```json
+    {
+      "status": "degraded",
+      "checks": {
+        "database": false,
+        "storage": true,
+        "ai": true
+      },
+      "uptime": 3600,
+      "timestamp": "2026-07-20T12:00:00.000Z"
+    }
+    ```
+
+---
+
+### 111. Metrics
+
+*   **Method**: `GET`
+*   **Endpoint**: `/metrics`
+*   **Auth**: None required
+*   **Description**: Returns server metrics in Prometheus text format for monitoring and autoscaling decisions. Includes uptime, total request count, and per-route request counts.
+*   **Response (200 OK)** — `Content-Type: text/plain; charset=utf-8`:
+    ```text
+    # HELP pixelthread_uptime_seconds Server uptime in seconds
+    # TYPE pixelthread_uptime_seconds gauge
+    pixelthread_uptime_seconds 3600
+
+    # HELP pixelthread_requests_total Total request count
+    # TYPE pixelthread_requests_total counter
+    pixelthread_requests_total 12345
+
+    # HELP pixelthread_route_requests_total Request count by route
+    # TYPE pixelthread_route_requests_total gauge
+    pixelthread_route_requests_total{route="GET:/"} 100
+    pixelthread_route_requests_total{route="POST:/api/auth/login"} 50
+    ```
+
+---
+
 ## Error Responses
 
 | Status | Scenario | Message |

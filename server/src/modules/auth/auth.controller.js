@@ -26,7 +26,6 @@ const register = async (req, res, next) => {
       password,
     });
 
-    console.log('Verification token:', rawVerificationToken);
     return sendSuccess(
       res,
       201,

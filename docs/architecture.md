@@ -224,3 +224,59 @@ The Settings module (`/api/me`) provides 13 endpoints for comprehensive account 
 | `Bookmark` | User-post bookmark relationships (unique constraint on user+post) |
 | `History` | Reading history tracking with `lastReadAt` and `readCount` |
 | `Report` | Content moderation reports (post, comment, user) with status tracking |
+
+---
+
+## Production Hardening (v0.9.0)
+
+### Security
+
+| Layer | Implementation |
+|---|---|
+| **Rate Limiting** | Auth routes: 20 req/15min (login), 5 req/hour (register), 30 req/min (search), 10 req/min (AI) |
+| **Input Sanitization** | Global XSS stripping middleware removes `<script>`, event handlers, `javascript:` URIs from all input |
+| **File Upload Security** | MIME type validation, extension whitelist (jpeg/png/webp/gif), max 10MB, path traversal prevention |
+| **Password Strength** | Enforced minimum 8 chars, must include uppercase, lowercase, digit, and special character |
+| **CSP Headers** | Production Content Security Policy restricts script/style/img/connect sources |
+| **HSTS** | Enabled in production (max-age 1 year, includeSubDomains, preload) |
+| **Cookie Security** | `HttpOnly`, `Secure` (production), `SameSite=Strict` |
+| **Environment Validation** | Startup fails if `DATABASE_URL`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, or `CLIENT_URL` are missing |
+
+### Monitoring
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /health` | Quick health check (200 if server is up) — used by Docker health checks and load balancers |
+| `GET /ready` | Readiness probe — checks database connectivity, storage availability, AI provider config |
+| `GET /metrics` | Prometheus-format metrics (uptime, request counts by route) |
+
+### Logging
+
+- Structured JSON logging in production, human-readable in development
+- Log levels: `error`, `warn`, `info`, `debug` — configured via `LOG_LEVEL` env var
+- Audit logging for authentication events and failures
+- All `console.*` calls replaced with structured logger
+- Never logs passwords, secrets, or tokens
+
+### Error Handling
+
+- Consistent `{ success, message, data/errors }` response format
+- Prisma error codes mapped to proper HTTP statuses (`P2002` → 409, `P2025` → 404, `P2003` → 400)
+- Multer errors (file size, count, type) mapped to meaningful 400 responses
+- JSON parse errors and request entity too large handled explicitly
+- Stack traces never returned in production
+
+### Deployment
+
+- **Docker**: Multi-stage build (`node:22-alpine`), non-root user, health check, `HEALTHCHECK` instruction
+- **Docker Compose**: One-service setup with env variables and persistent upload volume
+- **Graceful Shutdown**: `SIGTERM`/`SIGINT` handling — closes HTTP server, disconnects Prisma, force-exits after 30s timeout
+- **Process Safety**: `unhandledRejection` and `uncaughtException` handlers log and trigger graceful shutdown
+
+### Performance
+
+- **Compression**: `compression` middleware for gzip/brotli response compression
+- **Body Limits**: `express.json({ limit: '1mb' })` prevents oversized payloads
+- **Static Caching**: `/uploads` served with `maxAge: 7d`, `etag`, `lastModified`
+- **Database Indexes**: Added composite indexes for common query patterns (`status+visibility+createdAt`, `postId+createdAt`, `userId+createdAt`, etc.)
+- **Connection Pooling**: `pg.Pool` with Prisma adapter for efficient database connections

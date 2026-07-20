@@ -40,11 +40,16 @@ Edit `server/.env`:
 ```env
 PORT=5000
 NODE_ENV=development
+LOG_LEVEL=debug
 DATABASE_URL="postgresql://<user>:<password>@<pooler-host>:5432/postgres"
 DIRECT_URL="postgresql://<user>:<password>@<direct-host>:5432/postgres"
+JWT_ACCESS_SECRET=<random-64-char-string>
+JWT_REFRESH_SECRET=<random-64-char-string>
+CLIENT_URL=http://localhost:3000
+API_URL=http://localhost:5000
 ```
 
-> **Note:** If you are on an IPv4 network (most home/office networks), use the **Session Pooler** URL as your `DATABASE_URL` and the direct host URL as your `DIRECT_URL`.
+> **Important**: Generate strong JWT secrets: `openssl rand -hex 64`
 
 ### Client
 ```bash
@@ -68,6 +73,9 @@ cd server
 # Apply schema to the database (creates tables)
 npx prisma migrate dev --name init
 
+# Generate indexes for production performance
+npx prisma migrate dev --name add_indexes
+
 # Regenerate the Prisma client after schema changes
 npm run prisma:generate
 
@@ -78,7 +86,7 @@ npx prisma db seed
 npm run prisma:studio
 ```
 
-> **Note:** Prisma 7 requires the `prisma.config.ts` file for configuration. Do not add `url` to `schema.prisma` directly.
+> **Note**: Prisma 7 requires the `prisma.config.ts` file for configuration. Do not add `url` to `schema.prisma` directly.
 
 ---
 
@@ -100,7 +108,43 @@ cd server && npm run dev
 
 ---
 
-## 6. Code Quality
+## 6. Docker Deployment
+
+### Build and Run with Docker Compose
+```bash
+# Set environment variables
+export DATABASE_URL="postgresql://..."
+export JWT_ACCESS_SECRET="..."
+export JWT_REFRESH_SECRET="..."
+export CLIENT_URL="https://yourdomain.com"
+
+# Build and start
+docker-compose up -d --build
+```
+
+### Production Checklist
+- Generate strong JWT secrets: `openssl rand -hex 64`
+- Set `NODE_ENV=production`
+- Set `LOG_LEVEL=info`
+- Configure a reverse proxy (Nginx) for SSL termination
+- Set `STORAGE_PROVIDER=s3` for cloud storage
+- Configure `CLIENT_URL` and `API_URL` with your production domain
+
+---
+
+## 7. Monitoring Endpoints
+
+Once running, these endpoints are available:
+
+| Endpoint | Description |
+|---|---|
+| `GET /health` | Simple health check (always returns 200 if server is up) |
+| `GET /ready` | Readiness probe — checks database, storage, and AI connectivity |
+| `GET /metrics` | Prometheus-format metrics (request counts, uptime) |
+
+---
+
+## 8. Code Quality
 
 All commands can be run from the project root:
 
@@ -116,7 +160,7 @@ Pre-commit hooks are also active via **Husky**. Every `git commit` automatically
 
 ---
 
-## 7. Initial Git Push
+## 9. Initial Git Push
 
 ```bash
 git add .

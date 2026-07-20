@@ -1,28 +1,57 @@
 const nodemailer = require('nodemailer');
+const logger = require('../config/logger');
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: Number(process.env.EMAIL_PORT),
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+let transporter = null;
+
+const getTransporter = () => {
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT) || 465,
+      secure: process.env.EMAIL_PORT === '465',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  }
+  return transporter;
+};
+
+const sendEmail = async ({ to, subject, html }) => {
+  if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER) {
+    logger.warn('Email not sent — SMTP not configured', { to, subject });
+    return;
+  }
+
+  try {
+    const transport = getTransporter();
+    await transport.sendMail({
+      from:
+        process.env.EMAIL_FROM || `"PixelThread" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      html,
+    });
+    logger.info('Email sent', { to, subject });
+  } catch (err) {
+    logger.error('Failed to send email', {
+      to,
+      subject,
+      error: err.message,
+      code: err.code,
+    });
+  }
+};
 
 const sendVerificationEmail = async (to, token) => {
-  const verifyUrl = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
-
-  await transporter.verify();
-  console.log('SMTP Working...');
-
-  await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
+  const verifyUrl = `${process.env.CLIENT_URL}/verify-email?token=${encodeURIComponent(token)}`;
+  await sendEmail({
     to,
     subject: 'Verify your PixelThread account',
     html: `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-        <h2 style="color:#6c47ff">Welcome to PixelThread 🎉</h2>
+        <h2 style="color:#6c47ff">Welcome to PixelThread</h2>
         <p>Click the button below to verify your email address. This link expires in <strong>24 hours</strong>.</p>
         <a href="${verifyUrl}"
            style="display:inline-block;padding:12px 24px;background:#6c47ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold;">
@@ -35,10 +64,8 @@ const sendVerificationEmail = async (to, token) => {
 };
 
 const sendPasswordResetEmail = async (to, token) => {
-  const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
-
-  await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
+  const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${encodeURIComponent(token)}`;
+  await sendEmail({
     to,
     subject: 'Reset your PixelThread password',
     html: `
@@ -56,10 +83,8 @@ const sendPasswordResetEmail = async (to, token) => {
 };
 
 const sendEmailChangeVerification = async (to, token) => {
-  const verifyUrl = `${process.env.CLIENT_URL}/settings/email/verify?token=${token}`;
-
-  await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
+  const verifyUrl = `${process.env.CLIENT_URL}/settings/email/verify?token=${encodeURIComponent(token)}`;
+  await sendEmail({
     to,
     subject: 'Verify your new email address — PixelThread',
     html: `

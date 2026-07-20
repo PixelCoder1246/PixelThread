@@ -12,6 +12,9 @@ const {
   sendPasswordResetEmail,
 } = require('../../services/email.service');
 
+const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,128}$/;
+
 const generateSecureToken = (bytes = 32) =>
   crypto.randomBytes(bytes).toString('hex');
 
@@ -27,13 +30,26 @@ const sanitizeUser = (user) => ({
   isEmailVerified: user.isEmailVerified,
 });
 
+const validatePassword = (password) => {
+  if (!password || password.length < 8) {
+    throw new ApiError(400, 'Password must be at least 8 characters.');
+  }
+  if (password.length > 128) {
+    throw new ApiError(400, 'Password must not exceed 128 characters.');
+  }
+  if (!PASSWORD_REGEX.test(password)) {
+    throw new ApiError(
+      400,
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+    );
+  }
+};
+
 const registerUser = async ({ name, email, password }) => {
   if (!email || !password) {
     throw new ApiError(400, 'Email and password are required.');
   }
-  if (password.length < 8) {
-    throw new ApiError(400, 'Password must be at least 8 characters.');
-  }
+  validatePassword(password);
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -54,9 +70,7 @@ const registerUser = async ({ name, email, password }) => {
     data: { userId: user.id, token: hashedToken, expiresAt },
   });
 
-  sendVerificationEmail(user.email, rawToken).catch((err) =>
-    console.error('Failed to send verification email:', err)
-  );
+  sendVerificationEmail(user.email, rawToken);
 
   return { user, rawVerificationToken: rawToken };
 };
@@ -185,9 +199,7 @@ const forgotPassword = async (email) => {
     data: { userId: user.id, token: hashedToken, expiresAt },
   });
 
-  sendPasswordResetEmail(user.email, rawToken).catch((err) =>
-    console.error('Failed to send password reset email:', err)
-  );
+  sendPasswordResetEmail(user.email, rawToken);
 
   return { rawToken };
 };
@@ -196,9 +208,7 @@ const resetPassword = async (token, newPassword) => {
   if (!token || !newPassword) {
     throw new ApiError(400, 'Token and new password are required.');
   }
-  if (newPassword.length < 8) {
-    throw new ApiError(400, 'Password must be at least 8 characters.');
-  }
+  validatePassword(newPassword);
 
   const hashedToken = hashToken(token);
 
@@ -278,9 +288,7 @@ const resendVerification = async (email) => {
     data: { userId: user.id, token: hashedToken, expiresAt },
   });
 
-  sendVerificationEmail(user.email, rawToken).catch((err) =>
-    console.error('Failed to resend verification email:', err)
-  );
+  sendVerificationEmail(user.email, rawToken);
 
   return { user, rawToken };
 };

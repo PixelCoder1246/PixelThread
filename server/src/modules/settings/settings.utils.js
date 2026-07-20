@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
+const logger = require('../../config/logger');
 
 const uploadsDir = path.join(__dirname, '../../../public/uploads');
 
@@ -17,7 +18,7 @@ const deleteFile = async (fileUrl) => {
     await fs.promises.unlink(filePath);
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      console.error(`Failed to delete file: ${filePath}`, err);
+      logger.error('Failed to delete file', { filePath, error: err.message });
     }
   }
 };

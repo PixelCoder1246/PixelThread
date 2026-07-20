@@ -1,6 +1,6 @@
 # API Documentation
 
-> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI (16 endpoints), Notification, Follow, Search, Bookmark (4 endpoints), Reading History (3 endpoints), Reports (9 endpoints), Settings (13 endpoints), and Media (4 endpoints) modules fully implemented (v0.8.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
+> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI (16 endpoints), Notification, Follow, Search, Bookmark (4 endpoints), Reading History (3 endpoints), Reports (9 endpoints), Settings (13 endpoints), and Media (4 endpoints) modules fully implemented (v0.9.0). Monitoring endpoints (`/health`, `/ready`, `/metrics`) added. See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
 
 ## Base URL
 
@@ -16,6 +16,52 @@
 ### `GET /`
 
 Returns a welcome message to confirm the API is running.
+
+### `GET /health`
+
+Quick health check — returns `200 OK` if the server is up. Used by Docker health checks and load balancers.
+
+**Response**: `200 OK`
+```json
+{
+  "status": "ok",
+  "uptime": 3600,
+  "timestamp": "2026-07-20T12:00:00.000Z"
+}
+```
+
+### `GET /ready`
+
+Readiness probe — checks database, storage, and AI provider connectivity. Returns `200` when all services are available, `503` when degraded.
+
+**Response**: `200 OK`
+```json
+{
+  "status": "ok",
+  "checks": {
+    "database": true,
+    "storage": true,
+    "ai": true
+  },
+  "uptime": 3600,
+  "timestamp": "2026-07-20T12:00:00.000Z"
+}
+```
+
+### `GET /metrics`
+
+Prometheus-format metrics for monitoring and autoscaling decisions.
+
+**Response**: `200 OK` with `Content-Type: text/plain`
+```text
+# HELP pixelthread_uptime_seconds Server uptime in seconds
+# TYPE pixelthread_uptime_seconds gauge
+pixelthread_uptime_seconds 3600
+
+# HELP pixelthread_requests_total Total request count
+# TYPE pixelthread_requests_total counter
+pixelthread_requests_total 12345
+```
 
 **Response**: `200 OK`
 ```json

@@ -119,11 +119,10 @@ const extractJSON = (text) => {
     if (result) return result;
   }
 
-  // Debug: log the response for investigation
-  console.error(
-    'No parseable JSON found. Response preview:',
-    cleaned.slice(0, 500)
-  );
+  const logger = require('../../config/logger');
+  logger.warn('No parseable JSON found in AI response', {
+    preview: cleaned.slice(0, 500),
+  });
   throw new Error('No JSON object or array found in AI response');
 };
 

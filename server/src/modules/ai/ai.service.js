@@ -89,7 +89,8 @@ const logAIGeneration = async ({ userId, postId, type, prompt, response }) => {
       },
     });
   } catch (error) {
-    console.error('Failed to log AI generation:', error.message);
+    const logger = require('../../config/logger');
+    logger.error('Failed to log AI generation', { error: error.message });
   }
 };
 

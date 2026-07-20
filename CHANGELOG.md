@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-07-20
+
+### Added
+- **Structured logging** (`server/src/config/logger.js`) — JSON logging in production, human-readable in dev, configurable log levels via `LOG_LEVEL`.
+- **Environment validation** (`server/src/config/env.js`) — Startup fails if required vars missing, warns on missing optional vars.
+- **Rate limiting** — Auth endpoints: 20 req/15min (login), 5 req/hour (register). AI: 10 req/min. Search: 30 req/min.
+- **Input sanitization middleware** (`server/src/middleware/validate.js`) — Global XSS stripping, `<script>` removal, event handler scrubbing.
+- **Monitoring endpoints** — `GET /health` (Docker health check), `GET /ready` (readiness probe with DB/storage/AI checks), `GET /metrics` (Prometheus-format metrics).
+- **Audit logging** (`server/src/middleware/audit.js`) — Logs authentication events and failures.
+- **Password strength enforcement** — All registration and password changes require uppercase, lowercase, digit, and special character.
+- **Docker support** — `Dockerfile` (multi-stage, non-root, health check), `docker-compose.yml`, `.dockerignore`.
+- **Graceful shutdown** — `SIGTERM`/`SIGINT` handling with DB disconnection and 30s timeout.
+- **`unhandledRejection`/`uncaughtException` handlers** in `server.js`.
+- **Content Security Policy (CSP)** and **HSTS** headers in production via Helmet configuration.
+- **Request compression** via `compression` middleware.
+- **Database indexes** on Post (authorId, status+visibility, title, publishedAt), Comment (userId, parentId, postId+createdAt), PostTag (tagId), AIGeneration (userId, type, userId+createdAt).
+
+### Changed
+- **Upload security** — MIME type + extension whitelist, filename sanitization, path traversal prevention, descriptive error messages.
+- **Error handler** — Handles Multer errors, Prisma errors (P2002, P2025, P2003), JSON parse errors, request entity too large. Proper HTTP status codes.
+- **Email service** — Centralized `sendEmail()` with error handling and logging, `encodeURIComponent` on URLs, lazy transporter initialization.
+- **Cookie configuration** — `trust proxy` enabled for production reverse proxies.
+- **All `console.*` calls** replaced with structured logger.
+
+### Removed
+- **Unused dependencies**: `crypto-js`, `next-auth`, `@auth/prisma-adapter`, `uuid`.
+- **Debug `console.log`** exposing verification tokens in auth controller.
+- **Fire-and-forget `.catch()` calls** — email service handles errors internally.
+
 ## [0.8.0] - 2026-07-19
 
 ### Added
