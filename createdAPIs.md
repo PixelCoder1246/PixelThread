@@ -3039,14 +3039,536 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
+## Settings Endpoints — `/api/me`
+
+> **All settings endpoints require** `accessToken` cookie (authenticated). Users can only access/modify their own settings. Administrators do not bypass ownership for these endpoints.
+
+---
+
+### 92. Get My Settings
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/me/settings`
+*   **Auth**: `accessToken` cookie
+*   **Description**: Returns the authenticated user's complete account settings including profile, privacy, notification preferences, and app preferences.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Settings fetched successfully.",
+      "data": {
+        "settings": {
+          "id": "clx...",
+          "name": "John Doe",
+          "email": "john@example.com",
+          "image": null,
+          "role": "USER",
+          "isEmailVerified": true,
+          "username": "johndoe",
+          "bio": "Full-stack developer & blogger",
+          "location": "San Francisco, CA",
+          "website": "https://johndoe.com",
+          "coverImage": null,
+          "socialLinks": [
+            { "platform": "github", "url": "https://github.com/johndoe" },
+            { "platform": "twitter", "url": "https://twitter.com/johndoe" }
+          ],
+          "profileVisibility": "PUBLIC",
+          "emailVisibility": false,
+          "allowFollowers": true,
+          "allowMessages": true,
+          "notificationPreferences": {
+            "likes": true,
+            "comments": true,
+            "replies": true,
+            "follows": true,
+            "mentions": true,
+            "systemAnnouncements": true
+          },
+          "language": "en",
+          "timezone": "America/New_York",
+          "themePreference": "light",
+          "createdAt": "2026-01-15T10:00:00.000Z",
+          "updatedAt": "2026-07-19T12:00:00.000Z"
+        }
+      }
+    }
+    ```
+
+---
+
+### 93. Update Profile
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/me/profile`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body** (all fields optional):
+    ```json
+    {
+      "name": "John Updated",
+      "bio": "Full-stack developer & tech writer",
+      "username": "john_updated",
+      "location": "New York, NY",
+      "website": "https://john-doe.dev",
+      "socialLinks": [
+        { "platform": "github", "url": "https://github.com/john_updated" }
+      ]
+    }
+    ```
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `name` | Optional, string, 1–100 characters |
+    | `bio` | Optional, string, max 500 characters. Pass `null` to clear. |
+    | `username` | Optional, string, 3–30 characters, letters/numbers/underscores/hyphens only. Case-insensitive — stored lowercase. |
+    | `location` | Optional, string. Pass `null` to clear. |
+    | `website` | Optional, valid HTTP(S) URL, max 500 characters. Pass `null` to clear. |
+    | `socialLinks` | Optional, array of `{ platform, url }` objects. Max 20 entries. Each URL must be valid. |
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Profile updated successfully.",
+      "data": { "user": { "id": "clx...", "name": "John Updated", "username": "john_updated", "..." : "..." } }
+    }
+    ```
+*   **Error — Username Taken (409)**:
+    ```json
+    { "success": false, "message": "Username is already taken." }
+    ```
+
+---
+
+### 94. Change Email
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/me/email`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "newEmail": "newemail@example.com",
+      "password": "currentPassword123"
+    }
+    ```
+*   **Description**: Initiates an email change. The user's email is **not** updated until they verify via the link sent to the new address. Previous email verification tokens are invalidated. The old email remains active during the verification window.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Verification email sent to your new email address. Your email will be updated once verified.",
+      "data": { "pendingEmail": "newemail@example.com" }
+    }
+    ```
+*   **Error — Same Email (400)**:
+    ```json
+    { "success": false, "message": "New email is the same as your current email." }
+    ```
+*   **Error — Duplicate (409)**:
+    ```json
+    { "success": false, "message": "An account with this email already exists." }
+    ```
+
+---
+
+### 95. Verify New Email
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/me/email/verify?token=...`
+*   **Auth**: None required (uses verification token from query)
+*   **Query Params**: `token` — verification token sent to the new email
+*   **Description**: Completes the email change. Updates the user's email, clears `pendingEmail`, and marks the email as verified. Token expires after 24 hours.
+*   **Response (200 OK)**:
+    ```json
+    { "success": true, "message": "Email verified successfully." }
+    ```
+*   **Error — Invalid/Expired (400)**:
+    ```json
+    { "success": false, "message": "Invalid or expired verification token. Please request a new one." }
+    ```
+
+---
+
+### 96. Change Password
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/me/password`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    {
+      "currentPassword": "oldPassword123",
+      "newPassword": "NewSecurePass456!",
+      "confirmPassword": "NewSecurePass456!"
+    }
+    ```
+*   **Description**: Changes the user's password. **All sessions are revoked** — the user must log in again (password change notification sent).
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `currentPassword` | Required, must match the user's current password |
+    | `newPassword` | Required, 8–128 characters, must differ from current password |
+    | `confirmPassword` | Required, must match `newPassword` |
+*   **Response (200 OK)**:
+    ```json
+    { "success": true, "message": "Password changed successfully. Please log in again." }
+    ```
+*   **Error — Wrong Password (401)**:
+    ```json
+    { "success": false, "message": "Current password is incorrect." }
+    ```
+
+---
+
+### 97. Update Privacy Settings
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/me/privacy`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body** (all fields optional):
+    ```json
+    {
+      "profileVisibility": "PUBLIC",
+      "emailVisibility": false,
+      "allowFollowers": true
+    }
+    ```
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `profileVisibility` | `PUBLIC`, `PRIVATE`, or `FOLLOWERS_ONLY` |
+    | `emailVisibility` | Boolean — whether email is shown on profile |
+    | `allowFollowers` | Boolean — whether others can follow |
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Privacy settings updated successfully.",
+      "data": {
+        "privacy": {
+          "id": "clx...",
+          "profileVisibility": "PUBLIC",
+          "emailVisibility": false,
+          "allowFollowers": true,
+          "allowMessages": true
+        }
+      }
+    }
+    ```
+
+---
+
+### 98. Update Notification Preferences
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/me/notifications`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body** (all fields optional booleans):
+    ```json
+    {
+      "likes": true,
+      "comments": false,
+      "replies": true,
+      "follows": true,
+      "mentions": true,
+      "systemAnnouncements": false
+    }
+    ```
+*   **Description**: Toggles individual notification types. Only provided fields are updated; others retain their current value.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Notification preferences updated successfully.",
+      "data": {
+        "notificationPreferences": {
+          "likes": true,
+          "comments": false,
+          "replies": true,
+          "follows": true,
+          "mentions": true,
+          "systemAnnouncements": false
+        }
+      }
+    }
+    ```
+
+---
+
+### 99. Update Preferences (Language, Theme, Timezone)
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/me/preferences`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body** (all fields optional):
+    ```json
+    {
+      "language": "en",
+      "timezone": "America/New_York",
+      "themePreference": "dark"
+    }
+    ```
+*   **Validation Rules**:
+    | Field | Rule |
+    |---|---|
+    | `language` | One of 30 supported language codes: `en`, `es`, `fr`, `de`, `it`, `pt`, `ru`, `ja`, `ko`, `zh`, etc. |
+    | `timezone` | One of 25+ supported IANA timezone strings. Pass `null` to clear. |
+    | `themePreference` | `light`, `dark`, or `system` |
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Preferences updated successfully.",
+      "data": {
+        "preferences": {
+          "id": "clx...",
+          "language": "en",
+          "timezone": "America/New_York",
+          "themePreference": "dark"
+        }
+      }
+    }
+    ```
+
+---
+
+### 100. Upload Avatar
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/me/avatar`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: multipart/form-data`
+*   **Body** (Form Data):
+    *   `avatar` (file) — Image file (JPEG, PNG, WebP, GIF), max 5MB
+*   **Description**: Uploads a new avatar. Replaces and cleans up any existing avatar image.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Avatar uploaded successfully.",
+      "data": { "url": "http://localhost:5000/uploads/abc123.jpg" }
+    }
+    ```
+
+---
+
+### 101. Upload Cover Image
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/me/cover`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: multipart/form-data`
+*   **Body** (Form Data):
+    *   `cover` (file) — Image file (JPEG, PNG, WebP, GIF), max 5MB
+*   **Description**: Uploads a cover image for the profile. Replaces and cleans up any existing cover image.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Cover image uploaded successfully.",
+      "data": { "url": "http://localhost:5000/uploads/cover456.jpg" }
+    }
+    ```
+
+---
+
+### 102. Delete Avatar
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/me/avatar`
+*   **Auth**: `accessToken` cookie
+*   **Description**: Removes the avatar image. The associated file is deleted from disk.
+*   **Response (200 OK)**:
+    ```json
+    { "success": true, "message": "Avatar removed successfully." }
+    ```
+
+---
+
+### 103. Delete Cover Image
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/me/cover`
+*   **Auth**: `accessToken` cookie
+*   **Description**: Removes the cover image. The associated file is deleted from disk.
+*   **Response (200 OK)**:
+    ```json
+    { "success": true, "message": "Cover image removed successfully." }
+    ```
+
+---
+
+### 104. Delete Account
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/me`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: application/json`
+*   **Body**:
+    ```json
+    { "password": "currentPassword123" }
+    ```
+*   **Description**: Permanently deletes the user's account and all associated data (posts, comments, likes, follows, notifications, sessions, etc.). Requires password confirmation. This action cannot be undone.
+*   **Response (200 OK)**:
+    ```json
+    { "success": true, "message": "Account deleted successfully." }
+    ```
+*   **Error — Wrong Password (401)**:
+    ```json
+    { "success": false, "message": "Password is incorrect." }
+    ```
+
+---
+
+## Media Endpoints — `/api/media` and `/api/me/media`
+
+> **All media endpoints require** `accessToken` cookie (authenticated). Users can only access/modify their own media. The upload system is storage-provider agnostic — switching from local storage to S3, Cloudinary, or Supabase Storage requires changing only `STORAGE_PROVIDER` in the environment.
+
+---
+
+### 105. Upload Media
+
+*   **Method**: `POST`
+*   **Endpoint**: `/api/media`
+*   **Auth**: `accessToken` cookie
+*   **Headers**: `Content-Type: multipart/form-data`
+*   **Body** (Form Data):
+    *   `file` (file) — Image file (JPEG, PNG, WebP, GIF), max 10MB
+    *   `altText` (text, optional) — Accessible description of the image
+*   **Description**: Uploads an image. The file is automatically compressed, a WebP version is generated, metadata is stripped, and a thumbnail is created. The processed image metadata (width, height, size) is stored in the database alongside the original filename, storage provider, and public URL.
+*   **Response (201 Created)**:
+    ```json
+    {
+      "success": true,
+      "message": "Media uploaded successfully.",
+      "data": {
+        "id": "clx...",
+        "url": "http://localhost:5000/uploads/abc123.jpg",
+        "key": "abc123.jpg"
+      }
+    }
+    ```
+*   **Error — Invalid File (400)**:
+    ```json
+    { "success": false, "message": "Invalid file type. Allowed: .jpg, .jpeg, .png, .webp, .gif" }
+    ```
+*   **Error — File Too Large (400)**:
+    ```json
+    { "success": false, "message": "File size exceeds maximum of 10MB." }
+    ```
+
+---
+
+### 106. Delete Media
+
+*   **Method**: `DELETE`
+*   **Endpoint**: `/api/media/:id`
+*   **Auth**: `accessToken` cookie (owner only)
+*   **Params**: `id` — media CUID
+*   **Description**: Permanently deletes the media record and the associated file(s) from storage (original, WebP, and thumbnail). Only the uploader may delete their media.
+*   **Response (200 OK)**:
+    ```json
+    { "success": true, "message": "Media deleted successfully." }
+    ```
+*   **Error — Not Found (404)**:
+    ```json
+    { "success": false, "message": "Media not found." }
+    ```
+*   **Error — Forbidden (403)**:
+    ```json
+    { "success": false, "message": "You can only delete your own media." }
+    ```
+
+---
+
+### 107. Replace Media
+
+*   **Method**: `PATCH`
+*   **Endpoint**: `/api/media/:id`
+*   **Auth**: `accessToken` cookie (owner only)
+*   **Headers**: `Content-Type: multipart/form-data`
+*   **Params**: `id` — media CUID
+*   **Body** (Form Data):
+    *   `file` (file) — New image file
+    *   `altText` (text, optional) — Updated alt text
+*   **Description**: Replaces an existing media file with a new one. The old file (and associated WebP/thumbnail) is deleted from storage. Metadata is updated with the new file's dimensions and size.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Media replaced successfully.",
+      "data": {
+        "id": "clx...",
+        "url": "http://localhost:5000/uploads/def456.jpg",
+        "key": "def456.jpg"
+      }
+    }
+    ```
+
+---
+
+### 108. Get My Media
+
+*   **Method**: `GET`
+*   **Endpoint**: `/api/me/media`
+*   **Auth**: `accessToken` cookie
+*   **Query Params**:
+    *   `page` (optional, default: `1`, min: `1`)
+    *   `limit` (optional, default: `20`, range: `1`–`100`)
+    *   `sort` (optional, default: `newest`, options: `newest`, `oldest`)
+*   **Description**: Returns a paginated list of media files uploaded by the authenticated user, including original name, dimensions, file size, MIME type, storage provider, and public URL.
+*   **Response (200 OK)**:
+    ```json
+    {
+      "success": true,
+      "message": "Media fetched successfully.",
+      "data": {
+        "media": [
+          {
+            "id": "clx...",
+            "ownerId": "clx...",
+            "fileName": "abc123.jpg",
+            "originalName": "photo.jpg",
+            "mimeType": "image/jpeg",
+            "extension": ".jpg",
+            "size": 245000,
+            "width": 1920,
+            "height": 1080,
+            "storageProvider": "local",
+            "storageKey": "abc123.jpg",
+            "publicUrl": "http://localhost:5000/uploads/abc123.jpg",
+            "altText": "A scenic mountain landscape",
+            "createdAt": "2026-07-19T12:00:00.000Z"
+          }
+        ],
+        "pagination": {
+          "totalItems": 1,
+          "totalPages": 1,
+          "currentPage": 1,
+          "hasNextPage": false,
+          "hasPreviousPage": false
+        }
+      }
+    }
+    ```
+
+---
+
 ## Error Responses
 
 | Status | Scenario | Message |
 |---|---|---|
 | `400` | Missing/invalid field | Field-specific validation message |
 | `401` | Missing/expired/invalid token | `"No token available. Please log in."` or `"Session expired. Please log in again."` |
+| `401` | Wrong password | `"Current password is incorrect."` or `"Password is incorrect."` |
 | `403` | Email not verified | `"Please verify your email before accessing this feature."` |
-| `403` | Not owner or admin | `"You do not have permission to update/delete this comment."` or `"You do not have permission to update/delete this post."` |
-| `404` | Resource not found | `"Post not found."` or `"Comment not found."` or `"User not found."` |
-| `409` | Duplicate unique field | `"A record with this <field> already exists."` |
+| `403` | Not owner or admin | `"You do not have permission to update/delete this comment."` or `"You do not have permission to update/delete this post."` or `"You can only delete your own media."` |
+| `404` | Resource not found | `"Post not found."` or `"Comment not found."` or `"User not found."` or `"Media not found."` |
+| `409` | Duplicate unique field | `"A record with this <field> already exists."` or `"Username is already taken."` |
 | `500` | Unhandled server error | `"Something went wrong. Please try again later."` (prod) |

@@ -112,12 +112,33 @@ PixelThread/
 │   │   │   │   ├── history.routes.js
 │   │   │   │   ├── history.controller.js
 │   │   │   │   └── history.service.js
-│   │   │   └── reports/        # Reports feature module (v0.6.0)
-│   │   │       ├── report.routes.js
-│   │   │       ├── report.controller.js
-│   │   │       ├── report.service.js
-│   │   │       ├── report.validation.js
-│   │   │       └── report.constants.js
+│   │   │   ├── reports/        # Reports feature module (v0.6.0)
+│   │   │   │   ├── report.routes.js
+│   │   │   │   ├── report.controller.js
+│   │   │   │   ├── report.service.js
+│   │   │   │   ├── report.validation.js
+│   │   │   │   └── report.constants.js
+│   │   │   ├── settings/       # Settings feature module (v0.7.0)
+│   │   │   │   ├── settings.routes.js
+│   │   │   │   ├── settings.controller.js
+│   │   │   │   ├── settings.service.js
+│   │   │   │   ├── settings.validation.js
+│   │   │   │   ├── settings.constants.js
+│   │   │   │   └── settings.utils.js
+│   │   │   └── media/          # Media module (v0.8.0)
+│   │   │       ├── media.routes.js
+│   │   │       ├── media.controller.js
+│   │   │       ├── media.service.js
+│   │   │       ├── media.validation.js
+│   │   │       └── media.constants.js
+│   │   ├── services/
+│   │   │   └── storage/
+│   │   │       ├── storage.service.js      # Storage abstraction layer
+│   │   │       └── providers/
+│   │   │           ├── local.provider.js    # Local filesystem (active)
+│   │   │           ├── s3.provider.js       # Amazon S3 (placeholder)
+│   │   │           ├── cloudinary.provider.js # Cloudinary (placeholder)
+│   │   │           └── supabase.provider.js # Supabase Storage (placeholder)
 │   │   └── utils/              # Utility/helper functions (ApiError, ApiResponse, jwt, slug.util.js, upload.util.js)
 │   ├── prisma.config.ts        # Prisma 7 configuration file
 │   └── server.js               # Entry point (bootstraps Express)
@@ -150,7 +171,7 @@ Husky runs `lint-staged` on every commit, applying ESLint and Prettier to only t
 The `lint.yaml` workflow uses a **matrix strategy** to lint `client` and `server` in parallel, with **path filters** so CI only runs when relevant directories are modified, and **dependency caching** for speed.
 
 ### Secure Cookie-Based Authentication
-Access tokens (`15m` expiry) and refresh tokens (`30d` expiry) are issued as secure `HttpOnly` cookies. Refresh tokens are hashed via SHA-256 before being stored in the database. A token rotation strategy (revoking the old session and generating a new session upon refresh) mitigates replay attacks. Email verification status is enforced across restricted endpoints.
+Access tokens (`15m` expiry) and refresh tokens (`7d` expiry) are issued as secure `HttpOnly` cookies. Refresh tokens are hashed via SHA-256 before being stored in the database. A token rotation strategy (revoking the old session and generating a new session upon refresh) mitigates replay attacks. Email verification status is enforced across restricted endpoints.
 
 ### Authentication Middleware
 | Middleware | Purpose |
@@ -178,13 +199,16 @@ Full-text search across `title`, `excerpt`, `content` (JSON blocks), tag names, 
 ### AI Content Generation
 The AI module (`/api/ai`) provides 16 endpoints for content generation via NVIDIA's API (OpenAI-compatible). All endpoints are rate-limited to 10 req/min per user and require authentication. Every request is logged to the `AIGeneration` table with the user ID, generation type, and truncated prompt/response for audit and analytics. The backend uses a modular prompt system with separate system prompts and user prompt builders for each generation type, extracted to `ai.prompts.js`.
 
+### Account Settings & Profile Management
+The Settings module (`/api/me`) provides 13 endpoints for comprehensive account management. Profile fields include `username` (unique, indexed), `bio`, `location`, `website`, `socialLinks` (JSON array), and `coverImage`. Privacy controls support three visibility levels (`PUBLIC`, `PRIVATE`, `FOLLOWERS_ONLY`), email visibility toggle, and follow permissions. Notification preferences are stored as a JSON object with individual toggles for each notification type. App preferences support language (30 locales), timezone (25+ IANA zones), and theme (light/dark/system). The email change flow uses a two-step verification process — the old email remains active until the new one is verified via a 24-hour token, with all previous verification tokens invalidated on initiation. Password changes revoke all existing sessions and send a security notification. Account deletion is hard-delete with cleanup of all related records (sessions, likes, comments, follows, notifications, search history, bookmarks, reading history, reports, and verification tokens).
+
 ---
 
 ## Database Schema Overview
 
 | Model | Purpose |
 |---|---|---|
-| `User` | Platform users with email/password auth, roles (`USER`/`ADMIN`) |
+| `User` | Platform users with email/password auth, roles (`USER`/`ADMIN`), profile fields (`username`, `bio`, `location`, `website`, `coverImage`, `socialLinks`), privacy settings, notification preferences, app preferences, and soft-delete support |
 | `Session` | User sessions (`sessionToken`, `expires`, `ipAddress`, `userAgent`) |
 | `Post` | Blog posts with slug, status, visibility |
 | `SeoMeta` | Per-post SEO metadata and score |

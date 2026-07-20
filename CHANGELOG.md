@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-07-19
+
+### Added
+- **Media module** at `server/src/modules/media/`:
+  - 4 endpoints: upload, delete, replace, get my media.
+  - Automatic image processing via `sharp`: compression (JPEG 85%), WebP generation (quality 80), thumbnail generation (200px), metadata stripping, dimension calculation.
+  - File validation: MIME type, extension, size (configurable, default 10MB), sanitized filenames.
+- **Storage abstraction layer** at `server/src/services/storage/`:
+  - `storage.service.js` — Provider-agnostic interface. Selects provider via `STORAGE_PROVIDER` env var.
+  - `providers/local.provider.js` — Full local filesystem implementation using `multer` memory storage + `fs`.
+  - `providers/s3.provider.js` — Placeholder for Amazon S3.
+  - `providers/cloudinary.provider.js` — Placeholder for Cloudinary.
+  - `providers/supabase.provider.js` — Placeholder for Supabase Storage.
+  - Switching providers requires only changing `STORAGE_PROVIDER` — no controller, service, route, or model changes.
+- **Image processor** at `server/src/utils/image/imageProcessor.js`:
+  - `processImage()` — Compress, resize, strip metadata, generate WebP + thumbnail.
+  - `validateImage()`, `isAllowedMimeType()`, `isAllowedExtension()`.
+- **Prisma `Media` model**: `id`, `ownerId`, `fileName`, `originalName`, `mimeType`, `extension`, `size`, `width`, `height`, `storageProvider`, `storageKey`, `publicUrl`, `altText`, `createdAt`. Indexed on `ownerId`, `storageKey`, `createdAt`.
+
+### Changed
+- `docs/api.md`: added Media section (4 endpoints), bumped status to v0.8.0.
+- `docs/architecture.md`: added media module and storage services to directory tree.
+- `AI_CONTEXT.md`: updated endpoint count to 108.
+- Bumped all package versions to `0.8.0`.
+
+## [0.7.0] - 2026-07-19
+
+### Added
+- **Settings module** at `server/src/modules/settings/`:
+  - 13 endpoints for account management: get settings, update profile, change email, verify new email, change password, update privacy, update notifications, update preferences, upload/delete avatar, upload/delete cover image, delete account.
+  - Profile fields: `username`, `bio`, `location`, `website`, `socialLinks`, `coverImage`.
+  - Privacy controls: `profileVisibility` (PUBLIC/PRIVATE/FOLLOWERS_ONLY), `emailVisibility`, `allowFollowers`, `allowMessages`.
+  - Notification preference toggles stored as JSON: likes, comments, replies, follows, mentions, systemAnnouncements.
+  - App preferences: `language`, `timezone`, `themePreference`.
+  - Email change flow with verification token (24h expiry), preserves old email until verified.
+  - Password change with session revocation and security notification.
+  - Permanent account deletion with cleanup of all related records.
+  - Image upload/delete for avatar and cover with file cleanup.
+  - All sensitive actions require password confirmation.
+- New `ProfileVisibility` enum: `PUBLIC`, `PRIVATE`, `FOLLOWERS_ONLY`.
+- `sendEmailChangeVerification` in `email.service.js`.
+
+### Changed
+- `docs/api.md`: added Settings section (13 endpoints), bumped status to v0.7.0.
+- `docs/architecture.md`: added settings module to directory tree.
+- `AI_CONTEXT.md`: added settings entry.
+- Bumped all package versions to `0.7.0`.
+
 ## [0.6.0] - 2026-07-19
 
 ### Added

@@ -1,6 +1,6 @@
 # API Documentation
 
-> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI (16 endpoints), Notification, Follow, Search, Bookmark (4 endpoints), Reading History (3 endpoints), and Reports (9 endpoints) modules fully implemented (v0.6.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
+> **Status**: Auth, Post, User, Analytics, SEO, Comment, Like, Tag, AI (16 endpoints), Notification, Follow, Search, Bookmark (4 endpoints), Reading History (3 endpoints), Reports (9 endpoints), Settings (13 endpoints), and Media (4 endpoints) modules fully implemented (v0.8.0). See [createdAPIs.md](../createdAPIs.md) for complete Postman-ready API reference with request/response examples.
 
 ## Base URL
 
@@ -93,7 +93,7 @@ Returns a welcome message to confirm the API is running.
 
 ### Likes (`/api`)
 | Method | Path | Auth | Description |
-|---|---|---|---|---|
+|---|---|---|---|
 | `POST` | `/api/posts/:id/like` | `accessToken` cookie | Toggle like on a blog post |
 | `POST` | `/api/comments/:id/like` | `accessToken` cookie | Toggle like on a comment |
 | `GET` | `/api/posts/:id/likes` | Optional | Get list of users who liked a post |
@@ -213,3 +213,36 @@ All errors follow this format:
 - Send requests with `credentials: 'include'` (fetch) or enable "Send cookies" in Postman/Insomnia
 - Write endpoints (`POST`, `PUT`, `DELETE`) require **verified email** (`isEmailVerified: true`)
 - `optionalAuth` middleware: attaches user if valid token present, continues anonymously otherwise
+
+---
+
+## Settings & Account Management
+
+### Settings (`/api/me`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/me/settings` | `accessToken` cookie | Get all account settings |
+| `PATCH` | `/api/me/profile` | `accessToken` cookie | Update display name, bio, username, location, website, social links |
+| `PATCH` | `/api/me/email` | `accessToken` cookie | Initiate email change (sends verification) |
+| `GET` | `/api/me/email/verify` | None | Verify new email with token from query |
+| `PATCH` | `/api/me/password` | `accessToken` cookie | Change password (invalidates all sessions) |
+| `PATCH` | `/api/me/privacy` | `accessToken` cookie | Update profile visibility, email visibility, allow followers |
+| `PATCH` | `/api/me/notifications` | `accessToken` cookie | Update notification preference toggles |
+| `PATCH` | `/api/me/preferences` | `accessToken` cookie | Update language, timezone, theme preference |
+| `POST` | `/api/me/avatar` | `accessToken` cookie | Upload avatar image (multipart) |
+| `POST` | `/api/me/cover` | `accessToken` cookie | Upload cover image (multipart) |
+| `DELETE` | `/api/me/avatar` | `accessToken` cookie | Remove avatar, restore default |
+| `DELETE` | `/api/me/cover` | `accessToken` cookie | Remove cover image |
+| `DELETE` | `/api/me` | `accessToken` cookie | Permanently delete account (requires password in body) |
+
+---
+
+## Media
+
+### Media (`/api/media` and `/api/me/media`)
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/media` | `accessToken` cookie | Upload an image file (multipart) |
+| `DELETE` | `/api/media/:id` | `accessToken` cookie | Delete a media file (owner only) |
+| `PATCH` | `/api/media/:id` | `accessToken` cookie | Replace a media file with a new one |
+| `GET` | `/api/me/media` | `accessToken` cookie | Get my uploaded media (paginated, sortable) |

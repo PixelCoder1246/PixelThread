@@ -18,6 +18,24 @@ model User {
   isEmailVerified Boolean   @default(false)
   lastLoginAt     DateTime?
 
+  username         String?  @unique
+  bio              String?
+  location         String?
+  website          String?
+  coverImage       String?
+  socialLinks      Json?
+  profileVisibility ProfileVisibility @default(PUBLIC)
+  emailVisibility  Boolean  @default(false)
+  allowFollowers   Boolean  @default(true)
+  allowMessages    Boolean  @default(true)
+  notificationPreferences Json?
+  language         String   @default("en")
+  timezone         String?
+  themePreference  String   @default("light")
+  isActive         Boolean  @default(true)
+  pendingEmail     String?
+  deletedAt        DateTime?
+
   sessions            Session[]
   passwordResetTokens PasswordResetToken[]
   emailVerifyTokens   EmailVerificationToken[]
@@ -37,6 +55,37 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([username])
+  @@index([isActive])
+
+  media Media[]
+}
+
+model Media {
+  id        String @id @default(cuid())
+  ownerId   String
+
+  fileName     String
+  originalName String
+  mimeType     String
+  extension    String
+  size         Int
+  width        Int?
+  height       Int?
+
+  storageProvider String
+  storageKey      String
+  publicUrl       String
+
+  altText   String?
+  createdAt DateTime @default(now())
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId])
+  @@index([storageKey])
+  @@index([createdAt])
 }
 
 model Session {
@@ -335,6 +384,12 @@ enum AIGenerationType {
 enum UserRole {
   USER
   ADMIN
+}
+
+enum ProfileVisibility {
+  PUBLIC
+  PRIVATE
+  FOLLOWERS_ONLY
 }
 
 enum ReportType {

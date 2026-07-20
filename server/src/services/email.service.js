@@ -55,4 +55,29 @@ const sendPasswordResetEmail = async (to, token) => {
   });
 };
 
-module.exports = { sendVerificationEmail, sendPasswordResetEmail };
+const sendEmailChangeVerification = async (to, token) => {
+  const verifyUrl = `${process.env.CLIENT_URL}/settings/email/verify?token=${token}`;
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to,
+    subject: 'Verify your new email address — PixelThread',
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+        <h2 style="color:#6c47ff">Confirm Email Change</h2>
+        <p>Click the button below to verify your new email address. This link expires in <strong>24 hours</strong>.</p>
+        <a href="${verifyUrl}"
+           style="display:inline-block;padding:12px 24px;background:#6c47ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold;">
+          Verify New Email
+        </a>
+        <p style="color:#888;font-size:12px;margin-top:24px">If you didn't request this change, please secure your account immediately.</p>
+      </div>
+    `,
+  });
+};
+
+module.exports = {
+  sendVerificationEmail,
+  sendPasswordResetEmail,
+  sendEmailChangeVerification,
+};
