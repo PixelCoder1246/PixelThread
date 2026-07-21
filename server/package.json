@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.9.0",
+  "version": "1.1.0",
   "description": "PixelThread API Server — Production-grade AI-powered blogging backend",
   "license": "ISC",
   "author": "",
@@ -31,7 +31,9 @@
     "nodemailer": "^7.0.13",
     "openai": "^4.104.0",
     "pg": "^8.20.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

@@ -24,6 +24,7 @@ const reportRoutes = require('./modules/reports/report.routes');
 const settingsRoutes = require('./modules/settings/settings.routes');
 const mediaRoutes = require('./modules/media/media.routes');
 const adminRoutes = require('./modules/admin/admin.routes');
+const setupSwagger = require('./docs/swagger');
 const errorHandler = require('./middleware/errorHandler');
 const { sanitizeInput } = require('./middleware/validate');
 const {
@@ -133,6 +134,8 @@ app.use('/api', reportRoutes);
 app.use('/api', settingsRoutes);
 app.use('/api', mediaRoutes);
 app.use('/api/admin', adminRoutes);
+
+setupSwagger(app);
 
 app.use((req, res) => {
   res
