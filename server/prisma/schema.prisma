@@ -159,6 +159,9 @@ model Post {
   updatedAt   DateTime  @updatedAt
   publishedAt DateTime?
 
+  featured  Boolean @default(false)
+  pinned    Boolean @default(false)
+
   bookmarks Bookmark[]
   histories History[]
 
@@ -215,6 +218,8 @@ model Comment {
 
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies Comment[] @relation("CommentReplies")
+
+  isHidden Boolean @default(false)
 
   likes Like[]
 
@@ -367,6 +372,49 @@ model History {
   @@index([lastReadAt])
 }
 
+model Announcement {
+  id        String    @id @default(cuid())
+  title     String
+  message   String
+  type      String    @default("INFO")
+  isActive  Boolean   @default(true)
+  createdBy String
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetType String
+  targetId   String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
+model PlatformSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  type        String   @default("string")
+  description String?
+  updatedBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+}
+
 enum PostStatus {
   DRAFT
   PUBLISHED
@@ -399,6 +447,7 @@ enum AIGenerationType {
 enum UserRole {
   USER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum ProfileVisibility {
