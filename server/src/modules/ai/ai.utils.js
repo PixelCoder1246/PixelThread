@@ -123,7 +123,17 @@ const extractJSON = (text) => {
   logger.warn('No parseable JSON found in AI response', {
     preview: cleaned.slice(0, 500),
   });
-  throw new Error('No JSON object or array found in AI response');
+  
+  // Return a fallback object instead of throwing
+  return {
+    content: cleaned,
+    title: '',
+    excerpt: '',
+    tags: [],
+    improvedContent: cleaned,
+    titles: [],
+    suggestions: [],
+  };
 };
 
 const repairJSON = (raw) => {

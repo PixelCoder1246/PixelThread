@@ -3,6 +3,7 @@ const prisma = require('../../config/db');
 const { AI_DEFAULT_CONFIG, AI_GENERATION_TYPES } = require('./ai.constants');
 const { SYSTEM_PROMPTS, USER_PROMPT_BUILDERS } = require('./ai.prompts');
 const { extractJSON, buildTokenUsage, parseAIResponse } = require('./ai.utils');
+const ApiError = require('../../utils/ApiError');
 
 let aiClient = null;
 
@@ -13,13 +14,13 @@ const getAIClient = () => {
       process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1';
 
     if (!apiKey) {
-      throw new Error('NVIDIA_API_KEY environment variable is not configured.');
+      throw new ApiError(503, 'AI service not configured. Please set NVIDIA_API_KEY environment variable.');
     }
 
     aiClient = new OpenAI({
       apiKey,
       baseURL,
-      timeout: 60000,
+      timeout: 180000,
       maxRetries: 2,
     });
   }
@@ -35,23 +36,23 @@ const generateAIResponse = async ({
   stream = false,
   model = AI_DEFAULT_CONFIG.model,
 }) => {
-  const client = getAIClient();
-
-  const messages = [
-    { role: 'system', content: systemPrompt },
-    { role: 'user', content: userPrompt },
-  ];
-
-  const requestOptions = {
-    model,
-    messages,
-    temperature,
-    top_p,
-    max_tokens: maxTokens,
-    stream,
-  };
-
   try {
+    const client = getAIClient();
+
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ];
+
+    const requestOptions = {
+      model,
+      messages,
+      temperature,
+      top_p,
+      max_tokens: maxTokens,
+      stream,
+    };
+
     if (stream) {
       const streamResponse = await client.chat.completions.create({
         ...requestOptions,
@@ -65,10 +66,17 @@ const generateAIResponse = async ({
     const content = parseAIResponse(response);
     return { content, tokenUsage };
   } catch (err) {
-    if (err.status === 403) {
-      throw new Error(
-        'NVIDIA API access denied (403). Your API key may be invalid, expired, or lacks access to the model. Get a new key at https://build.nvidia.com'
-      );
+    if (err.status === 403 || err.status === 401) {
+      throw new ApiError(503, 'AI provider authentication failed. Check API key configuration.');
+    }
+    if (err.status === 429) {
+      throw new ApiError(429, 'AI provider rate limit exceeded. Please try again in a moment.');
+    }
+    if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+      throw new ApiError(504, 'AI request timed out. Please try again.');
+    }
+    if (err.message?.includes('not configured')) {
+      throw new ApiError(503, 'AI service not configured. Please set NVIDIA_API_KEY environment variable.');
     }
     throw err;
   }

@@ -17,14 +17,14 @@ const cookieOptions = {
   sameSite: 'strict',
 };
 
-const setAuthCookies = (res, accessToken, refreshToken) => {
+const setAuthCookies = (res, accessToken, refreshToken, persistent) => {
   res.cookie('accessToken', accessToken, {
     ...cookieOptions,
     maxAge: 15 * 60 * 1000,
   });
   res.cookie('refreshToken', refreshToken, {
     ...cookieOptions,
-    maxAge: 30 * 24 * 60 * 60 * 1000,
+    maxAge: persistent ? 30 * 24 * 60 * 60 * 1000 : 15 * 60 * 1000,
   });
 };
 
@@ -35,7 +35,59 @@ const userSelect = {
   role: true,
   isEmailVerified: true,
   image: true,
+  bio: true,
   createdAt: true,
+  updatedAt: true,
+};
+
+const tryRefreshSession = async (req, res) => {
+  const rt = req.cookies.refreshToken;
+  if (!rt) return null;
+
+  let rtDecoded;
+  try {
+    rtDecoded = verifyRefreshToken(rt);
+  } catch {
+    return null;
+  }
+
+  const hashed = hashToken(rt);
+  const session = await prisma.session.findUnique({
+    where: { token: hashed },
+  });
+
+  if (!session || session.expiresAt < new Date()) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: rtDecoded.id },
+    select: userSelect,
+  });
+
+  if (!user) return null;
+
+  const newAT = generateAccessToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
+  const newRT = generateRefreshToken({ id: user.id });
+
+  await prisma.$transaction([
+    prisma.session.delete({ where: { id: session.id } }),
+    prisma.session.create({
+      data: {
+        userId: user.id,
+        token: hashToken(newRT),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        persistent: session.persistent,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'],
+      },
+    }),
+  ]);
+
+  setAuthCookies(res, newAT, newRT, session.persistent);
+  return user;
 };
 
 const protect = async (req, res, next) => {
@@ -43,6 +95,11 @@ const protect = async (req, res, next) => {
     const token = req.cookies.accessToken;
 
     if (!token) {
+      const user = await tryRefreshSession(req, res);
+      if (user) {
+        req.user = user;
+        return next();
+      }
       return sendError(res, 401, 'No token provided. Please log in.');
     }
 
@@ -51,61 +108,12 @@ const protect = async (req, res, next) => {
       decoded = verifyAccessToken(token);
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
-        const rt = req.cookies.refreshToken;
-        if (!rt) {
-          return sendError(res, 401, 'Session expired. Please log in again.');
-        }
-
-        try {
-          const rtDecoded = verifyRefreshToken(rt);
-          const hashed = hashToken(rt);
-          const session = await prisma.session.findUnique({
-            where: { token: hashed },
-          });
-
-          if (!session || session.expiresAt < new Date()) {
-            return sendError(res, 401, 'Session expired. Please log in again.');
-          }
-
-          const user = await prisma.user.findUnique({
-            where: { id: rtDecoded.id },
-            select: userSelect,
-          });
-
-          if (!user) {
-            return sendError(
-              res,
-              401,
-              'User no longer exists. Please log in again.'
-            );
-          }
-
-          const newAT = generateAccessToken({
-            id: user.id,
-            email: user.email,
-            role: user.role,
-          });
-          const newRT = generateRefreshToken({ id: user.id });
-
-          await prisma.$transaction([
-            prisma.session.delete({ where: { id: session.id } }),
-            prisma.session.create({
-              data: {
-                userId: user.id,
-                token: hashToken(newRT),
-                expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-                ipAddress: req.ip,
-                userAgent: req.headers['user-agent'],
-              },
-            }),
-          ]);
-
-          setAuthCookies(res, newAT, newRT);
+        const user = await tryRefreshSession(req, res);
+        if (user) {
           req.user = user;
           return next();
-        } catch {
-          return sendError(res, 401, 'Session expired. Please log in again.');
         }
+        return sendError(res, 401, 'Session expired. Please log in again.');
       }
 
       if (err.name === 'JsonWebTokenError') {

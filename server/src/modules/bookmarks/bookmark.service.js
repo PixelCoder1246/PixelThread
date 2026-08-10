@@ -16,6 +16,13 @@ const bookmarkInclude = {
       analytics: {
         select: { views: true },
       },
+      tags: {
+        select: {
+          tag: {
+            select: { id: true, name: true },
+          },
+        },
+      },
       _count: {
         select: { likes: true, comments: true },
       },
@@ -23,18 +30,22 @@ const bookmarkInclude = {
   },
 };
 
-const formatBookmark = (bookmark) => ({
-  id: bookmark.post.id,
-  title: bookmark.post.title,
-  slug: bookmark.post.slug,
-  excerpt: bookmark.post.excerpt,
-  author: bookmark.post.author,
-  publishedAt: bookmark.post.publishedAt,
-  views: bookmark.post.analytics?.views || 0,
-  likes: bookmark.post._count?.likes || 0,
-  comments: bookmark.post._count?.comments || 0,
-  bookmarkedAt: bookmark.createdAt,
-});
+const formatBookmark = (bookmark) => {
+  const post = bookmark.post;
+  return {
+    id: post?.id,
+    title: post?.title,
+    slug: post?.slug,
+    excerpt: post?.excerpt,
+    author: post?.author,
+    publishedAt: post?.publishedAt,
+    views: post?.analytics?.views || 0,
+    likes: post?._count?.likes || 0,
+    comments: post?._count?.comments || 0,
+    tags: post?.tags?.map((t) => t.tag) || [],
+    bookmarkedAt: bookmark.createdAt,
+  };
+};
 
 const getPostVisibilityFilter = (status, visibility) => {
   if (status === 'ARCHIVED') return false;

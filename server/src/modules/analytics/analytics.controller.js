@@ -8,7 +8,8 @@ const analyticsService = require('./analytics.service');
 const recordView = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await analyticsService.recordView(id);
+    const userId = req.user?.id;
+    await analyticsService.recordView(id, userId);
     return sendSuccess(res, 200, 'View recorded');
   } catch (err) {
     next(err);
@@ -77,6 +78,20 @@ const getAdminAnalytics = async (req, res, next) => {
   }
 };
 
+const getPublicAnalytics = async (req, res, next) => {
+  try {
+    const data = await analyticsService.getPublicAnalytics();
+    return sendSuccess(
+      res,
+      200,
+      'Platform analytics fetched successfully.',
+      data
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   recordView,
   getPostAnalytics,
@@ -84,4 +99,5 @@ module.exports = {
   getMyPostsAnalytics,
   getMyTopPosts,
   getAdminAnalytics,
+  getPublicAnalytics,
 };

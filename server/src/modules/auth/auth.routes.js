@@ -27,6 +27,6 @@ router.post('/verify-email', verifyEmail);
 router.post('/resend-verification', authLimiter, resendVerification);
 
 router.get('/me', protect, getMe);
-router.post('/logout', protect, logout);
+router.post('/logout', logout);
 
 module.exports = router;

@@ -1,0 +1,108 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+/* Sizes */
+.sm {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.md {
+  width: 2rem;
+  height: 2rem;
+}
+
+.lg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.xl {
+  width: 3rem;
+  height: 3rem;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.initials {
+  color: #fff;
+  font-weight: var(--fw-semibold);
+  line-height: 1;
+  user-select: none;
+}
+
+.sm .initials {
+  font-size: var(--fs-xs);
+}
+
+.md .initials {
+  font-size: var(--fs-xs);
+}
+
+.lg .initials {
+  font-size: var(--fs-sm);
+}
+
+.xl .initials {
+  font-size: var(--fs-base);
+}
+
+/* Status indicator */
+.status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-primary);
+}
+
+.status-sm {
+  width: 6px;
+  height: 6px;
+}
+
+.status-md {
+  width: 8px;
+  height: 8px;
+}
+
+.status-lg {
+  width: 10px;
+  height: 10px;
+}
+
+.status-xl {
+  width: 12px;
+  height: 12px;
+}
+
+.status-online {
+  background: var(--color-success);
+}
+
+.status-offline {
+  background: var(--text-quaternary);
+}
+
+.status-away {
+  background: var(--color-warning);
+}

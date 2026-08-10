@@ -1,0 +1,56 @@
+.card {
+  background: var(--surface-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-2xl);
+  transition: all var(--transition-base);
+}
+
+/* Variants */
+.default {
+  background: var(--surface-primary);
+  border-color: var(--border-primary);
+}
+
+.elevated {
+  background: var(--bg-elevated);
+  border-color: transparent;
+  box-shadow: var(--shadow-md);
+}
+
+.bordered {
+  background: transparent;
+  border-color: var(--border-primary);
+}
+
+.gradient {
+  background: var(--gradient-card);
+  border-color: var(--border-primary);
+}
+
+/* Padding */
+.padding-none {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: var(--space-3);
+}
+
+.padding-md {
+  padding: var(--space-5);
+}
+
+.padding-lg {
+  padding: var(--space-8);
+}
+
+/* Hoverable */
+.hoverable {
+  cursor: pointer;
+}
+
+.hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-secondary);
+}

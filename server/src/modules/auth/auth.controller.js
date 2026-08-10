@@ -17,6 +17,11 @@ const refreshTokenCookieOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1000,
 };
 
+const sessionRefreshTokenCookieOptions = {
+  ...cookieOptions,
+  maxAge: 15 * 60 * 1000,
+};
+
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -41,16 +46,22 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const { user, accessToken, refreshToken } = await authService.loginUser({
-      email,
-      password,
-      ip: req.ip,
-      userAgent: req.headers['user-agent'],
-    });
+    const { email, password, rememberMe } = req.body;
+    const { user, accessToken, refreshToken, persistent } =
+      await authService.loginUser({
+        email,
+        password,
+        rememberMe,
+        ip: req.ip,
+        userAgent: req.headers['user-agent'],
+      });
 
     res.cookie('accessToken', accessToken, accessTokenCookieOptions);
-    res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
+    res.cookie(
+      'refreshToken',
+      refreshToken,
+      persistent ? refreshTokenCookieOptions : sessionRefreshTokenCookieOptions
+    );
 
     return sendSuccess(res, 200, 'Login successful.', {
       user: authService.sanitizeUser(user),
@@ -63,7 +74,8 @@ const login = async (req, res, next) => {
 const logout = async (req, res, next) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    await authService.logoutUser(refreshToken);
+    const userId = req.user?.id;
+    await authService.logoutUser(refreshToken, userId);
 
     res.clearCookie('accessToken', cookieOptions);
     res.clearCookie('refreshToken', cookieOptions);
@@ -85,7 +97,7 @@ const getMe = async (req, res, next) => {
 const refreshToken = async (req, res, next) => {
   try {
     const token = req.cookies.refreshToken;
-    const { accessToken, refreshToken: newRefreshToken } =
+    const { accessToken, refreshToken: newRefreshToken, persistent } =
       await authService.refreshUserSession(
         token,
         req.ip,
@@ -93,7 +105,11 @@ const refreshToken = async (req, res, next) => {
       );
 
     res.cookie('accessToken', accessToken, accessTokenCookieOptions);
-    res.cookie('refreshToken', newRefreshToken, refreshTokenCookieOptions);
+    res.cookie(
+      'refreshToken',
+      newRefreshToken,
+      persistent ? refreshTokenCookieOptions : sessionRefreshTokenCookieOptions
+    );
 
     return sendSuccess(res, 200, 'Token refreshed.');
   } catch (err) {

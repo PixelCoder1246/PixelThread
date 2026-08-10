@@ -19,6 +19,13 @@ const getTransporter = () => {
 };
 
 const sendEmail = async ({ to, subject, html }) => {
+  if (process.env.NODE_ENV === 'development') {
+    const urlMatch = html.match(/href="([^"]+)"/);
+    const link = urlMatch ? urlMatch[1] : '(no link found)';
+    logger.info(`📧 EMAIL: To: ${to} | Subject: ${subject}`);
+    logger.info(`🔗 LINK: ${link}`);
+  }
+
   if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER) {
     logger.warn('Email not sent — SMTP not configured', { to, subject });
     return;

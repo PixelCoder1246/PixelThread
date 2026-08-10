@@ -37,3 +37,6 @@ server/prisma/dev.db-journal
 
 # AI assets
 ai/recordings/
+
+
+createdAPIs.md

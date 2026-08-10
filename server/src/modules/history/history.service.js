@@ -15,22 +15,33 @@ const historyInclude = {
       analytics: {
         select: { views: true },
       },
+      tags: {
+        select: {
+          tag: {
+            select: { id: true, name: true },
+          },
+        },
+      },
     },
   },
 };
 
-const formatHistory = (history) => ({
-  id: history.id,
-  postId: history.postId,
-  title: history.post.title,
-  slug: history.post.slug,
-  excerpt: history.post.excerpt,
-  author: history.post.author,
-  publishedAt: history.post.publishedAt,
-  views: history.post.analytics?.views || 0,
-  lastReadAt: history.lastReadAt,
-  readCount: history.readCount,
-});
+const formatHistory = (history) => {
+  const post = history.post;
+  return {
+    id: history.id,
+    postId: history.postId,
+    title: post?.title,
+    slug: post?.slug,
+    excerpt: post?.excerpt,
+    author: post?.author,
+    publishedAt: post?.publishedAt,
+    views: post?.analytics?.views || 0,
+    tags: post?.tags?.map((t) => t.tag) || [],
+    lastReadAt: history.lastReadAt,
+    readCount: history.readCount,
+  };
+};
 
 const recordReading = async (postId, userId) => {
   await prisma.history.upsert({
@@ -58,10 +69,13 @@ const getHistory = async (userId, { page, limit }) => {
     prisma.history.count({ where }),
   ]);
 
+  // Filter out entries where post was deleted
+  const validHistory = history.filter((h) => h.post);
+
   const totalPages = Math.ceil(totalItems / limit);
 
   return {
-    posts: history.map(formatHistory),
+    posts: validHistory.map(formatHistory),
     pagination: {
       totalItems,
       totalPages,

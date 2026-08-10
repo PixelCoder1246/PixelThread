@@ -57,7 +57,7 @@ const AI_DEFAULT_CONFIG = {
   temperature: 0.7,
   top_p: 0.95,
   maxTokens: 2048,
-  model: process.env.AI_MODEL || 'nvidia/llama-3.1-nemotron-70b-instruct',
+  model: process.env.AI_MODEL || 'meta/llama-3.1-70b-instruct',
 };
 
 const AI_STREAM_CONFIG = {

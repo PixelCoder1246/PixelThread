@@ -1,0 +1,135 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Sizes */
+.sm {
+  height: 2rem;
+  padding: 0 var(--space-3);
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-md);
+}
+
+.md {
+  height: 2.5rem;
+  padding: 0 var(--space-4);
+  font-size: var(--fs-sm);
+}
+
+.lg {
+  height: 3rem;
+  padding: 0 var(--space-6);
+  font-size: var(--fs-base);
+}
+
+/* Variants */
+.primary {
+  background: var(--gradient-primary);
+  color: #fff;
+  border: none;
+}
+
+.primary:hover:not(:disabled) {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.secondary {
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--surface-tertiary);
+  border-color: var(--border-secondary);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid transparent;
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.danger {
+  background: var(--color-error);
+  color: #fff;
+  border: none;
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--rose-600);
+  box-shadow: var(--shadow-md);
+}
+
+.outline {
+  background: transparent;
+  color: var(--primary-500);
+  border: 1px solid var(--primary-500);
+}
+
+.outline:hover:not(:disabled) {
+  background: var(--primary-500);
+  color: #fff;
+}
+
+/* Full width */
+.fullWidth {
+  width: 100%;
+}
+
+/* Loading */
+.loading {
+  position: relative;
+  cursor: wait;
+}
+
+.spinner {
+  --spinner-size: 1rem;
+  --spinner-color: currentColor;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.leftIcon,
+.rightIcon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1em;
+}

@@ -27,7 +27,10 @@ const sanitizeUser = (user) => ({
   email: user.email,
   role: user.role,
   image: user.image,
+  bio: user.bio ?? null,
   isEmailVerified: user.isEmailVerified,
+  createdAt: user.createdAt,
+  updatedAt: user.updatedAt,
 });
 
 const validatePassword = (password) => {
@@ -70,12 +73,12 @@ const registerUser = async ({ name, email, password }) => {
     data: { userId: user.id, token: hashedToken, expiresAt },
   });
 
-  sendVerificationEmail(user.email, rawToken);
+  await sendVerificationEmail(user.email, rawToken);
 
   return { user, rawVerificationToken: rawToken };
 };
 
-const loginUser = async ({ email, password, ip, userAgent }) => {
+const loginUser = async ({ email, password, ip, userAgent, rememberMe }) => {
   if (!email || !password) {
     throw new ApiError(400, 'Email and password are required.');
   }
@@ -94,6 +97,7 @@ const loginUser = async ({ email, password, ip, userAgent }) => {
     throw new ApiError(403, 'Please verify your email before logging in.');
   }
 
+  const persistent = Boolean(rememberMe);
   const tokenPayload = { id: user.id, email: user.email, role: user.role };
   const accessToken = generateAccessToken(tokenPayload);
   const refreshToken = generateRefreshToken({ id: user.id });
@@ -106,6 +110,7 @@ const loginUser = async ({ email, password, ip, userAgent }) => {
       userId: user.id,
       token: hashedRefreshToken,
       expiresAt: sessionExpiresAt,
+      persistent,
       ipAddress: ip,
       userAgent,
     },
@@ -116,13 +121,16 @@ const loginUser = async ({ email, password, ip, userAgent }) => {
     data: { lastLoginAt: new Date() },
   });
 
-  return { user, accessToken, refreshToken };
+  return { user, accessToken, refreshToken, persistent };
 };
 
-const logoutUser = async (refreshToken) => {
+const logoutUser = async (refreshToken, userId) => {
   if (refreshToken) {
     const hashedRefreshToken = hashToken(refreshToken);
     await prisma.session.deleteMany({ where: { token: hashedRefreshToken } });
+  }
+  if (userId) {
+    await prisma.session.deleteMany({ where: { userId } });
   }
 };
 
@@ -171,13 +179,19 @@ const refreshUserSession = async (refreshToken, ip, userAgent) => {
         userId: user.id,
         token: hashToken(newRefreshToken),
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        persistent: session.persistent,
         ipAddress: ip,
         userAgent,
       },
     }),
   ]);
 
-  return { user, accessToken: newAccessToken, refreshToken: newRefreshToken };
+  return {
+    user,
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
+    persistent: session.persistent,
+  };
 };
 
 const forgotPassword = async (email) => {
@@ -199,7 +213,7 @@ const forgotPassword = async (email) => {
     data: { userId: user.id, token: hashedToken, expiresAt },
   });
 
-  sendPasswordResetEmail(user.email, rawToken);
+  await sendPasswordResetEmail(user.email, rawToken);
 
   return { rawToken };
 };

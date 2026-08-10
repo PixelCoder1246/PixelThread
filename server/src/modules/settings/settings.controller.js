@@ -116,7 +116,6 @@ const updatePreferences = async (req, res, next) => {
 };
 
 const uploadAvatar = async (req, res, next) => {
-  uploadAvatar(req, res, next);
   try {
     validateImageType(req.file);
     const result = await settingsService.uploadAvatar(req.user.id, req.file);

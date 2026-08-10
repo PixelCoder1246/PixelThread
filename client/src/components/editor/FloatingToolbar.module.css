@@ -1,0 +1,85 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.toolbar[data-visible='true'] {
+  opacity: 1;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.divider {
+  width: 1px;
+  height: 1.25rem;
+  background: var(--border-primary);
+  margin: 0 var(--space-1);
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.button:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.button:active {
+  background: var(--bg-active);
+}
+
+.button.active {
+  background: var(--primary-500);
+  color: #fff;
+}
+
+.button.active:hover {
+  background: var(--primary-600);
+}
+
+.linkInput {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+
+.linkInput input {
+  width: 180px;
+  height: 2rem;
+  padding: 0 var(--space-2);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+  font-family: var(--font-sans);
+  outline: none;
+}
+
+.linkInput input:focus {
+  border-color: var(--input-border-focus);
+}

@@ -16,9 +16,16 @@ const parseFormDataAndMapFiles = async (req) => {
 
   if (typeof content === 'string') {
     try {
-      content = JSON.parse(content);
+      const parsed = JSON.parse(content);
+      if (Array.isArray(parsed)) {
+        content = parsed;
+      } else if (typeof parsed === 'object' && parsed !== null) {
+        content = [parsed];
+      } else {
+        content = [{ type: 'paragraph', text: parsed }];
+      }
     } catch (e) {
-      throw new ApiError(400, 'Invalid JSON format for content blocks.');
+      content = [{ type: 'paragraph', text: content }];
     }
   }
 

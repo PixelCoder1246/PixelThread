@@ -1,0 +1,65 @@
+.errorAlert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  font-size: var(--fs-sm);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.fieldSpacer {
+  height: var(--space-4);
+}
+
+.submitButton {
+  margin-top: var(--space-2);
+}
+
+.backRow {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--text-link);
+  font-weight: var(--fw-medium);
+  transition: color var(--transition-fast);
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.successState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+
+.successIcon {
+  color: var(--color-success);
+}
+
+.successTitle {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+}
+
+.successMessage {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  line-height: var(--lh-relaxed);
+  max-width: 24rem;
+}

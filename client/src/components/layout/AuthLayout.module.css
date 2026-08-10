@@ -1,0 +1,129 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.brandPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: 1;
+  padding: var(--space-8);
+  background: var(--gradient-primary);
+  overflow: hidden;
+}
+
+.brandContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 28rem;
+}
+
+.logo {
+  font-family: var(--font-sans);
+  font-size: var(--fs-4xl);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brandDescription {
+  margin-top: var(--space-4);
+  font-size: var(--fs-lg);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: var(--lh-relaxed);
+}
+
+.decorCircle1,
+.decorCircle2,
+.decorCircle3 {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.decorCircle1 {
+  top: -10%;
+  right: -15%;
+  width: 28rem;
+  height: 28rem;
+}
+
+.decorCircle2 {
+  bottom: -20%;
+  left: -10%;
+  width: 22rem;
+  height: 22rem;
+}
+
+.decorCircle3 {
+  top: 40%;
+  left: -8%;
+  width: 12rem;
+  height: 12rem;
+}
+
+.formPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: var(--space-8);
+  background: var(--bg-primary);
+}
+
+.formCard {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.formHeader {
+  margin-bottom: var(--space-8);
+  text-align: center;
+}
+
+.title {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.subtitle {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column-reverse;
+  }
+
+  .brandPanel {
+    padding: var(--space-6) var(--space-4);
+    min-height: 12rem;
+  }
+
+  .logo {
+    font-size: var(--fs-2xl);
+  }
+
+  .brandDescription {
+    display: none;
+  }
+
+  .decorCircle1,
+  .decorCircle2,
+  .decorCircle3 {
+    display: none;
+  }
+
+  .formPanel {
+    padding: var(--space-6) var(--space-4);
+    align-items: flex-start;
+  }
+}

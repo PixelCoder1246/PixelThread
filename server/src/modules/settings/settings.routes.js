@@ -20,7 +20,7 @@ const {
 const router = Router();
 
 router.get('/me/settings', protect, getMySettings);
-router.patch('/me/profile', protect, updateProfile);
+router.patch('/me/profile', protect, upload.none(), updateProfile);
 router.patch('/me/email', protect, changeEmail);
 router.get('/me/email/verify', verifyNewEmail);
 router.patch('/me/password', protect, changePassword);

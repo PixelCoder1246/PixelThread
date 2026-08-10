@@ -1,7 +1,7 @@
 const prisma = require('../../config/db');
 const ApiError = require('../../utils/ApiError');
 
-const recordView = async (postId) => {
+const recordView = async (postId, userId) => {
   const post = await prisma.post.findUnique({
     where: { id: postId },
     select: { id: true },
@@ -11,11 +11,32 @@ const recordView = async (postId) => {
     throw new ApiError(404, 'Post not found.');
   }
 
-  await prisma.postAnalytics.upsert({
-    where: { postId },
-    create: { postId, views: 1 },
-    update: { views: { increment: 1 } },
-  });
+  if (userId) {
+    const existingView = await prisma.postView.findUnique({
+      where: { userId_postId: { userId, postId } },
+    });
+
+    if (existingView) {
+      return;
+    }
+
+    await prisma.$transaction([
+      prisma.postView.create({
+        data: { userId, postId },
+      }),
+      prisma.postAnalytics.upsert({
+        where: { postId },
+        create: { postId, views: 1 },
+        update: { views: { increment: 1 } },
+      }),
+    ]);
+  } else {
+    await prisma.postAnalytics.upsert({
+      where: { postId },
+      create: { postId, views: 1 },
+      update: { views: { increment: 1 } },
+    });
+  }
 };
 
 const getPostAnalytics = async (postId) => {
@@ -215,6 +236,10 @@ const getAdminAnalytics = async () => {
   };
 };
 
+const getPublicAnalytics = async () => {
+  return getAdminAnalytics();
+};
+
 module.exports = {
   recordView,
   getPostAnalytics,
@@ -222,4 +247,5 @@ module.exports = {
   getMyPostsAnalytics,
   getTopPosts,
   getAdminAnalytics,
+  getPublicAnalytics,
 };

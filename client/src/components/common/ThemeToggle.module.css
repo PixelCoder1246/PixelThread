@@ -1,0 +1,43 @@
+.button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--border-primary);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.button:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-secondary);
+  color: var(--text-primary);
+}
+
+.placeholder {
+  visibility: hidden;
+}
+
+.icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+.visible {
+  transform: rotate(0deg);
+  opacity: 1;
+}
+
+.hidden {
+  transform: rotate(90deg);
+  opacity: 0;
+}

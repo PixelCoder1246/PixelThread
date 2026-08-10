@@ -777,9 +777,7 @@ const getEnhancedAnalytics = async () => {
     prisma.post.groupBy({
       by: ['authorId'],
       _count: { id: true },
-      _sum: {
-        /* views from analytics would need join */
-      },
+      _sum: {/* views from analytics would need join */},
       orderBy: { _count: { id: 'desc' } },
       take: 10,
     }),
