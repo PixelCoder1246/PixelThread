@@ -21,7 +21,10 @@ export default function ProfilePage() {
               <p className={styles.profileUsername}>@johndoe</p>
             </div>
           </div>
-          <p className={styles.profileBio}>Software developer and technical writer. Passionate about AI, web development, and open source.</p>
+          <p className={styles.profileBio}>
+            Software developer and technical writer. Passionate about AI, web
+            development, and open source.
+          </p>
           <div className={styles.profileStats}>
             <span>123 Posts</span>
             <span>4.5k Followers</span>

@@ -21,7 +21,8 @@ function LoginFormInner() {
   const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null);
 
   const rawCallbackUrl = searchParams.get('callbackUrl');
-  const callbackUrl = (rawCallbackUrl && rawCallbackUrl !== '/') ? rawCallbackUrl : '/posts';
+  const callbackUrl =
+    rawCallbackUrl && rawCallbackUrl !== '/' ? rawCallbackUrl : '/posts';
 
   const {
     register,
@@ -38,11 +39,21 @@ function LoginFormInner() {
     setUnverifiedEmail(null);
     try {
       await login(data.email, data.password, data.rememberMe ?? true);
-      toast({ type: 'success', title: 'Welcome back!', message: 'You have been logged in successfully.' });
+      toast({
+        type: 'success',
+        title: 'Welcome back!',
+        message: 'You have been logged in successfully.',
+      });
       router.replace(callbackUrl);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Login failed. Please try again.';
-      if (message.toLowerCase().includes('verify') || (error as { status?: number })?.status === 403) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Login failed. Please try again.';
+      if (
+        message.toLowerCase().includes('verify') ||
+        (error as { status?: number })?.status === 403
+      ) {
         setUnverifiedEmail(data.email);
       }
       toast({ type: 'error', title: 'Login failed', message });
@@ -73,12 +84,18 @@ function LoginFormInner() {
             lineHeight: '1.5',
           }}
         >
-          <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>Email verification required</div>
+          <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
+            Email verification required
+          </div>
           <div>
             Please check your inbox to verify your email, or{' '}
             <Link
               href={`/resend-verification?email=${encodeURIComponent(unverifiedEmail)}`}
-              style={{ textDecoration: 'underline', fontWeight: 600, color: 'inherit' }}
+              style={{
+                textDecoration: 'underline',
+                fontWeight: 600,
+                color: 'inherit',
+              }}
             >
               resend the verification link
             </Link>
@@ -116,16 +133,18 @@ function LoginFormInner() {
             <span className={s['login-form-remember-label']}>Remember me</span>
           </label>
 
-          <Link
-            href="/forgot-password"
-            className={s['login-form-forgot']}
-          >
+          <Link href="/forgot-password" className={s['login-form-forgot']}>
             Forgot password?
           </Link>
         </div>
       </div>
 
-      <Button type="submit" className={s['login-form-submit']} size="lg" isLoading={isSubmitting}>
+      <Button
+        type="submit"
+        className={s['login-form-submit']}
+        size="lg"
+        isLoading={isSubmitting}
+      >
         Sign in
       </Button>
     </form>

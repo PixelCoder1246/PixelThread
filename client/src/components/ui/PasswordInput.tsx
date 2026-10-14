@@ -19,7 +19,14 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
-      <div className="w-full" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+      <div
+        className="w-full"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--space-1)',
+        }}
+      >
         {label && (
           <label htmlFor={inputId} className="label">
             {label}
@@ -35,9 +42,13 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
               s['password-input-with-toggle'],
               error ? s['password-input-error'] : '',
               className,
-            ].filter(Boolean).join(' ')}
+            ]
+              .filter(Boolean)
+              .join(' ')}
             aria-invalid={error ? 'true' : 'false'}
-            aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+            aria-describedby={
+              error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined
+            }
             {...props}
           />
           <button
@@ -47,7 +58,11 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             aria-label={showPassword ? 'Hide password' : 'Show password'}
             aria-pressed={showPassword}
           >
-            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            {showPassword ? (
+              <EyeOff className="h-5 w-5" />
+            ) : (
+              <Eye className="h-5 w-5" />
+            )}
           </button>
         </div>
         {error && (

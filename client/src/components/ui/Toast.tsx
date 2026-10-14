@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+} from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import styles from './Toast.module.css';
 
@@ -36,11 +42,16 @@ const icons = {
 
 function getTypeClass(type: ToastType): string {
   switch (type) {
-    case 'success': return styles['toast-success'];
-    case 'error': return styles['toast-error'];
-    case 'info': return styles['toast-info'];
-    case 'warning': return styles['toast-warning'];
-    default: return '';
+    case 'success':
+      return styles['toast-success'];
+    case 'error':
+      return styles['toast-error'];
+    case 'info':
+      return styles['toast-info'];
+    case 'warning':
+      return styles['toast-warning'];
+    default:
+      return '';
   }
 }
 
@@ -102,14 +113,18 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
 
   return (
     <div
-      className={[styles.toast, getTypeClass(toast.type)].filter(Boolean).join(' ')}
+      className={[styles.toast, getTypeClass(toast.type)]
+        .filter(Boolean)
+        .join(' ')}
       role="alert"
       aria-live="polite"
     >
       <Icon className={styles['toast-icon']} aria-hidden="true" />
       <div className={styles['toast-content']}>
         <p className={styles['toast-title']}>{toast.title}</p>
-        {toast.message && <p className={styles['toast-message']}>{toast.message}</p>}
+        {toast.message && (
+          <p className={styles['toast-message']}>{toast.message}</p>
+        )}
         {toast.action && (
           <button
             onClick={() => {

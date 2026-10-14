@@ -92,7 +92,14 @@ export function Modal({
                 </h2>
               )}
               {description && (
-                <p id="modal-description" style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)', marginTop: 'var(--space-1)' }}>
+                <p
+                  id="modal-description"
+                  style={{
+                    fontSize: 'var(--font-size-sm)',
+                    color: 'var(--color-text-muted)',
+                    marginTop: 'var(--space-1)',
+                  }}
+                >
                   {description}
                 </p>
               )}
@@ -109,9 +116,7 @@ export function Modal({
             )}
           </div>
         )}
-        <div className={styles['modal-body']}>
-          {children}
-        </div>
+        <div className={styles['modal-body']}>{children}</div>
       </div>
     </Fragment>
   );

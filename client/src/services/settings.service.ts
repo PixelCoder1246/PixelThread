@@ -1,6 +1,14 @@
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/api';
-import type { UserSettings, UpdateProfileInput, ChangeEmailInput, ChangePasswordInput, UpdatePrivacyInput, UpdateNotificationPreferencesInput, UpdatePreferencesInput } from '@/types/user';
+import type {
+  UserSettings,
+  UpdateProfileInput,
+  ChangeEmailInput,
+  ChangePasswordInput,
+  UpdatePrivacyInput,
+  UpdateNotificationPreferencesInput,
+  UpdatePreferencesInput,
+} from '@/types/user';
 import type { ApiClient } from '@/lib/api';
 
 const typedApi = api as ApiClient;
@@ -18,11 +26,15 @@ export const settingsService = {
     return typedApi.get(API_ENDPOINTS.settings.get);
   },
 
-  async updateProfile(data: UpdateProfileInput): Promise<{ user: UserSettings }> {
+  async updateProfile(
+    data: UpdateProfileInput
+  ): Promise<{ user: UserSettings }> {
     return typedApi.patch(API_ENDPOINTS.settings.updateProfile, data);
   },
 
-  async changeEmail(data: ChangeEmailInput): Promise<{ message: string; pendingEmail: string }> {
+  async changeEmail(
+    data: ChangeEmailInput
+  ): Promise<{ message: string; pendingEmail: string }> {
     return typedApi.patch(API_ENDPOINTS.settings.changeEmail, data);
   },
 
@@ -30,19 +42,39 @@ export const settingsService = {
     return typedApi.get(API_ENDPOINTS.settings.verifyNewEmail, { token });
   },
 
-  async changePassword(data: ChangePasswordInput): Promise<{ message: string }> {
+  async changePassword(
+    data: ChangePasswordInput
+  ): Promise<{ message: string }> {
     return typedApi.patch(API_ENDPOINTS.settings.changePassword, data);
   },
 
-  async updatePrivacy(data: UpdatePrivacyInput): Promise<{ privacy: Pick<UserSettings, 'profileVisibility' | 'emailVisibility' | 'allowFollowers' | 'allowMessages'> }> {
+  async updatePrivacy(data: UpdatePrivacyInput): Promise<{
+    privacy: Pick<
+      UserSettings,
+      | 'profileVisibility'
+      | 'emailVisibility'
+      | 'allowFollowers'
+      | 'allowMessages'
+    >;
+  }> {
     return typedApi.patch(API_ENDPOINTS.settings.updatePrivacy, data);
   },
 
-  async updateNotificationPreferences(data: UpdateNotificationPreferencesInput): Promise<{ notificationPreferences: Record<string, unknown> }> {
-    return typedApi.patch(API_ENDPOINTS.settings.updateNotificationPreferences, data);
+  async updateNotificationPreferences(
+    data: UpdateNotificationPreferencesInput
+  ): Promise<{ notificationPreferences: Record<string, unknown> }> {
+    return typedApi.patch(
+      API_ENDPOINTS.settings.updateNotificationPreferences,
+      data
+    );
   },
 
-  async updatePreferences(data: UpdatePreferencesInput): Promise<{ preferences: Pick<UserSettings, 'language' | 'timezone' | 'themePreference'> }> {
+  async updatePreferences(data: UpdatePreferencesInput): Promise<{
+    preferences: Pick<
+      UserSettings,
+      'language' | 'timezone' | 'themePreference'
+    >;
+  }> {
     return typedApi.patch(API_ENDPOINTS.settings.updatePreferences, data);
   },
 

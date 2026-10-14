@@ -40,7 +40,12 @@ export interface GlobalSearchResponse {
 }
 
 export interface SuggestionsResponse {
-  posts: Array<{ id: string; title: string; slug: string; excerpt?: string | null }>;
+  posts: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    excerpt?: string | null;
+  }>;
   users: Array<{ id: string; name: string; image?: string | null }>;
   tags: Array<{ id: string; name: string }>;
 }

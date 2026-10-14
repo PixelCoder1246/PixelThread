@@ -14,8 +14,15 @@ export const metadata: Metadata = {
     default: 'PixelThread - AI-powered Blogging Platform',
     template: '%s | PixelThread',
   },
-  description: 'AI-powered blogging platform for creators and developers. Write, publish, and grow your audience with intelligent writing assistance.',
-  keywords: ['blogging', 'AI writing', 'content creation', 'publishing', 'developer blog'],
+  description:
+    'AI-powered blogging platform for creators and developers. Write, publish, and grow your audience with intelligent writing assistance.',
+  keywords: [
+    'blogging',
+    'AI writing',
+    'content creation',
+    'publishing',
+    'developer blog',
+  ],
   authors: [{ name: 'PixelThread' }],
   creator: 'PixelThread',
   publisher: 'PixelThread',
@@ -69,7 +76,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className="dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <Providers>{children}</Providers>

@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 import { queryClient } from '@/lib/queryClient';
 import { authService, type AuthResponse } from '@/services/auth.service';
 import type { CurrentUser } from '@/types/user';
@@ -12,8 +18,16 @@ interface AuthContextType {
   user: CurrentUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
-  register: (data: { name: string; email: string; password: string }) => Promise<AuthResponse>;
+  login: (
+    email: string,
+    password: string,
+    rememberMe?: boolean
+  ) => Promise<void>;
+  register: (data: {
+    name: string;
+    email: string;
+    password: string;
+  }) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   updateUser: (data: Partial<CurrentUser>) => void;
@@ -31,7 +45,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // If remember me was unchecked, we don't persist session across browser closes (sessionStorage vs localStorage)
       if (typeof window !== 'undefined') {
         const rememberSetting = localStorage.getItem(REMEMBER_ME_KEY);
-        const sessionActive = sessionStorage.getItem('pixelthread_session_active');
+        const sessionActive = sessionStorage.getItem(
+          'pixelthread_session_active'
+        );
 
         // If remember me is explicitly "false" and this is a new browser session (sessionActive is missing),
         // then according to user requirement, do not restore the session: log out from backend.
@@ -100,7 +116,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const register = async (data: { name: string; email: string; password: string }) => {
+  const register = async (data: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
     const response = await authService.register(data);
     return response;
   };

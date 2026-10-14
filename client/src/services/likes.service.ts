@@ -28,12 +28,23 @@ export const likesService = {
     return api.post(API_ENDPOINTS.likes.toggleComment(commentId));
   },
 
-  async getPostLikes(postId: string, page = 1, limit = 20): Promise<LikesListResponse> {
+  async getPostLikes(
+    postId: string,
+    page = 1,
+    limit = 20
+  ): Promise<LikesListResponse> {
     return api.get(API_ENDPOINTS.likes.postLikes(postId), { page, limit });
   },
 
-  async getCommentLikes(commentId: string, page = 1, limit = 20): Promise<LikesListResponse> {
-    return api.get(API_ENDPOINTS.likes.commentLikes(commentId), { page, limit });
+  async getCommentLikes(
+    commentId: string,
+    page = 1,
+    limit = 20
+  ): Promise<LikesListResponse> {
+    return api.get(API_ENDPOINTS.likes.commentLikes(commentId), {
+      page,
+      limit,
+    });
   },
 
   async getPostLikeStatus(postId: string): Promise<LikeStatusResponse> {

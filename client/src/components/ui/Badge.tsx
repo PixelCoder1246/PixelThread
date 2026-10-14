@@ -23,7 +23,9 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
     return (
       <span
         ref={ref}
-        className={[variantClasses[variant], className].filter(Boolean).join(' ')}
+        className={[variantClasses[variant], className]
+          .filter(Boolean)
+          .join(' ')}
         {...props}
       />
     );

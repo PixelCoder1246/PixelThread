@@ -44,12 +44,18 @@ export interface AuthResponse {
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const res = await api.post<ServerResponse<{ user: CurrentUser }>>(API_ENDPOINTS.auth.login, credentials);
+    const res = await api.post<ServerResponse<{ user: CurrentUser }>>(
+      API_ENDPOINTS.auth.login,
+      credentials
+    );
     return { user: res.data.user, message: res.message };
   },
 
   async register(data: RegisterData): Promise<AuthResponse> {
-    const res = await api.post<ServerResponse<{ user: CurrentUser }>>(API_ENDPOINTS.auth.register, data);
+    const res = await api.post<ServerResponse<{ user: CurrentUser }>>(
+      API_ENDPOINTS.auth.register,
+      data
+    );
     return { user: res.data.user, message: res.message };
   },
 
@@ -58,12 +64,16 @@ export const authService = {
   },
 
   async refreshToken(): Promise<{ message: string }> {
-    const res = await api.post<ServerResponse<unknown>>(API_ENDPOINTS.auth.refresh);
+    const res = await api.post<ServerResponse<unknown>>(
+      API_ENDPOINTS.auth.refresh
+    );
     return { message: res.message };
   },
 
   async getMe(): Promise<CurrentUser> {
-    const res = await api.get<ServerResponse<{ user: CurrentUser }>>(API_ENDPOINTS.auth.me);
+    const res = await api.get<ServerResponse<{ user: CurrentUser }>>(
+      API_ENDPOINTS.auth.me
+    );
     return res.data.user;
   },
 
@@ -79,7 +89,9 @@ export const authService = {
     return api.post(API_ENDPOINTS.auth.verifyEmail, data);
   },
 
-  async resendVerification(data: ResendVerificationData): Promise<{ message: string }> {
+  async resendVerification(
+    data: ResendVerificationData
+  ): Promise<{ message: string }> {
     return api.post(API_ENDPOINTS.auth.resendVerification, data);
   },
 };

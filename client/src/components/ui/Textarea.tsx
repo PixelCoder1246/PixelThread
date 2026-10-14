@@ -16,7 +16,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
-      <div className="w-full" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+      <div
+        className="w-full"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--space-1)',
+        }}
+      >
         {label && (
           <label htmlFor={textareaId} className="label">
             {label}
@@ -25,13 +32,17 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           ref={ref}
           id={textareaId}
-          className={[
-            s.textarea,
-            error ? s['textarea-error'] : '',
-            className,
-          ].filter(Boolean).join(' ')}
+          className={[s.textarea, error ? s['textarea-error'] : '', className]
+            .filter(Boolean)
+            .join(' ')}
           aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={error ? `${textareaId}-error` : hint ? `${textareaId}-hint` : undefined}
+          aria-describedby={
+            error
+              ? `${textareaId}-error`
+              : hint
+                ? `${textareaId}-hint`
+                : undefined
+          }
           {...props}
         />
         {error && (

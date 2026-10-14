@@ -25,7 +25,10 @@ export function Dropdown({ trigger, items, align = 'right' }: DropdownProps) {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
@@ -39,8 +42,14 @@ export function Dropdown({ trigger, items, align = 'right' }: DropdownProps) {
 
   return (
     <Fragment>
-      <div ref={dropdownRef} className={`${s.dropdown} ${isOpen ? s.open : ''}`}>
-        <div className={s['dropdown-trigger']} onClick={() => setIsOpen(!isOpen)}>
+      <div
+        ref={dropdownRef}
+        className={`${s.dropdown} ${isOpen ? s.open : ''}`}
+      >
+        <div
+          className={s['dropdown-trigger']}
+          onClick={() => setIsOpen(!isOpen)}
+        >
           {trigger}
         </div>
         {isOpen && (
@@ -73,9 +82,13 @@ export function Dropdown({ trigger, items, align = 'right' }: DropdownProps) {
                   s['dropdown-item'],
                   item.variant === 'danger' ? s.danger : '',
                   item.disabled ? s.disabled : '',
-                ].filter(Boolean).join(' ')}
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
               >
-                {item.icon && <span className={s['dropdown-item-icon']}>{item.icon}</span>}
+                {item.icon && (
+                  <span className={s['dropdown-item-icon']}>{item.icon}</span>
+                )}
                 {item.label}
               </button>
             ))}

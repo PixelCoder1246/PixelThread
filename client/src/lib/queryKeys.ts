@@ -51,8 +51,7 @@ export const queryKeys = {
     all: BOOKMARKS_KEYS,
     list: (page: number, limit: number, sort: string) =>
       [...BOOKMARKS_KEYS, 'list', { page, limit, sort }] as const,
-    status: (postId: string) =>
-      [...BOOKMARKS_KEYS, 'status', postId] as const,
+    status: (postId: string) => [...BOOKMARKS_KEYS, 'status', postId] as const,
   },
   follow: {
     all: FOLLOW_KEYS,
@@ -71,8 +70,7 @@ export const queryKeys = {
     all: SEARCH_KEYS,
     global: (params: Record<string, unknown>) =>
       [...SEARCH_KEYS, 'global', params] as const,
-    suggestions: (q: string) =>
-      [...SEARCH_KEYS, 'suggestions', q] as const,
+    suggestions: (q: string) => [...SEARCH_KEYS, 'suggestions', q] as const,
     trending: [...SEARCH_KEYS, 'trending'] as const,
     history: [...SEARCH_KEYS, 'history'] as const,
     popularTags: [...SEARCH_KEYS, 'popularTags'] as const,

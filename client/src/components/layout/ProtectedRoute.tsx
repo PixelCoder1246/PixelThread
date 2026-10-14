@@ -13,7 +13,10 @@ interface ProtectedRouteProps {
   requireVerified?: boolean;
 }
 
-export function ProtectedRoute({ children, requireVerified = false }: ProtectedRouteProps) {
+export function ProtectedRoute({
+  children,
+  requireVerified = false,
+}: ProtectedRouteProps) {
   const { user, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -30,7 +33,15 @@ export function ProtectedRoute({ children, requireVerified = false }: ProtectedR
         router.replace('/verify-email');
       }
     }
-  }, [isLoading, isAuthenticated, user, requireVerified, pathname, searchParams, router]);
+  }, [
+    isLoading,
+    isAuthenticated,
+    user,
+    requireVerified,
+    pathname,
+    searchParams,
+    router,
+  ]);
 
   if (isLoading) {
     return (
@@ -44,9 +55,5 @@ export function ProtectedRoute({ children, requireVerified = false }: ProtectedR
     return null;
   }
 
-  return (
-    <div className={s['protected-route']}>
-      {children}
-    </div>
-  );
+  return <div className={s['protected-route']}>{children}</div>;
 }

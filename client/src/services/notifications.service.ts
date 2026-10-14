@@ -35,7 +35,11 @@ export const notificationsService = {
     limit = 20,
     filters?: { type?: string; isRead?: boolean }
   ): Promise<NotificationsResponse> {
-    return api.get(API_ENDPOINTS.notifications.list, { page, limit, ...filters });
+    return api.get(API_ENDPOINTS.notifications.list, {
+      page,
+      limit,
+      ...filters,
+    });
   },
 
   async getUnreadCount(): Promise<UnreadCountResponse> {

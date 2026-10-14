@@ -9,9 +9,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryProvider>
       <AuthProvider>
-        <ToastProvider>
-          {children}
-        </ToastProvider>
+        <ToastProvider>{children}</ToastProvider>
       </AuthProvider>
     </QueryProvider>
   );

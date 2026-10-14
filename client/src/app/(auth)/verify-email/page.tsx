@@ -4,7 +4,13 @@ import styles from './page.module.css';
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle, AlertCircle, Loader2, Mail, ArrowRight } from 'lucide-react';
+import {
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+  Mail,
+  ArrowRight,
+} from 'lucide-react';
 import { Button, Card } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { Spinner } from '@/components/ui/Spinner';
@@ -14,7 +20,9 @@ function VerifyEmailInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
+    'loading'
+  );
   const [message, setMessage] = useState('');
   const token = searchParams.get('token');
 
@@ -32,7 +40,11 @@ function VerifyEmailInner() {
         setMessage(res.message || 'Email verified successfully!');
       } catch (error) {
         setStatus('error');
-        setMessage(error instanceof Error ? error.message : 'Verification failed. Please try again.');
+        setMessage(
+          error instanceof Error
+            ? error.message
+            : 'Verification failed. Please try again.'
+        );
       }
     };
 
@@ -67,9 +79,7 @@ function VerifyEmailInner() {
 
         {status === 'success' && (
           <div className={styles.actionGroup}>
-            <p>
-              Your account is now verified. You can sign in to PixelThread.
-            </p>
+            <p>Your account is now verified. You can sign in to PixelThread.</p>
             <Link href="/login" className="w-full">
               <Button className="w-full gap-2">
                 Sign In
@@ -81,9 +91,7 @@ function VerifyEmailInner() {
 
         {status === 'error' && (
           <div className={styles.actionGroup}>
-            <p>
-              The verification link may have expired or already been used.
-            </p>
+            <p>The verification link may have expired or already been used.</p>
             <Link href="/resend-verification" className="w-full">
               <Button variant="outline" className="w-full gap-2">
                 <Mail className="h-4 w-4" />

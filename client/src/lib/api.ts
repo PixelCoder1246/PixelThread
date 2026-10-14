@@ -1,4 +1,7 @@
-const API_URL = typeof window === 'undefined' ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') : '';
+const API_URL =
+  typeof window === 'undefined'
+    ? process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+    : '';
 
 export { API_ENDPOINTS } from './apiEndpoints';
 
@@ -37,7 +40,9 @@ async function handleResponse<T>(response: Response): Promise<T> {
     if (isJson) {
       errorData = await response.json().catch(() => ({}));
     } else {
-      errorData.message = await response.text().catch(() => 'An error occurred');
+      errorData.message = await response
+        .text()
+        .catch(() => 'An error occurred');
     }
 
     throw new ApiError(
@@ -93,12 +98,16 @@ export async function apiRequest<T>(
   if (params) {
     const query = Object.entries(params)
       .filter(([, value]) => value !== undefined && value !== null)
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
+      )
       .join('&');
     if (query) urlString += `?${query}`;
   }
 
-  const isFormData = typeof FormData !== 'undefined' && fetchOptions.body instanceof FormData;
+  const isFormData =
+    typeof FormData !== 'undefined' && fetchOptions.body instanceof FormData;
 
   const defaultHeaders: HeadersInit = {
     ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
@@ -133,48 +142,97 @@ export async function apiRequest<T>(
 }
 
 export interface ApiClient {
-  get: <T>(endpoint: string, params?: Record<string, string | number | boolean | undefined>) => Promise<T>;
-  post: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) => Promise<T>;
-  put: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) => Promise<T>;
-  patch: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) => Promise<T>;
-  delete: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) => Promise<T>;
-  postForm: <T>(endpoint: string, formData: FormData, params?: Record<string, string | number | boolean | undefined>) => Promise<T>;
-  putForm: <T>(endpoint: string, formData: FormData, params?: Record<string, string | number | boolean | undefined>) => Promise<T>;
+  get: <T>(
+    endpoint: string,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => Promise<T>;
+  post: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => Promise<T>;
+  put: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => Promise<T>;
+  patch: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => Promise<T>;
+  delete: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => Promise<T>;
+  postForm: <T>(
+    endpoint: string,
+    formData: FormData,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => Promise<T>;
+  putForm: <T>(
+    endpoint: string,
+    formData: FormData,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => Promise<T>;
 }
 
 export const api: ApiClient = {
-  get: <T>(endpoint: string, params?: Record<string, string | number | boolean | undefined>) =>
-    apiRequest<T>(endpoint, { method: 'GET', params }),
+  get: <T>(
+    endpoint: string,
+    params?: Record<string, string | number | boolean | undefined>
+  ) => apiRequest<T>(endpoint, { method: 'GET', params }),
 
-  post: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) =>
+  post: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) =>
     apiRequest<T>(endpoint, {
       method: 'POST',
       body: body ? JSON.stringify(body) : undefined,
       params,
     }),
 
-  put: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) =>
+  put: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) =>
     apiRequest<T>(endpoint, {
       method: 'PUT',
       body: body ? JSON.stringify(body) : undefined,
       params,
     }),
 
-  patch: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) =>
+  patch: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) =>
     apiRequest<T>(endpoint, {
       method: 'PATCH',
       body: body ? JSON.stringify(body) : undefined,
       params,
     }),
 
-  delete: <T>(endpoint: string, body?: unknown, params?: Record<string, string | number | boolean | undefined>) =>
+  delete: <T>(
+    endpoint: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean | undefined>
+  ) =>
     apiRequest<T>(endpoint, {
       method: 'DELETE',
       body: body ? JSON.stringify(body) : undefined,
       params,
     }),
 
-  postForm: <T>(endpoint: string, formData: FormData, params?: Record<string, string | number | boolean | undefined>) =>
+  postForm: <T>(
+    endpoint: string,
+    formData: FormData,
+    params?: Record<string, string | number | boolean | undefined>
+  ) =>
     apiRequest<T>(endpoint, {
       method: 'POST',
       body: formData,
@@ -182,7 +240,11 @@ export const api: ApiClient = {
       headers: {},
     }),
 
-  putForm: <T>(endpoint: string, formData: FormData, params?: Record<string, string | number | boolean | undefined>) =>
+  putForm: <T>(
+    endpoint: string,
+    formData: FormData,
+    params?: Record<string, string | number | boolean | undefined>
+  ) =>
     apiRequest<T>(endpoint, {
       method: 'PUT',
       body: formData,

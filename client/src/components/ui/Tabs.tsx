@@ -43,7 +43,12 @@ function useTabsContext() {
   return context;
 }
 
-export function Tabs({ defaultValue, onValueChange, children, className }: TabsProps) {
+export function Tabs({
+  defaultValue,
+  onValueChange,
+  children,
+  className,
+}: TabsProps) {
   const [value, setValue] = useState(defaultValue);
 
   const handleValueChange = (newValue: string) => {
@@ -53,7 +58,9 @@ export function Tabs({ defaultValue, onValueChange, children, className }: TabsP
 
   return (
     <TabsContext.Provider value={{ value, onValueChange: handleValueChange }}>
-      <div className={['space-y-4', className].filter(Boolean).join(' ')}>{children}</div>
+      <div className={['space-y-4', className].filter(Boolean).join(' ')}>
+        {children}
+      </div>
     </TabsContext.Provider>
   );
 }
@@ -70,7 +77,12 @@ export function TabsList({ children, className }: TabsListProps) {
   );
 }
 
-export function TabsTrigger({ value, children, disabled, className }: TabsTriggerProps) {
+export function TabsTrigger({
+  value,
+  children,
+  disabled,
+  className,
+}: TabsTriggerProps) {
   const { value: currentValue, onValueChange } = useTabsContext();
   const isActive = currentValue === value;
 
@@ -88,7 +100,9 @@ export function TabsTrigger({ value, children, disabled, className }: TabsTrigge
         isActive ? s.active : '',
         disabled ? 'opacity-50 pointer-events-none' : '',
         className,
-      ].filter(Boolean).join(' ')}
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       {children}
     </button>

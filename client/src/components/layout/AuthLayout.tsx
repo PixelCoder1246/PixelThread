@@ -30,7 +30,8 @@ function AuthGuard({ children }: { children: ReactNode }) {
     }
     if (alreadyAuthOnMount.current && isAuthenticated) {
       const rawCallbackUrl = searchParams.get('callbackUrl');
-      const callbackUrl = (rawCallbackUrl && rawCallbackUrl !== '/') ? rawCallbackUrl : '/posts';
+      const callbackUrl =
+        rawCallbackUrl && rawCallbackUrl !== '/' ? rawCallbackUrl : '/posts';
       router.replace(callbackUrl);
     }
   }, [isAuthenticated, isLoading, router, searchParams]);
@@ -52,11 +53,13 @@ function AuthGuard({ children }: { children: ReactNode }) {
 
 export function AuthLayout({ children, title, description }: AuthLayoutProps) {
   return (
-    <Suspense fallback={
-      <div className={s['auth-layout-loading']}>
-        <Spinner className="h-8 w-8" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className={s['auth-layout-loading']}>
+          <Spinner className="h-8 w-8" />
+        </div>
+      }
+    >
       <AuthGuard>
         <div className={s['auth-layout']}>
           {/* Background */}
@@ -85,11 +88,17 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
 
               <div className={s['auth-layout-marketing']}>
                 <h1 className={s['auth-layout-title']}>
-                  Write smarter,<br />
-                  publish <span className={s['auth-layout-title-highlight']}>faster</span>.
+                  Write smarter,
+                  <br />
+                  publish{' '}
+                  <span className={s['auth-layout-title-highlight']}>
+                    faster
+                  </span>
+                  .
                 </h1>
                 <p className={s['auth-layout-description']}>
-                  The AI-powered blogging platform built for creators and developers who want to grow their audience.
+                  The AI-powered blogging platform built for creators and
+                  developers who want to grow their audience.
                 </p>
                 <ul className={s['auth-layout-features']}>
                   <li className={s['auth-layout-feature-item']}>
@@ -108,7 +117,8 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
               </div>
 
               <div className={s['auth-layout-copyright']}>
-                &copy; {new Date().getFullYear()} PixelThread. All rights reserved.
+                &copy; {new Date().getFullYear()} PixelThread. All rights
+                reserved.
               </div>
             </div>
 
@@ -123,12 +133,12 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
                     height={36}
                     className={s['auth-layout-brand-image']}
                   />
-                  <span className={s['auth-layout-brand-text']}>PixelThread</span>
+                  <span className={s['auth-layout-brand-text']}>
+                    PixelThread
+                  </span>
                 </Link>
               </div>
-              <div className={s['auth-layout-card']}>
-                {children}
-              </div>
+              <div className={s['auth-layout-card']}>{children}</div>
             </div>
           </div>
         </div>

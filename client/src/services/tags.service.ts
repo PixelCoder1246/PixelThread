@@ -34,11 +34,19 @@ export interface TagPostsResponse {
 }
 
 export const tagsService = {
-  async getAllTags(page = 1, limit = 20, sort = 'alphabetical'): Promise<TagsResponse> {
+  async getAllTags(
+    page = 1,
+    limit = 20,
+    sort = 'alphabetical'
+  ): Promise<TagsResponse> {
     return api.get(API_ENDPOINTS.tags.list, { page, limit, sort });
   },
 
-  async getTagPosts(name: string, page = 1, limit = 10): Promise<TagPostsResponse> {
+  async getTagPosts(
+    name: string,
+    page = 1,
+    limit = 10
+  ): Promise<TagPostsResponse> {
     return api.get(API_ENDPOINTS.tags.posts(name), { page, limit });
   },
 };

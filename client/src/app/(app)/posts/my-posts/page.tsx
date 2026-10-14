@@ -12,7 +12,9 @@ export default function MyPostsPage() {
       <div className={styles.myPostsHeader}>
         <h1>My Posts</h1>
         <Link href="/posts/new">
-          <Button style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Button
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          >
             <Plus style={{ width: '1rem', height: '1rem' }} />
             New Post
           </Button>

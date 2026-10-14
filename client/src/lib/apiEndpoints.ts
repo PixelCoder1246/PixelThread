@@ -35,7 +35,8 @@ export const API_ENDPOINTS = {
     postLikes: (postId: string) => `/api/posts/${postId}/likes`,
     commentLikes: (commentId: string) => `/api/comments/${commentId}/likes`,
     postStatus: (postId: string) => `/api/posts/${postId}/like-status`,
-    commentStatus: (commentId: string) => `/api/comments/${commentId}/like-status`,
+    commentStatus: (commentId: string) =>
+      `/api/comments/${commentId}/like-status`,
   },
   bookmarks: {
     list: '/api/me/bookmarks',

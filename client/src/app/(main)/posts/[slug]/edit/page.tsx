@@ -13,7 +13,9 @@ export default function EditPostPage() {
       <MainLayout>
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold mb-4">Edit Post: {slug}</h1>
-          <p className="text-muted-foreground">Post editor will be implemented in Phase 2.</p>
+          <p className="text-muted-foreground">
+            Post editor will be implemented in Phase 2.
+          </p>
         </div>
       </MainLayout>
     </ProtectedRoute>

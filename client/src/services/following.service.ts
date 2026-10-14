@@ -31,11 +31,19 @@ export interface FollowResponse {
 }
 
 export const followService = {
-  async getFollowers(userId: string, page = 1, limit = 20): Promise<FollowersResponse> {
+  async getFollowers(
+    userId: string,
+    page = 1,
+    limit = 20
+  ): Promise<FollowersResponse> {
     return api.get(API_ENDPOINTS.follow.followers(userId), { page, limit });
   },
 
-  async getFollowing(userId: string, page = 1, limit = 20): Promise<FollowingResponse> {
+  async getFollowing(
+    userId: string,
+    page = 1,
+    limit = 20
+  ): Promise<FollowingResponse> {
     return api.get(API_ENDPOINTS.follow.following(userId), { page, limit });
   },
 

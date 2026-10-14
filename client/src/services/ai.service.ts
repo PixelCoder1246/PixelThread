@@ -140,7 +140,11 @@ export interface AISocialResponse {
 }
 
 export interface AISuggestionsResponse {
-  suggestions: Array<{ type: string; description: string; priority: 'high' | 'medium' | 'low' }>;
+  suggestions: Array<{
+    type: string;
+    description: string;
+    priority: 'high' | 'medium' | 'low';
+  }>;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -223,11 +227,17 @@ export interface AISuggestionsInput {
 
 export interface AIApplySuggestionsInput {
   content: string;
-  suggestions: Array<{ type: string; description: string; priority: 'high' | 'medium' | 'low' }>;
+  suggestions: Array<{
+    type: string;
+    description: string;
+    priority: 'high' | 'medium' | 'low';
+  }>;
 }
 
 export const aiService = {
-  async generatePost(data: AIGeneratePostInput): Promise<AIGeneratePostResponse> {
+  async generatePost(
+    data: AIGeneratePostInput
+  ): Promise<AIGeneratePostResponse> {
     return api.post(API_ENDPOINTS.ai.generatePost, data);
   },
 
@@ -283,11 +293,15 @@ export const aiService = {
     return api.post(API_ENDPOINTS.ai.generateSocial, data);
   },
 
-  async generateSuggestions(data: AISuggestionsInput): Promise<AISuggestionsResponse> {
+  async generateSuggestions(
+    data: AISuggestionsInput
+  ): Promise<AISuggestionsResponse> {
     return api.post(API_ENDPOINTS.ai.generateSuggestions, data);
   },
 
-  async applySuggestions(data: AIApplySuggestionsInput): Promise<AIApplySuggestionsResponse> {
+  async applySuggestions(
+    data: AIApplySuggestionsInput
+  ): Promise<AIApplySuggestionsResponse> {
     return api.post(API_ENDPOINTS.ai.applySuggestions, data);
   },
 };

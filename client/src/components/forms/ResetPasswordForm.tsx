@@ -5,7 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { resetPasswordSchema, type ResetPasswordInput } from '@/lib/validations';
+import {
+  resetPasswordSchema,
+  type ResetPasswordInput,
+} from '@/lib/validations';
 import { Button, PasswordInput, Spinner } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { authService } from '@/services/auth.service';
@@ -35,10 +38,17 @@ function ResetPasswordFormInner() {
         newPassword: data.password,
       });
 
-      toast({ type: 'success', title: 'Password reset!', message: 'Your password has been updated successfully.' });
+      toast({
+        type: 'success',
+        title: 'Password reset!',
+        message: 'Your password has been updated successfully.',
+      });
       router.push('/login');
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to reset password. Please try again.';
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to reset password. Please try again.';
       toast({ type: 'error', title: 'Error', message });
     }
   };
@@ -46,15 +56,30 @@ function ResetPasswordFormInner() {
   if (!token) {
     return (
       <div className={s['reset-password-form-success']}>
-        <svg className={s['reset-password-form-success-icon']} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className={s['reset-password-form-success-icon']}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <circle cx="12" cy="12" r="10" strokeWidth="2" />
-          <path d="M9 12l2 2 4-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M9 12l2 2 4-4"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
-        <h2 className={s['reset-password-form-success-title']}>Invalid reset link</h2>
+        <h2 className={s['reset-password-form-success-title']}>
+          Invalid reset link
+        </h2>
         <p className={s['reset-password-form-success-message']}>
           This password reset link is invalid or has expired.
         </p>
-        <Link href="/forgot-password" className={s['reset-password-form-success-link']}>
+        <Link
+          href="/forgot-password"
+          className={s['reset-password-form-success-link']}
+        >
           Request a new reset link
         </Link>
       </div>
@@ -62,7 +87,10 @@ function ResetPasswordFormInner() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={s['reset-password-form']}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={s['reset-password-form']}
+    >
       <div className={s['reset-password-form-header']}>
         <h2 className={s['reset-password-form-title']}>Reset your password</h2>
         <p className={s['reset-password-form-subtitle']}>
@@ -90,7 +118,12 @@ function ResetPasswordFormInner() {
         <input {...register('token')} type="hidden" />
       </div>
 
-      <Button type="submit" className={s['reset-password-form-submit']} size="lg" isLoading={isSubmitting}>
+      <Button
+        type="submit"
+        className={s['reset-password-form-submit']}
+        size="lg"
+        isLoading={isSubmitting}
+      >
         Reset password
       </Button>
 

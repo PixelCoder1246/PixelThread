@@ -3,7 +3,16 @@
 import styles from './page.module.css';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { Card, Input, Textarea, Button, Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui';
+import {
+  Card,
+  Input,
+  Textarea,
+  Button,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from '@/components/ui';
 
 export default function ProfileSettingsPage() {
   return (
@@ -23,9 +32,22 @@ export default function ProfileSettingsPage() {
               <Card>
                 <div className={styles.settingsCard}>
                   <h2>Profile Information</h2>
-                  <Input label="Username" placeholder="johndoe" defaultValue="johndoe" />
-                  <Input label="Email" type="email" placeholder="john@example.com" defaultValue="john@example.com" />
-                  <Textarea label="Bio" placeholder="Tell us about yourself" defaultValue="Software developer and technical writer." />
+                  <Input
+                    label="Username"
+                    placeholder="johndoe"
+                    defaultValue="johndoe"
+                  />
+                  <Input
+                    label="Email"
+                    type="email"
+                    placeholder="john@example.com"
+                    defaultValue="john@example.com"
+                  />
+                  <Textarea
+                    label="Bio"
+                    placeholder="Tell us about yourself"
+                    defaultValue="Software developer and technical writer."
+                  />
                   <Input label="Location" placeholder="San Francisco, CA" />
                   <Input label="Website" placeholder="https://example.com" />
                   <Button>Save Changes</Button>
@@ -36,7 +58,9 @@ export default function ProfileSettingsPage() {
               <Card>
                 <div className={styles.settingsCard}>
                   <h2>Account Settings</h2>
-                  <p className="text-muted-foreground">Account settings will be implemented in Phase 4.</p>
+                  <p className="text-muted-foreground">
+                    Account settings will be implemented in Phase 4.
+                  </p>
                 </div>
               </Card>
             </TabsContent>
@@ -44,7 +68,9 @@ export default function ProfileSettingsPage() {
               <Card>
                 <div className={styles.settingsCard}>
                   <h2>Privacy Settings</h2>
-                  <p className="text-muted-foreground">Privacy settings will be implemented in Phase 4.</p>
+                  <p className="text-muted-foreground">
+                    Privacy settings will be implemented in Phase 4.
+                  </p>
                 </div>
               </Card>
             </TabsContent>
@@ -52,7 +78,9 @@ export default function ProfileSettingsPage() {
               <Card>
                 <div className={styles.settingsCard}>
                   <h2>Notification Preferences</h2>
-                  <p className="text-muted-foreground">Notification preferences will be implemented in Phase 4.</p>
+                  <p className="text-muted-foreground">
+                    Notification preferences will be implemented in Phase 4.
+                  </p>
                 </div>
               </Card>
             </TabsContent>
@@ -60,7 +88,9 @@ export default function ProfileSettingsPage() {
               <Card>
                 <div className={styles.settingsCard}>
                   <h2>Preferences</h2>
-                  <p className="text-muted-foreground">Preferences will be implemented in Phase 4.</p>
+                  <p className="text-muted-foreground">
+                    Preferences will be implemented in Phase 4.
+                  </p>
                 </div>
               </Card>
             </TabsContent>

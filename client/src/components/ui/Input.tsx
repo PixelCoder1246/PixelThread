@@ -25,13 +25,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
-          className={[
-            s.input,
-            error ? s['input-error'] : '',
-            className,
-          ].filter(Boolean).join(' ')}
+          className={[s.input, error ? s['input-error'] : '', className]
+            .filter(Boolean)
+            .join(' ')}
           aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+          aria-describedby={
+            error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined
+          }
           {...props}
         />
         {error && (

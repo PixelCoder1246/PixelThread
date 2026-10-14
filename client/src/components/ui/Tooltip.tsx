@@ -12,7 +12,12 @@ interface TooltipProps {
   delay?: number;
 }
 
-export function Tooltip({ content, children, side = 'top', delay = 200 }: TooltipProps) {
+export function Tooltip({
+  content,
+  children,
+  side = 'top',
+  delay = 200,
+}: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -40,11 +45,7 @@ export function Tooltip({ content, children, side = 'top', delay = 200 }: Toolti
     >
       {children}
       {isVisible && (
-        <div
-          ref={tooltipRef}
-          className={s['tooltip-content']}
-          role="tooltip"
-        >
+        <div ref={tooltipRef} className={s['tooltip-content']} role="tooltip">
           {content}
         </div>
       )}

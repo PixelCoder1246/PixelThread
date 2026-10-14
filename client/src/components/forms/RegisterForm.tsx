@@ -40,7 +40,10 @@ export function RegisterForm() {
         message: 'Please check your email to verify your account.',
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Registration failed. Please try again.';
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Registration failed. Please try again.';
       toast({ type: 'error', title: 'Registration failed', message });
     }
   };
@@ -48,7 +51,10 @@ export function RegisterForm() {
   if (registeredEmail) {
     return (
       <div className={s['register-form']}>
-        <div className={s['register-form-header']} style={{ textAlign: 'center' }}>
+        <div
+          className={s['register-form-header']}
+          style={{ textAlign: 'center' }}
+        >
           <div
             style={{
               width: '4rem',
@@ -61,18 +67,47 @@ export function RegisterForm() {
               margin: '0 auto 1.5rem',
             }}
           >
-            <Mail style={{ width: '2rem', height: '2rem', color: 'var(--color-accent-primary)' }} />
+            <Mail
+              style={{
+                width: '2rem',
+                height: '2rem',
+                color: 'var(--color-accent-primary)',
+              }}
+            />
           </div>
           <h2 className={s['register-form-title']}>Check your email</h2>
-          <p className={s['register-form-subtitle']} style={{ marginTop: '0.5rem', lineHeight: '1.6' }}>
-            We&apos;ve sent a verification link to <strong style={{ color: 'var(--color-text-primary)' }}>{registeredEmail}</strong>.
-            Please verify your email address to activate your account before logging in.
+          <p
+            className={s['register-form-subtitle']}
+            style={{ marginTop: '0.5rem', lineHeight: '1.6' }}
+          >
+            We&apos;ve sent a verification link to{' '}
+            <strong style={{ color: 'var(--color-text-primary)' }}>
+              {registeredEmail}
+            </strong>
+            . Please verify your email address to activate your account before
+            logging in.
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
+            marginTop: '1rem',
+          }}
+        >
           <Link href="/login" style={{ width: '100%' }}>
-            <Button size="lg" className="w-full" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            <Button
+              size="lg"
+              className="w-full"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+              }}
+            >
               <span>Proceed to Sign In</span>
               <ArrowRight style={{ width: '1rem', height: '1rem' }} />
             </Button>
@@ -84,14 +119,22 @@ export function RegisterForm() {
           </Link>
         </div>
 
-        <div className={s['register-form-footer']} style={{ marginTop: '1.5rem' }}>
+        <div
+          className={s['register-form-footer']}
+          style={{ marginTop: '1.5rem' }}
+        >
           <span className={s['register-form-footer-text']}>
             Need to use a different email?{' '}
             <button
               type="button"
               onClick={() => setRegisteredEmail(null)}
               className={s['register-form-footer-link']}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+              }}
             >
               Sign up again
             </button>
@@ -157,16 +200,28 @@ export function RegisterForm() {
           required
           className={s['register-form-terms-input']}
         />
-        <label htmlFor="terms-checkbox" className={s['register-form-terms-text']}>
+        <label
+          htmlFor="terms-checkbox"
+          className={s['register-form-terms-text']}
+        >
           By creating an account, you agree to our{' '}
-          <Link href="/terms" className={s['register-form-terms-link']}>Terms of Service</Link>
-          {' '}and{' '}
-          <Link href="/privacy" className={s['register-form-terms-link']}>Privacy Policy</Link>
+          <Link href="/terms" className={s['register-form-terms-link']}>
+            Terms of Service
+          </Link>{' '}
+          and{' '}
+          <Link href="/privacy" className={s['register-form-terms-link']}>
+            Privacy Policy
+          </Link>
           .
         </label>
       </div>
 
-      <Button type="submit" className={s['register-form-submit']} size="lg" isLoading={isSubmitting}>
+      <Button
+        type="submit"
+        className={s['register-form-submit']}
+        size="lg"
+        isLoading={isSubmitting}
+      >
         Create account
       </Button>
     </form>

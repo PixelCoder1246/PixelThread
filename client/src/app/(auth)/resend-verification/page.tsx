@@ -41,14 +41,23 @@ export default function ResendVerificationPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to send verification email');
+        throw new Error(
+          errorData.message || 'Failed to send verification email'
+        );
       }
 
       setStatus('success');
-      toast({ type: 'success', title: 'Verification email sent!', message: 'Please check your inbox.' });
+      toast({
+        type: 'success',
+        title: 'Verification email sent!',
+        message: 'Please check your inbox.',
+      });
     } catch (error) {
       setStatus('idle');
-      const message = error instanceof Error ? error.message : 'Failed to send verification email. Please try again.';
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to send verification email. Please try again.';
       toast({ type: 'error', title: 'Error', message });
     }
   };
@@ -62,9 +71,7 @@ export default function ResendVerificationPage() {
               <Mail className={styles.icon} />
             </div>
             <h2>Resend Verification Email</h2>
-            <p>
-              Enter your email and we&apos;ll send a new verification link.
-            </p>
+            <p>Enter your email and we&apos;ll send a new verification link.</p>
           </div>
 
           {status === 'success' ? (
@@ -74,7 +81,8 @@ export default function ResendVerificationPage() {
               </div>
               <h3>Email Sent!</h3>
               <p>
-                We&apos;ve sent a new verification link to your email. Please check your inbox.
+                We&apos;ve sent a new verification link to your email. Please
+                check your inbox.
               </p>
               <Link href="/login" className="w-full">
                 <Button className="w-full gap-2">
@@ -95,8 +103,15 @@ export default function ResendVerificationPage() {
                 required
               />
 
-              <Button type="submit" className={styles.submitButton} size="lg" isLoading={isSubmitting || status === 'loading'}>
-                {status === 'loading' && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+              <Button
+                type="submit"
+                className={styles.submitButton}
+                size="lg"
+                isLoading={isSubmitting || status === 'loading'}
+              >
+                {status === 'loading' && (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                )}
                 Send Verification Email
               </Button>
             </form>
@@ -104,10 +119,7 @@ export default function ResendVerificationPage() {
 
           <div className={styles.footer}>
             <p>
-              Remember your password?{' '}
-              <Link href="/login">
-                Sign in
-              </Link>
+              Remember your password? <Link href="/login">Sign in</Link>
             </p>
           </div>
         </div>

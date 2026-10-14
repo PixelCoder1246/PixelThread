@@ -21,19 +21,33 @@ export function Footer() {
           <span>PixelThread</span>
         </Link>
         <nav className={s['footer-links']} aria-label="Footer navigation">
-          <Link href="/posts/new" className={s['footer-link']}>Write</Link>
+          <Link href="/posts/new" className={s['footer-link']}>
+            Write
+          </Link>
           <span className={s['footer-divider']}>·</span>
-          <Link href="/search" className={s['footer-link']}>Discover</Link>
+          <Link href="/search" className={s['footer-link']}>
+            Discover
+          </Link>
           <span className={s['footer-divider']}>·</span>
-          <Link href="/tags" className={s['footer-link']}>Topics</Link>
+          <Link href="/tags" className={s['footer-link']}>
+            Topics
+          </Link>
           <span className={s['footer-divider']}>·</span>
-          <Link href="/analytics" className={s['footer-link']}>Analytics</Link>
+          <Link href="/analytics" className={s['footer-link']}>
+            Analytics
+          </Link>
           <span className={s['footer-divider']}>·</span>
-          <Link href="/about" className={s['footer-link']}>About</Link>
+          <Link href="/about" className={s['footer-link']}>
+            About
+          </Link>
           <span className={s['footer-divider']}>·</span>
-          <Link href="/privacy" className={s['footer-link']}>Privacy</Link>
+          <Link href="/privacy" className={s['footer-link']}>
+            Privacy
+          </Link>
           <span className={s['footer-divider']}>·</span>
-          <Link href="/terms" className={s['footer-link']}>Terms</Link>
+          <Link href="/terms" className={s['footer-link']}>
+            Terms
+          </Link>
         </nav>
         <p className={s['footer-copyright']}>
           &copy; {currentYear} PixelThread. All rights reserved.

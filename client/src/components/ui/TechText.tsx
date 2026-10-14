@@ -2,19 +2,26 @@
 
 import { useEffect, useRef } from 'react';
 
-const LABEL_FONT = '10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+const LABEL_FONT =
+  '10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
 const FALLOFF_STEPS = 8;
 const SPRING = 320;
 const DAMPING = 22;
 
-const approach = (current: number, target: number, dt: number, seconds: number) =>
-  current + (target - current) * (1 - Math.exp(-dt / seconds));
+const approach = (
+  current: number,
+  target: number,
+  dt: number,
+  seconds: number
+) => current + (target - current) * (1 - Math.exp(-dt / seconds));
 
 const hexToRgb = (hex: string) => {
   let h = String(hex || '').replace('#', '');
   if (h.length === 3) h = h.replace(/./g, (c) => c + c);
   const n = parseInt(h.slice(0, 6), 16);
-  return Number.isNaN(n) ? [255, 255, 255] : [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  return Number.isNaN(n)
+    ? [255, 255, 255]
+    : [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 };
 
 const rgba = (hex: string, alpha: number) => {
@@ -33,7 +40,8 @@ const noise = (...values: number[]) => {
   return (h >>> 0) / 4294967296;
 };
 
-const signed = (value: number) => (value > 0 ? `+${value}` : value < 0 ? `−${-value}` : '0');
+const signed = (value: number) =>
+  value > 0 ? `+${value}` : value < 0 ? `−${-value}` : '0';
 
 interface TechTextProps {
   text?: string;
@@ -113,7 +121,28 @@ export const TechText = ({
       speed,
     };
     wakeRef.current();
-  }, [text, fontFamily, fontWeight, fontSize, letterSpacing, color, accentColor, reach, softness, dashLength, dashGap, strokeWidth, lineStyle, reveal, specks, selection, labels, draggable, sweep, speed]);
+  }, [
+    text,
+    fontFamily,
+    fontWeight,
+    fontSize,
+    letterSpacing,
+    color,
+    accentColor,
+    reach,
+    softness,
+    dashLength,
+    dashGap,
+    strokeWidth,
+    lineStyle,
+    reveal,
+    specks,
+    selection,
+    labels,
+    draggable,
+    sweep,
+    speed,
+  ]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -123,7 +152,9 @@ export const TechText = ({
     const scratchCtx = scratch.getContext('2d');
     if (!container || !canvas || !ctx || !scratchCtx) return undefined;
 
-    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const reducedMotion = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
     let width = 1;
     let height = 1;
     let dpr = 1;
@@ -150,17 +181,29 @@ export const TechText = ({
       wakeRef.current();
     };
 
-    const family = (s: TechTextProps) => s.fontFamily || getComputedStyle(container).fontFamily || 'sans-serif';
-    const fontFor = (s: TechTextProps, size: number) => `${s.fontWeight} ${size}px ${family(s)}`;
+    const family = (s: TechTextProps) =>
+      s.fontFamily || getComputedStyle(container).fontFamily || 'sans-serif';
+    const fontFor = (s: TechTextProps, size: number) =>
+      `${s.fontWeight} ${size}px ${family(s)}`;
 
-    const setFont = (target: CanvasRenderingContext2D, s: TechTextProps, size: number) => {
+    const setFont = (
+      target: CanvasRenderingContext2D,
+      s: TechTextProps,
+      size: number
+    ) => {
       target.font = fontFor(s, size);
-      if ('letterSpacing' in target) target.letterSpacing = `${(s.letterSpacing ?? -0.03) * size}px`;
+      if ('letterSpacing' in target)
+        target.letterSpacing = `${(s.letterSpacing ?? -0.03) * size}px`;
       target.textAlign = 'left';
       target.textBaseline = 'alphabetic';
     };
 
-    const sprite = (s: TechTextProps, view: any, glyph: any, stroke: boolean) => {
+    const sprite = (
+      s: TechTextProps,
+      view: any,
+      glyph: any,
+      stroke: boolean
+    ) => {
       const strokeWidth = s.strokeWidth ?? 1.5;
       const dashLength = s.dashLength ?? 4;
       const dashGap = s.dashGap ?? 2;
@@ -183,7 +226,8 @@ export const TechText = ({
         c.lineWidth = strokeWidth * 2;
         c.lineCap = 'butt';
         c.strokeStyle = color;
-        if (lineStyle !== 'solid') c.setLineDash([Math.max(1, dashLength), Math.max(1, dashGap)]);
+        if (lineStyle !== 'solid')
+          c.setLineDash([Math.max(1, dashLength), Math.max(1, dashGap)]);
         c.strokeText(glyph.char, glyph.x, view.baseline);
         c.setLineDash([]);
         c.globalCompositeOperation = 'destination-out';
@@ -227,8 +271,10 @@ export const TechText = ({
       let m = probe.measureText(s.text ?? 'PixelThread');
       const fit = Math.min(
         1,
-        (width * 0.9) / Math.max(m.actualBoundingBoxLeft + m.actualBoundingBoxRight, 1),
-        (height * 0.66) / Math.max(m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, 1)
+        (width * 0.9) /
+          Math.max(m.actualBoundingBoxLeft + m.actualBoundingBoxRight, 1),
+        (height * 0.66) /
+          Math.max(m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, 1)
       );
       const size = fontSize * fit;
       setFont(probe, s, size);
@@ -298,7 +344,14 @@ export const TechText = ({
       return bestDistance < 28 ? best : -1;
     };
 
-    const falloff = (target: CanvasRenderingContext2D, cx: number, cy: number, radius: number, strength: number, softness: number) => {
+    const falloff = (
+      target: CanvasRenderingContext2D,
+      cx: number,
+      cy: number,
+      radius: number,
+      strength: number,
+      softness: number
+    ) => {
       const inner = Math.min(1, Math.max(0, 1 - softness));
       const gradient = target.createRadialGradient(cx, cy, 0, cx, cy, radius);
       gradient.addColorStop(0, `rgba(0, 0, 0, ${strength})`);
@@ -310,12 +363,22 @@ export const TechText = ({
       for (let i = 0; i <= FALLOFF_STEPS; i++) {
         const t = i / FALLOFF_STEPS;
         const eased = t * t * (3 - 2 * t);
-        gradient.addColorStop(inner + (1 - inner) * t, `rgba(0, 0, 0, ${strength * (1 - eased)})`);
+        gradient.addColorStop(
+          inner + (1 - inner) * t,
+          `rgba(0, 0, 0, ${strength * (1 - eased)})`
+        );
       }
       return gradient;
     };
 
-    const blit = (target: CanvasRenderingContext2D, art: any, dx: number, dy: number, originX: number, originY: number) => {
+    const blit = (
+      target: CanvasRenderingContext2D,
+      art: any,
+      dx: number,
+      dy: number,
+      originX: number,
+      originY: number
+    ) => {
       target.drawImage(
         art.image,
         Math.round((art.left + dx) * dpr - originX),
@@ -348,9 +411,17 @@ export const TechText = ({
       scratchCtx.setTransform(1, 0, 0, 1, 0, 0);
       scratchCtx.globalCompositeOperation = 'source-over';
       scratchCtx.clearRect(0, 0, w, h);
-      for (const glyph of glyphs) blit(scratchCtx, glyph.dashes, glyph.offset.x, glyph.offset.y, x0, y0);
+      for (const glyph of glyphs)
+        blit(scratchCtx, glyph.dashes, glyph.offset.x, glyph.offset.y, x0, y0);
       scratchCtx.globalCompositeOperation = 'destination-in';
-      scratchCtx.fillStyle = falloff(scratchCtx, cx - x0, cy - y0, radius, 1, softness);
+      scratchCtx.fillStyle = falloff(
+        scratchCtx,
+        cx - x0,
+        cy - y0,
+        radius,
+        1,
+        softness
+      );
       scratchCtx.fillRect(0, 0, w, h);
       scratchCtx.globalCompositeOperation = 'source-over';
       ctx.globalAlpha = presence;
@@ -388,13 +459,29 @@ export const TechText = ({
         const cycle = Math.floor(t);
         const life = t - cycle;
         if (life > 0.7) continue;
-        const [px, py, nx, ny] = perimeterPoint(noise(seed, k, cycle) * perimeter, w, h);
+        const [px, py, nx, ny] = perimeterPoint(
+          noise(seed, k, cycle) * perimeter,
+          w,
+          h
+        );
         const pick = noise(seed, k, cycle, 2);
-        const size = pick < 0.46 ? 2 : pick < 0.7 ? 3 : pick < 0.84 ? 5 : pick < 0.94 ? 8 : 11;
+        const size =
+          pick < 0.46
+            ? 2
+            : pick < 0.7
+              ? 3
+              : pick < 0.84
+                ? 5
+                : pick < 0.94
+                  ? 8
+                  : 11;
         const large = size >= 8;
-        const out = (large ? 9 : 4) + Math.floor(noise(seed, k, cycle, 1) * 5) * grid;
-        const x = frame.x1 + Math.round((px + nx * out - frame.x1) / grid) * grid;
-        const y = frame.y1 + Math.round((py + ny * out - frame.y1) / grid) * grid;
+        const out =
+          (large ? 9 : 4) + Math.floor(noise(seed, k, cycle, 1) * 5) * grid;
+        const x =
+          frame.x1 + Math.round((px + nx * out - frame.x1) / grid) * grid;
+        const y =
+          frame.y1 + Math.round((py + ny * out - frame.y1) / grid) * grid;
         const tone = noise(seed, k, cycle, 3);
         const blink = life < 0.06 || (life > 0.32 && life < 0.36) ? 0.35 : 1;
         const alpha = a * (large ? 0.3 + 0.4 * tone : 0.3 + 0.6 * tone) * blink;
@@ -419,7 +506,12 @@ export const TechText = ({
           const [x, y] = perimeterPoint(head - i * 6, w, h);
           const size = i === 0 ? 3 : 2;
           ctx.fillStyle = rgba(accentColor, a * [0.95, 0.55, 0.32, 0.16][i]);
-          ctx.fillRect(Math.round(x - size / 2), Math.round(y - size / 2), size, size);
+          ctx.fillRect(
+            Math.round(x - size / 2),
+            Math.round(y - size / 2),
+            size,
+            size
+          );
         }
       }
     };
@@ -504,14 +596,19 @@ export const TechText = ({
       const selection = s.selection ?? true;
       const draggable = s.draggable ?? true;
 
-      const sweeping = sweep && !reducedMotion && !pointer.inside && dragging < 0;
+      const sweeping =
+        sweep && !reducedMotion && !pointer.inside && dragging < 0;
       if (sweeping) clock += dt * speed;
       pulse += dt;
       let targetX = pointer.x;
       let targetY = pointer.y;
       if (sweeping) {
-        targetX = view.left + (view.right - view.left) * (0.5 - 0.5 * Math.cos(clock * 0.45));
-        targetY = view.top + (view.bottom - view.top) * (0.45 + 0.1 * Math.sin(clock * 0.8));
+        targetX =
+          view.left +
+          (view.right - view.left) * (0.5 - 0.5 * Math.cos(clock * 0.45));
+        targetY =
+          view.top +
+          (view.bottom - view.top) * (0.45 + 0.1 * Math.sin(clock * 0.8));
       }
       const active = pointer.inside || sweeping || dragging >= 0;
       if (active && !placed) {
@@ -524,20 +621,39 @@ export const TechText = ({
         lens.y = approach(lens.y, targetY, dt, lag);
       }
       placed = active;
-      presence = approach(presence, reveal === 'area' && active && dragging < 0 ? 1 : 0, dt, 0.16);
+      presence = approach(
+        presence,
+        reveal === 'area' && active && dragging < 0 ? 1 : 0,
+        dt,
+        0.16
+      );
 
       let moving = false;
       glyphs.forEach((glyph, i) => {
         if (i === dragging) {
-          glyph.offset.x = approach(glyph.offset.x, pointer.x - grab.x, dt, 0.03);
-          glyph.offset.y = approach(glyph.offset.y, pointer.y - grab.y, dt, 0.03);
+          glyph.offset.x = approach(
+            glyph.offset.x,
+            pointer.x - grab.x,
+            dt,
+            0.03
+          );
+          glyph.offset.y = approach(
+            glyph.offset.y,
+            pointer.y - grab.y,
+            dt,
+            0.03
+          );
           glyph.velocity.x = 0;
           glyph.velocity.y = 0;
           moving = true;
           return;
         }
         const { offset, velocity } = glyph;
-        if (Math.abs(offset.x) < 0.05 && Math.abs(offset.y) < 0.05 && Math.hypot(velocity.x, velocity.y) < 0.5) {
+        if (
+          Math.abs(offset.x) < 0.05 &&
+          Math.abs(offset.y) < 0.05 &&
+          Math.hypot(velocity.x, velocity.y) < 0.5
+        ) {
           offset.x = 0;
           offset.y = 0;
           velocity.x = 0;
@@ -551,7 +667,8 @@ export const TechText = ({
         moving = true;
       });
 
-      const focus = dragging >= 0 ? dragging : active ? glyphAt(lens.x, lens.y) : -1;
+      const focus =
+        dragging >= 0 ? dragging : active ? glyphAt(lens.x, lens.y) : -1;
       if (focus >= 0 && s.selection) {
         const glyph = glyphs[focus];
         const bx1 = glyph.box.x1 + glyph.offset.x - 6;
@@ -571,16 +688,28 @@ export const TechText = ({
         frame.y2 = approach(frame.y2, by2, dt, glide);
         frame.index = focus;
       }
-      frame.alpha = approach(frame.alpha, focus >= 0 && s.selection ? 1 : 0, dt, 0.1);
+      frame.alpha = approach(
+        frame.alpha,
+        focus >= 0 && s.selection ? 1 : 0,
+        dt,
+        0.1
+      );
 
       glyphs.forEach((glyph, i) => {
-        const target = s.reveal === 'letter' && i === focus && i !== dragging ? 1 : 0;
+        const target =
+          s.reveal === 'letter' && i === focus && i !== dragging ? 1 : 0;
         glyph.outline = approach(glyph.outline, target, dt, 0.09);
         if (Math.abs(glyph.outline - target) > 0.002) moving = true;
         else glyph.outline = target;
       });
 
-      if (s.draggable) container.style.cursor = dragging >= 0 ? 'grabbing' : focus >= 0 && pointer.inside ? 'grab' : '';
+      if (s.draggable)
+        container.style.cursor =
+          dragging >= 0
+            ? 'grabbing'
+            : focus >= 0 && pointer.inside
+              ? 'grab'
+              : '';
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.globalCompositeOperation = 'source-over';
@@ -609,9 +738,12 @@ export const TechText = ({
 
       const settling =
         moving ||
-        Math.abs(presence - (s.reveal === 'area' && active && dragging < 0 ? 1 : 0)) > 0.002 ||
+        Math.abs(
+          presence - (s.reveal === 'area' && active && dragging < 0 ? 1 : 0)
+        ) > 0.002 ||
         (frame.alpha > 0.01 && frame.alpha < 0.99);
-      if ((active || settling) && visible && alive) raf = requestAnimationFrame(tick);
+      if ((active || settling) && visible && alive)
+        raf = requestAnimationFrame(tick);
     };
 
     const wake = () => {
@@ -650,7 +782,10 @@ export const TechText = ({
       locate(e);
       pointer.inside = true;
       const s = settingsRef.current;
-      if (s?.draggable && (e.pointerType !== 'mouse' || (e as any).button === 0)) {
+      if (
+        s?.draggable &&
+        (e.pointerType !== 'mouse' || (e as any).button === 0)
+      ) {
         const index = glyphAt(pointer.x, pointer.y);
         if (index >= 0) {
           dragging = index;
@@ -667,17 +802,24 @@ export const TechText = ({
         container.releasePointerCapture?.(e.pointerId);
         const rect = container.getBoundingClientRect();
         pointer.inside =
-          e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom;
       }
       wake();
     };
 
     container.addEventListener('pointermove', onMove as any, { passive: true });
-    container.addEventListener('pointerenter', onMove as any, { passive: true });
+    container.addEventListener('pointerenter', onMove as any, {
+      passive: true,
+    });
     container.addEventListener('pointerdown', onDown as any, { passive: true });
     container.addEventListener('pointerup', onUp as any, { passive: true });
     container.addEventListener('pointercancel', onUp as any, { passive: true });
-    container.addEventListener('pointerleave', onLeave as any, { passive: true });
+    container.addEventListener('pointerleave', onLeave as any, {
+      passive: true,
+    });
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);

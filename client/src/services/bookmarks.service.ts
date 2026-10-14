@@ -18,7 +18,11 @@ export interface BookmarkStatusResponse {
 }
 
 export const bookmarksService = {
-  async getMyBookmarks(page = 1, limit = 10, sort = 'newest'): Promise<BookmarksResponse> {
+  async getMyBookmarks(
+    page = 1,
+    limit = 10,
+    sort = 'newest'
+  ): Promise<BookmarksResponse> {
     return api.get(API_ENDPOINTS.bookmarks.list, { page, limit, sort });
   },
 

@@ -22,7 +22,9 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
     return (
       <div
         ref={ref}
-        className={[s.skeleton, variantClasses[variant], className].filter(Boolean).join(' ')}
+        className={[s.skeleton, variantClasses[variant], className]
+          .filter(Boolean)
+          .join(' ')}
         style={{
           width: variant !== 'text' ? width : undefined,
           height: variant !== 'text' ? height : undefined,
@@ -69,8 +71,14 @@ export function PostCardSkeletonSm() {
         <div className={s.authorRowSm}>
           <Skeleton variant="circular" width={28} height={28} />
           <div className={s.authorDetails}>
-            <Skeleton variant="text" style={{ width: '70px', height: '1rem' }} />
-            <Skeleton variant="text" style={{ width: '50px', height: '0.75rem' }} />
+            <Skeleton
+              variant="text"
+              style={{ width: '70px', height: '1rem' }}
+            />
+            <Skeleton
+              variant="text"
+              style={{ width: '50px', height: '0.75rem' }}
+            />
           </div>
         </div>
         <Skeleton variant="text" style={{ height: '1rem' }} />

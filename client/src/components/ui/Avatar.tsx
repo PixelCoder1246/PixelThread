@@ -23,15 +23,13 @@ export const Avatar = forwardRef<HTMLImageElement, AvatarProps>(
   ({ src, alt, fallback, size = 'md', className, ...props }, ref) => {
     const [hasError, setHasError] = useState(false);
 
-    const avatarClasses = [styles.avatar, sizeClasses[size], className].filter(Boolean).join(' ');
+    const avatarClasses = [styles.avatar, sizeClasses[size], className]
+      .filter(Boolean)
+      .join(' ');
 
     if (!src || hasError) {
       return (
-        <div
-          ref={ref}
-          className={avatarClasses}
-          aria-label={alt || fallback}
-        >
+        <div ref={ref} className={avatarClasses} aria-label={alt || fallback}>
           {fallback || (alt ? getInitials(alt) : '?')}
         </div>
       );

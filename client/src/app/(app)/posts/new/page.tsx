@@ -22,7 +22,10 @@ export default function NewPostPage() {
           </div>
           <div className={styles.formField}>
             <label>Content</label>
-            <textarea placeholder="Write your post content here..." className="min-h-[300px]" />
+            <textarea
+              placeholder="Write your post content here..."
+              className="min-h-[300px]"
+            />
           </div>
           <div className={styles.formActions}>
             <Button>Save as Draft</Button>

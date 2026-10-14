@@ -33,10 +33,39 @@ Spinner.displayName = 'Spinner';
 
 export function LoadingDots({ className }: { className?: string }) {
   return (
-    <div className={[styles['loading-dots'], className].filter(Boolean).join(' ')} aria-label="Loading">
-      <div style={{ width: 'var(--space-2)', height: 'var(--space-2)', borderRadius: '50%', backgroundColor: 'currentColor', animation: 'bounce 1s infinite', animationDelay: '-0.3s' }} />
-      <div style={{ width: 'var(--space-2)', height: 'var(--space-2)', borderRadius: '50%', backgroundColor: 'currentColor', animation: 'bounce 1s infinite', animationDelay: '-0.15s' }} />
-      <div style={{ width: 'var(--space-2)', height: 'var(--space-2)', borderRadius: '50%', backgroundColor: 'currentColor', animation: 'bounce 1s infinite' }} />
+    <div
+      className={[styles['loading-dots'], className].filter(Boolean).join(' ')}
+      aria-label="Loading"
+    >
+      <div
+        style={{
+          width: 'var(--space-2)',
+          height: 'var(--space-2)',
+          borderRadius: '50%',
+          backgroundColor: 'currentColor',
+          animation: 'bounce 1s infinite',
+          animationDelay: '-0.3s',
+        }}
+      />
+      <div
+        style={{
+          width: 'var(--space-2)',
+          height: 'var(--space-2)',
+          borderRadius: '50%',
+          backgroundColor: 'currentColor',
+          animation: 'bounce 1s infinite',
+          animationDelay: '-0.15s',
+        }}
+      />
+      <div
+        style={{
+          width: 'var(--space-2)',
+          height: 'var(--space-2)',
+          borderRadius: '50%',
+          backgroundColor: 'currentColor',
+          animation: 'bounce 1s infinite',
+        }}
+      />
     </div>
   );
 }

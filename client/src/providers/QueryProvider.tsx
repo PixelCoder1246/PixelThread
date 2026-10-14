@@ -7,9 +7,5 @@ import { queryClient } from '@/lib/queryClient';
 export function QueryProvider({ children }: { children: ReactNode }) {
   const [client] = useState(() => queryClient);
 
-  return (
-    <QueryClientProvider client={client}>
-      {children}
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }

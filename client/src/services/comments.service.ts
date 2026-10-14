@@ -1,6 +1,10 @@
 import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/api';
-import type { Comment, CreateCommentInput, UpdateCommentInput } from '@/types/comment';
+import type {
+  Comment,
+  CreateCommentInput,
+  UpdateCommentInput,
+} from '@/types/comment';
 
 export interface ThreadedCommentsResponse {
   comments: Comment[];
@@ -19,15 +23,24 @@ export const commentsService = {
     return api.get(API_ENDPOINTS.comments.replies(commentId));
   },
 
-  async createComment(postId: string, data: CreateCommentInput): Promise<{ comment: Comment }> {
+  async createComment(
+    postId: string,
+    data: CreateCommentInput
+  ): Promise<{ comment: Comment }> {
     return api.post(API_ENDPOINTS.comments.create(postId), data);
   },
 
-  async createReply(commentId: string, data: CreateCommentInput): Promise<{ comment: Comment }> {
+  async createReply(
+    commentId: string,
+    data: CreateCommentInput
+  ): Promise<{ comment: Comment }> {
     return api.post(API_ENDPOINTS.comments.reply(commentId), data);
   },
 
-  async updateComment(id: string, data: UpdateCommentInput): Promise<{ comment: Comment }> {
+  async updateComment(
+    id: string,
+    data: UpdateCommentInput
+  ): Promise<{ comment: Comment }> {
     return api.patch(API_ENDPOINTS.comments.update(id), data);
   },
 
