@@ -8,7 +8,9 @@ export default function DashboardPage() {
     <div className={styles.dashboardPage}>
       <div className={styles.dashboardHeader}>
         <h1 className={styles.dashboardTitle}>Dashboard</h1>
-        <p className={styles.dashboardSubtitle}>Welcome to your workspace. Manage your content and account below.</p>
+        <p className={styles.dashboardSubtitle}>
+          Welcome to your workspace. Manage your content and account below.
+        </p>
       </div>
       <div className={styles.dashboardGrid}>
         <Link href="/posts/new" className={styles.dashboardCard}>
@@ -25,7 +27,7 @@ export default function DashboardPage() {
         </Link>
         <Link href="/history" className={styles.dashboardCard}>
           <h3>Reading History</h3>
-          <p>Posts you've recently read</p>
+          <p>Posts you&apos;ve recently read</p>
         </Link>
         <Link href="/notifications" className={styles.dashboardCard}>
           <h3>Notifications</h3>

@@ -4,7 +4,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { forgotPasswordSchema, type ForgotPasswordInput } from '@/lib/validations';
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordInput,
+} from '@/lib/validations';
 import { Button, Input } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { authService } from '@/services/auth.service';
@@ -31,21 +34,29 @@ export function ForgotPasswordForm() {
       toast({
         type: 'success',
         title: 'Check your email',
-        message: 'If an account exists, you will receive a password reset link.',
+        message:
+          'If an account exists, you will receive a password reset link.',
       });
       router.push('/login');
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to send reset email. Please try again.';
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to send reset email. Please try again.';
       toast({ type: 'error', title: 'Error', message });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={s['forgot-password-form']}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={s['forgot-password-form']}
+    >
       <div className={s['forgot-password-form-header']}>
         <h2 className={s['forgot-password-form-title']}>Forgot password?</h2>
         <p className={s['forgot-password-form-subtitle']}>
-          Enter your email and we'll send you a link to reset your password.
+          Enter your email and we&apos;ll send you a link to reset your
+          password.
         </p>
       </div>
 
@@ -61,7 +72,12 @@ export function ForgotPasswordForm() {
         />
       </div>
 
-      <Button type="submit" className={s['forgot-password-form-submit']} size="lg" isLoading={isSubmitting}>
+      <Button
+        type="submit"
+        className={s['forgot-password-form-submit']}
+        size="lg"
+        isLoading={isSubmitting}
+      >
         Send reset link
       </Button>
 

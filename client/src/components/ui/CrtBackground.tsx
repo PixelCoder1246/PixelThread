@@ -71,7 +71,8 @@ const terminalLines = [
   '> _',
 ];
 
-const matrixChars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const matrixChars =
+  'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export const CrtBackground = ({
   variant = 'terminal',
@@ -113,11 +114,19 @@ export const CrtBackground = ({
     let lineIndex = 0;
     let charIndex = 0;
     let currentLine = '';
-    let typedLines: string[] = [];
+    const typedLines: string[] = [];
     let scrollOffset = 0;
     let scanlineOffset = 0;
     let glitchTime = 0;
-    let particles: Array<{ x: number; y: number; vx: number; vy: number; life: number; color: string; size: number }> = [];
+    let particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      life: number;
+      color: string;
+      size: number;
+    }> = [];
 
     const animate = () => {
       if (!ctx || !canvas) return;
@@ -136,15 +145,32 @@ export const CrtBackground = ({
       ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${brightness}%, ${opacity * 0.03})`;
       const scanlineSpacing = 4 * dpr;
       scanlineOffset = (scanlineOffset + 0.5 * speed) % scanlineSpacing;
-      for (let y = -scanlineSpacing + scanlineOffset; y < h; y += scanlineSpacing) {
+      for (
+        let y = -scanlineSpacing + scanlineOffset;
+        y < h;
+        y += scanlineSpacing
+      ) {
         ctx.fillRect(0, y, w, 1 * dpr);
       }
 
       // Draw vignette
-      const gradient = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) / 1.5);
+      const gradient = ctx.createRadialGradient(
+        w / 2,
+        h / 2,
+        0,
+        w / 2,
+        h / 2,
+        Math.max(w, h) / 1.5
+      );
       gradient.addColorStop(0, 'rgba(0,0,0,0)');
-      gradient.addColorStop(0.7, `hsla(${hue}, ${saturation}%, 5%, ${opacity * 0.15})`);
-      gradient.addColorStop(1, `hsla(${hue}, ${saturation}%, 2%, ${opacity * 0.4})`);
+      gradient.addColorStop(
+        0.7,
+        `hsla(${hue}, ${saturation}%, 5%, ${opacity * 0.15})`
+      );
+      gradient.addColorStop(
+        1,
+        `hsla(${hue}, ${saturation}%, 2%, ${opacity * 0.4})`
+      );
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, w, h);
 
@@ -171,7 +197,12 @@ export const CrtBackground = ({
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    const drawTerminal = (ctx: CanvasRenderingContext2D, w: number, h: number, dpr: number) => {
+    const drawTerminal = (
+      ctx: CanvasRenderingContext2D,
+      w: number,
+      h: number,
+      dpr: number
+    ) => {
       const fontSize = Math.max(12, Math.min(16, w / 80)) * dpr;
       const lineHeight = fontSize * 1.4;
       const padding = 40 * dpr;
@@ -231,8 +262,12 @@ export const CrtBackground = ({
       });
 
       // Draw cursor on last line if still typing
-      if (lineIndex < terminalLines.length && charIndex > 0 && charIndex < currentLine.length) {
-        const y = padding + (typedLines.length) * lineHeight - scrollOffset;
+      if (
+        lineIndex < terminalLines.length &&
+        charIndex > 0 &&
+        charIndex < currentLine.length
+      ) {
+        const y = padding + typedLines.length * lineHeight - scrollOffset;
         const partial = currentLine.substring(0, Math.floor(charIndex));
         ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${brightness}%, ${opacity})`;
         ctx.fillText(partial, padding, y);
@@ -243,7 +278,12 @@ export const CrtBackground = ({
       }
     };
 
-    const drawMatrix = (ctx: CanvasRenderingContext2D, w: number, h: number, dpr: number) => {
+    const drawMatrix = (
+      ctx: CanvasRenderingContext2D,
+      w: number,
+      h: number,
+      dpr: number
+    ) => {
       const fontSize = 14 * dpr;
       const columns = Math.floor(w / fontSize);
       const drops: number[] = [];
@@ -260,7 +300,8 @@ export const CrtBackground = ({
       ctx.fillRect(0, 0, w, h);
 
       for (let i = 0; i < columns; i++) {
-        const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        const char =
+          matrixChars[Math.floor(Math.random() * matrixChars.length)];
         const x = i * fontSize;
         const y = drops[i];
 
@@ -276,7 +317,12 @@ export const CrtBackground = ({
       }
     };
 
-    const drawCode = (ctx: CanvasRenderingContext2D, w: number, h: number, dpr: number) => {
+    const drawCode = (
+      ctx: CanvasRenderingContext2D,
+      w: number,
+      h: number,
+      dpr: number
+    ) => {
       const codeSnippets = [
         'const neuralNet = new Transformer({',
         '  layers: 96,',
@@ -307,16 +353,27 @@ export const CrtBackground = ({
       ctx.textBaseline = 'top';
 
       codeSnippets.forEach((line, i) => {
-        const y = padding + i * lineHeight + Math.sin(time * 0.5 + i * 0.3) * 2 * dpr;
+        const y =
+          padding + i * lineHeight + Math.sin(time * 0.5 + i * 0.3) * 2 * dpr;
         if (y < -lineHeight || y > h) return;
 
         // Syntax highlighting colors
         let color = `hsla(${hue}, ${saturation}%, ${brightness * 0.7}%, ${opacity * 0.6})`;
-        if (line.startsWith('const') || line.startsWith('async') || line.startsWith('function') || line.startsWith('return')) {
+        if (
+          line.startsWith('const') ||
+          line.startsWith('async') ||
+          line.startsWith('function') ||
+          line.startsWith('return')
+        ) {
           color = `hsla(${(hue + 270) % 360}, ${saturation}%, ${brightness}%, ${opacity})`;
         } else if (line.includes('//')) {
           color = `hsla(${(hue + 60) % 360}, ${saturation * 0.5}%, ${brightness * 0.6}%, ${opacity * 0.5})`;
-        } else if (line.includes('{') || line.includes('}') || line.includes('(') || line.includes(')')) {
+        } else if (
+          line.includes('{') ||
+          line.includes('}') ||
+          line.includes('(') ||
+          line.includes(')')
+        ) {
           color = `hsla(${(hue + 30) % 360}, ${saturation}%, ${brightness * 0.9}%, ${opacity * 0.8})`;
         } else if (/['"`]/.test(line)) {
           color = `hsla(${(hue + 120) % 360}, ${saturation}%, ${brightness}%, ${opacity * 0.8})`;
@@ -329,7 +386,12 @@ export const CrtBackground = ({
       });
     };
 
-    const drawParticles = (ctx: CanvasRenderingContext2D, w: number, h: number, dpr: number) => {
+    const drawParticles = (
+      ctx: CanvasRenderingContext2D,
+      w: number,
+      h: number,
+      dpr: number
+    ) => {
       // Spawn particles
       if (Math.random() < 0.02 * speed) {
         particles.push({
@@ -363,18 +425,19 @@ export const CrtBackground = ({
       });
     };
 
-    const drawGlitch = (ctx: CanvasRenderingContext2D, w: number, h: number, dpr: number) => {
+    const drawGlitch = (
+      ctx: CanvasRenderingContext2D,
+      w: number,
+      h: number,
+      dpr: number
+    ) => {
       const slices = 3 + Math.floor(Math.random() * 5);
       for (let i = 0; i < slices; i++) {
         const y = Math.random() * h;
         const height = Math.random() * 20 * dpr + 5 * dpr;
         const offset = (Math.random() - 0.5) * 30 * dpr;
 
-        ctx.drawImage(
-          canvas,
-          0, y, w, height,
-          offset, y, w, height
-        );
+        ctx.drawImage(canvas, 0, y, w, height, offset, y, w, height);
       }
     };
 

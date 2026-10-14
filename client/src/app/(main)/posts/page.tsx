@@ -2,7 +2,14 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { Plus, PenTool, Sparkles, Compass, MessageSquare, Heart, Clock } from 'lucide-react';
+import {
+  Plus,
+  PenTool,
+  Sparkles,
+  Compass,
+  MessageSquare,
+  Heart,
+} from 'lucide-react';
 import styles from './page.module.css';
 import { postsService } from '@/services/posts.service';
 import { queryKeys } from '@/lib/queryKeys';
@@ -28,7 +35,8 @@ export default function PostsPage() {
         <div className={s.headerTitleGroup}>
           <h1>Explore Posts</h1>
           <span className={s.headerSubtitle}>
-            Discover stories, tech insights, and creative ideas from our community
+            Discover stories, tech insights, and creative ideas from our
+            community
           </span>
         </div>
         <Link href="/posts/new" className={s.createBtn}>
@@ -45,27 +53,50 @@ export default function PostsPage() {
         </div>
       ) : isError ? (
         <div className={s.errorState}>
-          <p>{error instanceof Error ? error.message : 'Failed to load posts.'}</p>
-          <button onClick={() => refetch()} className={s.exploreBtn} style={{ marginTop: '1rem' }}>
+          <p>
+            {error instanceof Error ? error.message : 'Failed to load posts.'}
+          </p>
+          <button
+            onClick={() => refetch()}
+            className={s.exploreBtn}
+            style={{ marginTop: '1rem' }}
+          >
             Try Again
           </button>
         </div>
       ) : hasPosts ? (
         <div className={s.postsList}>
           {posts.map((post) => (
-            <Link key={post.id} href={`/posts/${post.slug}`} className={s.postCard}>
+            <Link
+              key={post.id}
+              href={`/posts/${post.slug}`}
+              className={s.postCard}
+            >
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {post.tags?.map((t, idx) => (
-                  <Badge key={idx} variant="default">
-                    #{typeof t === 'string' ? t : (t as any).name || (t as any).tag?.name}
-                  </Badge>
-                ))}
+                {post.tags?.map((t, idx) => {
+                  const tagName =
+                    typeof t === 'string'
+                      ? t
+                      : (t.tag?.name ?? (t as { name?: string }).name ?? '');
+                  return (
+                    <Badge key={idx} variant="default">
+                      #{tagName}
+                    </Badge>
+                  );
+                })}
               </div>
               <h2 className={s.postCardTitle}>{post.title}</h2>
-              {post.excerpt && <p className={s.postCardExcerpt}>{post.excerpt}</p>}
+              {post.excerpt && (
+                <p className={s.postCardExcerpt}>{post.excerpt}</p>
+              )}
               <div className={s.postCardMeta}>
                 <div className={s.postAuthorGroup}>
-                  <Avatar alt={post.author?.name || 'Author'} fallback={post.author?.name || 'A'} src={post.author?.image || undefined} size="sm" />
+                  <Avatar
+                    alt={post.author?.name || 'Author'}
+                    fallback={post.author?.name || 'A'}
+                    src={post.author?.image || undefined}
+                    size="sm"
+                  />
                   <span>{post.author?.name || 'Anonymous'}</span>
                   <span>•</span>
                   <span>{formatDate(post.createdAt)}</span>
@@ -76,7 +107,9 @@ export default function PostsPage() {
                     {post._count?.likes ?? 0}
                   </span>
                   <span className={s.statItem}>
-                    <MessageSquare style={{ width: '0.875rem', height: '0.875rem' }} />
+                    <MessageSquare
+                      style={{ width: '0.875rem', height: '0.875rem' }}
+                    />
                     {post._count?.comments ?? 0}
                   </span>
                 </div>
@@ -94,8 +127,8 @@ export default function PostsPage() {
           </div>
           <h2 className={s.emptyTitle}>No posts here yet</h2>
           <p className={s.emptyDescription}>
-            Be the first creator to share your story or dive into topics with our community.
-            Start writing or explore trending tags.
+            Be the first creator to share your story or dive into topics with
+            our community. Start writing or explore trending tags.
           </p>
           <div className={s.emptyActions}>
             <Link href="/posts/new" className={s.createBtn}>

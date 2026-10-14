@@ -73,7 +73,7 @@ export interface CreatePostInput {
   tags?: string[];
 }
 
-export interface UpdatePostInput extends Partial<CreatePostInput> {}
+export type UpdatePostInput = Partial<CreatePostInput>;
 
 export interface PostSearchParams {
   q?: string;
