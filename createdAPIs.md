@@ -9,7 +9,6 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
-## Auth Endpoints — `/api/auth`
 
 ### 1. API Health Check
 *   **Method**: `GET`
@@ -21,6 +20,7 @@ This file documents all API endpoints created in the project. You can copy the U
 
 ---
 
+## Auth Endpoints — `/api/auth`
 ### 2. Register User
 *   **Method**: `POST`
 *   **Endpoint**: `/api/auth/register`

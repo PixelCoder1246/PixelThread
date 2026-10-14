@@ -14,7 +14,7 @@ const hashToken = (token) =>
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  sameSite: 'lax',
 };
 
 const setAuthCookies = (res, accessToken, refreshToken) => {

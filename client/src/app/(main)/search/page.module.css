@@ -1,0 +1,39 @@
+.searchPage {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.searchPage h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-8);
+}
+
+.searchInputWrapper {
+  position: relative;
+  margin-bottom: var(--space-8);
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+.searchInput {
+  padding-left: 3rem;
+  font-size: var(--font-size-lg);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+.searchResults {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}

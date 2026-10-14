@@ -1,0 +1,26 @@
+{
+  "name": "PixelThread",
+  "short_name": "PixelThread",
+  "description": "AI-powered blogging platform for creators and developers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "/PTfavicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/PTfavicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/PTfavicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+.myPostsPage {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.myPostsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+}
+
+.myPostsHeader h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.myPostsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}

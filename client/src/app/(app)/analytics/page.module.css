@@ -1,0 +1,72 @@
+.analyticsPage {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.analyticsPage h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-8);
+}
+
+.analyticsGrid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .analyticsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .analyticsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.statCard {
+  padding: var(--space-6);
+}
+
+.statCard label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.statCard .value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.chartCard {
+  padding: var(--space-6);
+}
+
+.chartCard h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-4);
+}
+
+.chartCard > p {
+  color: var(--color-text-muted);
+}
+
+.chartPlaceholder {
+  height: 16rem;
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chartPlaceholder span {
+  color: var(--color-text-muted);
+}

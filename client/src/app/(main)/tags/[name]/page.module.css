@@ -1,0 +1,15 @@
+.tagPage {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.tagPage h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+}
+
+.tagPage p {
+  color: var(--color-text-muted);
+}

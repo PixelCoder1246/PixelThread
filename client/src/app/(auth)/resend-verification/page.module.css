@@ -1,0 +1,118 @@
+.resendVerificationPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-primary);
+  padding: var(--space-8) var(--space-4);
+}
+
+.resendVerificationCard {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.resendVerificationContent {
+  padding: var(--space-8);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.iconWrapper {
+  margin: 0 auto var(--space-4);
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: rgba(var(--color-accent-primary), 0.1);
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent-primary);
+}
+
+.header h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.header p {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.successState {
+  text-align: center;
+  padding: var(--space-8) 0;
+}
+
+.successIconWrapper {
+  margin: 0 auto var(--space-4);
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: rgba(var(--color-success), 0.1);
+}
+
+.successIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-success);
+}
+
+.successState h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.successState p {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.successState .button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.submitButton {
+  width: 100%;
+}
+
+.footer {
+  margin-top: var(--space-6);
+  text-align: center;
+}
+
+.footer p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.footer a {
+  color: var(--color-accent-primary);
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}

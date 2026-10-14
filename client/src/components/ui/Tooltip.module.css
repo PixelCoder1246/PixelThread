@@ -1,0 +1,116 @@
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-trigger {
+  cursor: help;
+}
+
+.tooltip-content {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  margin-bottom: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-fast);
+  z-index: var(--z-tooltip);
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--color-bg-card) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-content,
+.tooltip:focus-within .tooltip-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-top .tooltip-content {
+  bottom: 100%;
+  top: auto;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+.tooltip-top:hover .tooltip-content,
+.tooltip-top:focus-within .tooltip-content {
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-bottom .tooltip-content {
+  top: 100%;
+  bottom: auto;
+  transform: translateX(-50%) translateY(8px);
+}
+
+.tooltip-bottom:hover .tooltip-content,
+.tooltip-bottom:focus-within .tooltip-content {
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-left .tooltip-content {
+  left: auto;
+  right: 100%;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%) translateX(-8px);
+  margin-bottom: 0;
+  margin-right: var(--space-2);
+}
+
+.tooltip-left .tooltip-content::after {
+  top: 50%;
+  left: auto;
+  right: 100%;
+  transform: translateY(-50%) translateX(8px);
+  border-color: transparent transparent transparent var(--color-bg-card);
+}
+
+.tooltip-left:hover .tooltip-content,
+.tooltip-left:focus-within .tooltip-content {
+  transform: translateY(-50%) translateX(0);
+}
+
+.tooltip-right .tooltip-content {
+  left: 100%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%) translateX(8px);
+  margin-bottom: 0;
+  margin-left: var(--space-2);
+}
+
+.tooltip-right .tooltip-content::after {
+  top: 50%;
+  left: 0;
+  right: auto;
+  transform: translateY(-50%) translateX(-8px);
+  border-color: transparent var(--color-bg-card) transparent transparent;
+}
+
+.tooltip-right:hover .tooltip-content,
+.tooltip-right:focus-within .tooltip-content {
+  transform: translateY(-50%) translateX(0);
+}
