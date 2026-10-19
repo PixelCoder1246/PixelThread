@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { FloatingParticles } from '@/components/ui/FloatingParticles';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ArrowRight,
   PenTool,
@@ -22,8 +23,12 @@ import {
   Rocket,
   Layers,
   LayoutDashboard,
+  Search,
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/useAuth';
+import { usePosts } from '@/features/posts/usePosts';
+import { PostCard } from '@/components/post/PostCard';
+import type { PostListItem } from '@/types/post';
 import './page.css';
 
 const features = [
@@ -87,8 +92,41 @@ const techStack = [
   { name: 'PostgreSQL', icon: Database },
 ];
 
+function adaptHomePost(p: unknown): PostListItem {
+  const post = p as Record<string, unknown>;
+  const tags = (post.tags as unknown[]) ?? [];
+  const normalizedTags = tags.map((t) => {
+    const tag = t as Record<string, unknown>;
+    if (tag.tag) return tag as { tag: { id: string; name: string } };
+    return {
+      tag: { id: (tag.id as string) ?? '', name: (tag.name as string) ?? '' },
+    };
+  });
+
+  return {
+    id: post.id as string,
+    title: post.title as string,
+    slug: post.slug as string,
+    excerpt: (post.excerpt as string | null) ?? null,
+    content: (post.content as PostListItem['content']) ?? [],
+    status: (post.status as PostListItem['status']) ?? 'PUBLISHED',
+    visibility: (post.visibility as PostListItem['visibility']) ?? 'PUBLIC',
+    authorId: (post.authorId as string) ?? '',
+    author: post.author as PostListItem['author'],
+    tags: normalizedTags,
+    createdAt: post.createdAt as string,
+    updatedAt: (post.updatedAt as string) ?? (post.createdAt as string),
+    featured: (post.featured as boolean) ?? false,
+    pinned: (post.pinned as boolean) ?? false,
+    analytics: (post.analytics as PostListItem['analytics']) ?? undefined,
+    _count: (post._count as PostListItem['_count']) ?? undefined,
+  };
+}
+
 export default function HomePage() {
   const { isAuthenticated } = useAuth();
+  const { data: postsData, isLoading: postsLoading } = usePosts(1, 3);
+  const latestPosts = (postsData?.posts ?? []).map(adaptHomePost);
 
   return (
     <div className="landing-page">
@@ -100,6 +138,71 @@ export default function HomePage() {
         <div className="landing-grid" />
         <FloatingParticles count={12} />
       </div>
+
+      {/* Top Navigation Bar */}
+      <header className="landing-navbar">
+        <div className="landing-navbar-container">
+          <Link href="/" className="landing-navbar-logo">
+            <Image
+              src="/PTfavicon.png"
+              alt="PixelThread"
+              width={30}
+              height={30}
+              className="rounded-lg"
+            />
+            <span className="landing-navbar-brand">PixelThread</span>
+          </Link>
+
+          <nav className="landing-navbar-links">
+            <Link href="/posts" className="landing-nav-link highlight">
+              <BookOpen className="h-4 w-4" />
+              <span>Read Posts</span>
+            </Link>
+            <Link href="/tags" className="landing-nav-link">
+              <Sparkles className="h-4 w-4" />
+              <span>Topics</span>
+            </Link>
+            <Link href="/search" className="landing-nav-link">
+              <Search className="h-4 w-4" />
+              <span>Search</span>
+            </Link>
+          </nav>
+
+          <div className="landing-navbar-actions">
+            <Link href="/posts">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex gap-2"
+              >
+                <BookOpen className="h-4 w-4" />
+                Browse Posts
+              </Button>
+            </Link>
+            {isAuthenticated ? (
+              <Link href="/dashboard">
+                <Button size="sm" variant="primary">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/posts">
+                  <Button size="sm" variant="primary" className="gap-2">
+                    Start Reading
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
 
       <main className="relative z-10">
         {/* Hero Section */}
@@ -137,6 +240,13 @@ export default function HomePage() {
 
             {/* Tagline */}
             <div className="hero-tagline relative z-10">
+              <Link href="/posts" className="hero-public-badge">
+                <Sparkles className="h-4 w-4 text-indigo-400" />
+                <span>
+                  Public Feed: Explore stories & tech articles without logging
+                  in &rarr;
+                </span>
+              </Link>
               <p className="hero-tagline-text">
                 The AI-powered blogging platform where{' '}
                 <span className="hero-tagline-highlight">creators</span> and{' '}
@@ -147,43 +257,42 @@ export default function HomePage() {
 
             {/* CTA Buttons */}
             <div className="hero-cta relative z-10">
+              <Link href="/posts" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto gap-3 px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg relative overflow-hidden group bg-gradient-btn-primary hover:bg-gradient-btn-primary-hover shadow-glow hover:shadow-glow-hover border border-primary transition-all duration-300 hover:-translate-y-1"
+                >
+                  <BookOpen className="h-5 w-5 sm:h-6 sm:w-6 relative z-10" />
+                  <span className="relative z-10 font-medium tracking-wide">
+                    Explore All Posts
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-btn-outline opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Button>
+              </Link>
+
               {isAuthenticated ? (
                 <Link href="/dashboard" className="w-full sm:w-auto">
                   <Button
+                    variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto gap-3 px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg relative overflow-hidden group bg-gradient-btn-primary hover:bg-gradient-btn-primary-hover shadow-glow hover:shadow-glow-hover border border-primary transition-all duration-300 hover:-translate-y-1"
+                    className="w-full sm:w-auto gap-3 px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg border-secondary hover:border-slate-500/40 hover:bg-hover bg-hover-strong backdrop-blur-sm text-primary hover:text-white transition-all duration-300 hover:-translate-y-1"
                   >
-                    <LayoutDashboard className="h-5 w-5 sm:h-6 sm:w-6 relative z-10" />
-                    <span className="relative z-10 font-medium tracking-wide">
-                      Go to Dashboard
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-btn-outline opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <LayoutDashboard className="h-5 w-5 sm:h-6 sm:w-6" />
+                    Go to Dashboard
                   </Button>
                 </Link>
               ) : (
-                <Link href="/register" className="w-full sm:w-auto">
+                <Link href="/posts/new" className="w-full sm:w-auto">
                   <Button
+                    variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto gap-3 px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg relative overflow-hidden group bg-gradient-btn-primary hover:bg-gradient-btn-primary-hover shadow-glow hover:shadow-glow-hover border border-primary transition-all duration-300 hover:-translate-y-1"
+                    className="w-full sm:w-auto gap-3 px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg border-secondary hover:border-slate-500/40 hover:bg-hover bg-hover-strong backdrop-blur-sm text-primary hover:text-white transition-all duration-300 hover:-translate-y-1"
                   >
-                    <PenTool className="h-5 w-5 sm:h-6 sm:w-6 relative z-10" />
-                    <span className="relative z-10 font-medium tracking-wide">
-                      Start Writing Free
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-btn-outline opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <PenTool className="h-5 w-5 sm:h-6 sm:w-6" />
+                    Write a Story
                   </Button>
                 </Link>
               )}
-              <Link href="/posts" className="w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto gap-3 px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg border-secondary hover:border-slate-500/40 hover:bg-hover bg-hover-strong backdrop-blur-sm text-primary hover:text-white transition-all duration-300 hover:-translate-y-1"
-                >
-                  <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
-                  Explore Posts
-                </Button>
-              </Link>
             </div>
           </div>
         </section>
@@ -338,7 +447,7 @@ export default function HomePage() {
                   Discover what developers and creators are writing about
                 </p>
               </div>
-              <Link href="/search">
+              <Link href="/posts">
                 <Button
                   variant="ghost"
                   style={{
@@ -347,7 +456,7 @@ export default function HomePage() {
                     gap: '0.5rem',
                   }}
                 >
-                  View All
+                  View All Posts
                   <ArrowRight style={{ width: '1rem', height: '1rem' }} />
                 </Button>
               </Link>
@@ -357,9 +466,27 @@ export default function HomePage() {
               role="feed"
               aria-label="Latest posts"
             >
-              {[1, 2, 3].map((i) => (
-                <PostCardSkeletonSm key={i} />
-              ))}
+              {postsLoading
+                ? [1, 2, 3].map((i) => <PostCardSkeletonSm key={i} />)
+                : latestPosts.length > 0
+                  ? latestPosts.map((post) => (
+                      <PostCard key={post.id} post={post} />
+                    ))
+                  : [1, 2, 3].map((i) => <PostCardSkeletonSm key={i} />)}
+            </div>
+
+            <div style={{ marginTop: '2.5rem', textAlign: 'center' }}>
+              <Link href="/posts">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="gap-3 px-8 py-4 border-secondary hover:border-slate-500/40 hover:bg-hover transition-all duration-300 hover:-translate-y-1"
+                >
+                  <BookOpen className="h-5 w-5" />
+                  <span>Browse All Community Posts</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

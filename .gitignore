@@ -39,3 +39,5 @@ server/prisma/dev.db-journal
 
 # AI assets
 ai/recordings/
+
+/.opencode/plans/PLAN.md

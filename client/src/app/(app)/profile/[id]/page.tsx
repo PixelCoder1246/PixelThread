@@ -2,7 +2,6 @@
 
 import styles from './page.module.css';
 import { useParams } from 'next/navigation';
-import { MainLayout } from '@/components/layout/MainLayout';
 import { Avatar, Badge, Button, Card } from '@/components/ui';
 import { PostCardSkeleton } from '@/components/ui/Skeleton';
 

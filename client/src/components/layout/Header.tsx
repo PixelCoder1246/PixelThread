@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/useAuth';
 import { Button, Input, Avatar, Dropdown, DropdownItem } from '@/components/ui';
+import { SearchBar } from '@/components/search/SearchBar';
 import styles from './Header.module.css';
 import { ROUTES } from '@/lib/constants';
 
@@ -87,24 +88,10 @@ export function Header() {
           </Link>
         </div>
 
-        {/* Center: Search (authenticated only) */}
-        {isAuthenticated && (
-          <div className={s['header-center']}>
-            <div ref={searchRef} className={s['header-search']}>
-              <Search className={s['header-search-icon']} />
-              <Input
-                type="search"
-                placeholder="Search posts, users, tags..."
-                className={s['header-search-input']}
-                onFocus={() => setIsSearchOpen(true)}
-                onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Spacer when not authenticated */}
-        {!isAuthenticated && <div style={{ flex: 1 }} />}
+        {/* Center: Search */}
+        <div className={s['header-center']}>
+          <SearchBar placeholder="Search posts, topics, authors..." />
+        </div>
 
         {/* Right: Actions */}
         <div className={s['header-right']}>
@@ -142,6 +129,11 @@ export function Header() {
             </>
           ) : (
             <div className={s['header-auth-buttons']}>
+              <Link href="/posts">
+                <Button variant="ghost" size="sm">
+                  Explore
+                </Button>
+              </Link>
               <Link href="/login">
                 <Button variant="ghost" size="sm">
                   Sign in
@@ -191,6 +183,9 @@ export function Header() {
               </nav>
             ) : (
               <nav className={s['header-mobile-nav']}>
+                <Link href="/posts" className={s['header-mobile-nav-link']}>
+                  Explore Posts
+                </Link>
                 <Link href="/login" className={s['header-mobile-nav-link']}>
                   Sign in
                 </Link>

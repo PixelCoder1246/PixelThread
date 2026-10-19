@@ -1,0 +1,119 @@
+.actionsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+.leftGroup,
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.actionBtn:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.actionBtnActiveLike {
+  color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+.actionBtnActiveLike:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+}
+
+.actionBtnActiveBookmark {
+  color: var(--primary) !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+}
+
+.actionBtnActiveBookmark:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+}
+
+.statItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  padding: 0.25rem 0.5rem;
+}
+
+.icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  transition: transform 0.2s ease;
+}
+
+.actionBtn:hover .icon {
+  transform: scale(1.1);
+}
+
+.authorActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--border);
+}
+
+.editBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-md);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  background: var(--card);
+  transition: background 0.15s ease;
+}
+
+.editBtn:hover {
+  background: var(--muted);
+}
+
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-md);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.08);
+}

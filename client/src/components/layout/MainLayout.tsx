@@ -16,7 +16,9 @@ export function MainLayout({ children }: MainLayoutProps) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className={s['main-layout']}>
+    <div
+      className={`${s['main-layout']} ${isSidebarCollapsed ? s.collapsed : ''}`}
+    >
       <header className={s['main-layout-header']}>
         <Header />
       </header>

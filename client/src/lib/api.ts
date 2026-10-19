@@ -58,7 +58,25 @@ async function handleResponse<T>(response: Response): Promise<T> {
   }
 
   if (isJson) {
-    return response.json();
+    const json = await response.json();
+    if (
+      json &&
+      typeof json === 'object' &&
+      'success' in json &&
+      'data' in json &&
+      json.data !== null &&
+      json.data !== undefined
+    ) {
+      if (typeof json.data === 'object' && !Array.isArray(json.data)) {
+        return {
+          ...json.data,
+          message: json.message,
+          data: json.data,
+        } as T;
+      }
+      return json.data as T;
+    }
+    return json as T;
   }
 
   return response.text() as T;
