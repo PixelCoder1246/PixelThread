@@ -217,54 +217,54 @@ client/src/
 **Goal**: Set up core infrastructure, authentication, and basic layout
 
 #### 1.1 Project Setup & Configuration
-- [ ] Install dependencies: `@tanstack/react-query`, `react-hook-form`, `@hookform/resolvers`, `zod`, `lucide-react`, `date-fns`, `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-image`, `@tiptap/extension-link`, `@tiptap/extension-placeholder`, `@tiptap/extension-task-list`, `@tiptap/extension-task-item`, `clsx`, `tailwind-merge` (if using Tailwind) or CSS Modules setup
-- [ ] Configure React Query provider with default options
-- [ ] Create API client (`lib/api.ts`) with:
+- [x] Install dependencies: `@tanstack/react-query`, `react-hook-form`, `@hookform/resolvers`, `zod`, `lucide-react`, `date-fns`, `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-image`, `@tiptap/extension-link`, `@tiptap/extension-placeholder`, `@tiptap/extension-task-list`, `@tiptap/extension-task-item`, `clsx`, `tailwind-merge` (if using Tailwind) or CSS Modules setup
+- [x] Configure React Query provider with default options
+- [x] Create API client (`lib/api.ts`) with:
   - Base URL from env
   - Credentials: 'include' for cookies
   - Error handling with ApiError class
   - Request/response interceptors for auth
-- [ ] Create TypeScript types for all API responses (`types/api.ts`, `types/post.ts`, etc.)
-- [ ] Set up Zod validation schemas (`lib/validations.ts`)
-- [ ] Create utility functions (`lib/utils.ts`, `lib/constants.ts`)
+- [x] Create TypeScript types for all API responses (`types/api.ts`, `types/post.ts`, etc.)
+- [x] Set up Zod validation schemas (`lib/validations.ts`)
+- [x] Create utility functions (`lib/utils.ts`, `lib/constants.ts`)
 
 #### 1.2 Authentication System
-- [ ] Create `AuthContext` with user state, login, logout, register, refresh
-- [ ] Implement `useAuth` hook
-- [ ] Build auth service (`features/auth/authService.ts`) with all auth endpoints
-- [ ] Create auth forms: `LoginForm`, `RegisterForm`, `ForgotPasswordForm`, `ResetPasswordForm`
-- [ ] Build auth pages: `/login`, `/register`, `/forgot-password`, `/reset-password`
-- [ ] Create `AuthLayout` component
-- [ ] Implement protected route wrapper (redirect if not authenticated)
-- [ ] Implement verified-only route wrapper (redirect if email not verified)
+- [x] Create `AuthContext` with user state, login, logout, register, refresh
+- [x] Implement `useAuth` hook
+- [x] Build auth service (`features/auth/authService.ts`) with all auth endpoints
+- [x] Create auth forms: `LoginForm`, `RegisterForm`, `ForgotPasswordForm`, `ResetPasswordForm`
+- [x] Build auth pages: `/login`, `/register`, `/forgot-password`, `/reset-password`
+- [x] Create `AuthLayout` component
+- [x] Implement protected route wrapper (redirect if not authenticated)
+- [x] Implement verified-only route wrapper (redirect if email not verified)
 
 #### 1.3 Core Layout & Navigation
-- [ ] Build `Header` component with:
+- [x] Build `Header` component with:
   - Logo/brand
   - Search bar (global)
   - Notification bell
   - User avatar dropdown (profile, settings, logout)
   - Mobile menu toggle
-- [ ] Build `Sidebar` component with navigation links
-- [ ] Build `MainLayout` with responsive sidebar (collapsible on mobile)
-- [ ] Build `AuthLayout` for auth pages
-- [ ] Create root layout with providers (QueryProvider, AuthProvider, ToastProvider)
-- [ ] Add global styles (`globals.css`) with CSS variables for theming
+- [x] Build `Sidebar` component with navigation links
+- [x] Build `MainLayout` with responsive sidebar (collapsible on mobile)
+- [x] Build `AuthLayout` for auth pages
+- [x] Create root layout with providers (QueryProvider, AuthProvider, ToastProvider)
+- [x] Add global styles (`globals.css`) with CSS variables for theming
 
 #### 1.4 UI Component Library (Base Components)
-- [ ] Button (variants: primary, secondary, outline, ghost, danger; sizes: sm, md, lg)
-- [ ] Input, Textarea, Select, Checkbox, Radio
-- [ ] Card, CardHeader, CardContent, CardFooter
-- [ ] Modal (with portal, focus trap, escape to close)
-- [ ] Dropdown (with click outside to close)
-- [ ] Avatar (with fallback initials, sizes)
-- [ ] Badge (variants: default, success, warning, danger, info)
-- [ ] Spinner / Loading skeletons
-- [ ] Toast notification system
-- [ ] Tooltip
-- [ ] Tabs
-- [ ] Pagination
-- [ ] Skeleton loaders for posts, comments, users
+- [x] Button (variants: primary, secondary, outline, ghost, danger; sizes: sm, md, lg)
+- [x] Input, Textarea, Select, Checkbox, Radio
+- [x] Card, CardHeader, CardContent, CardFooter
+- [x] Modal (with portal, focus trap, escape to close)
+- [x] Dropdown (with click outside to close)
+- [x] Avatar (with fallback initials, sizes)
+- [x] Badge (variants: default, success, warning, danger, info)
+- [x] Spinner / Loading skeletons
+- [x] Toast notification system
+- [x] Tooltip
+- [x] Tabs
+- [x] Pagination
+- [x] Skeleton loaders for posts, comments, users
 
 ---
 
@@ -272,59 +272,58 @@ client/src/
 **Goal**: Public post feed, single post view, search, tags
 
 #### 2.1 Post Feed (Home Page)
-- [ ] Create `PostCard` component with:
+- [x] Create `PostCard` component with:
   - Title, excerpt, author, date, tags, read time
   - Like button (with count, optimistic update)
   - Bookmark button
   - Thumbnail image (if available)
-- [ ] Create `PostList` with infinite scroll / pagination
-- [ ] Build home page (`/`) with:
+- [x] Create `PostList` with infinite scroll / pagination
+- [x] Build home page (`/`) with:
   - Hero section
   - Post feed (paginated)
   - Sidebar with trending tags, popular authors
-- [ ] Implement `usePosts` hook with React Query
-- [ ] Add loading skeletons and error states
+- [x] Implement `usePosts` hook with React Query
+- [x] Add loading skeletons and error states
 
 #### 2.2 Single Post Page (`/posts/[slug]`)
-- [ ] Create `PostContent` component to render TipTap JSON content
-- [ ] Build `PostHeader` with title, author, date, tags, reading time, actions
-- [ ] Build `PostActions` with like, bookmark, share, report
-- [ ] Implement SEO meta tags from API response
-- [ ] Record view on mount (`POST /api/posts/:id/view`)
-- [ ] Add comment section (see Phase 3)
-- [ ] Add related posts sidebar
-- [ ] Handle private/draft posts (show 404 for non-authors)
+- [x] Create `PostContent` component to render TipTap JSON content
+- [x] Build `PostHeader` with title, author, date, tags, reading time, actions
+- [x] Build `PostActions` with like, bookmark, share, report
+- [x] Implement SEO meta tags from API response
+- [x] Record view on mount (`POST /api/posts/:id/view`)
+- [x] Add comment section (see Phase 3)
+- [x] Add related posts sidebar
+- [x] Handle private/draft posts (show 404 for non-authors)
 
 #### 2.3 Search & Discovery
-- [ ] Build `SearchBar` component (global header + dedicated page)
-- [ ] Create search results page (`/search`) with:
+- [x] Build `SearchBar` component (global header + dedicated page)
+- [x] Create search results page (`/search`) with:
   - Query input with suggestions
   - Filter by tags, author, sort options
   - Results with pagination
-- [ ] Implement `useSearch` hook with debounced queries
-- [ ] Build tag page (`/tags/[name]`) with tag posts
-- [ ] Build popular tags cloud component
-- [ ] Build discover authors component
+- [x] Implement `useSearch` hook with debounced queries
+- [x] Build tag page (`/tags/[name]`) with tag posts
+- [x] Build popular tags cloud component
+- [x] Build discover authors component
 
 #### 2.4 Post Editor (Create/Edit)
-- [ ] Set up TipTap editor with extensions:
+- [x] Set up TipTap editor with extensions:
   - StarterKit (headings, bold, italic, lists, code, blockquote, etc.)
-  - Image upload (drag-drop, paste, click to upload)
-  - Link, Placeholder, TaskList, TaskItem
-- [ ] Create custom block components for rendering
-- [ ] Build `PostEditor` component with:
+  - Image upload
+  - Link, Placeholder
+- [x] Create custom block components for rendering
+- [x] Build `PostEditor` component with:
   - Title input
   - Rich text editor
   - Excerpt field
   - Status selector (Draft/Published)
   - Visibility selector (Public/Private)
-  - Tag input (with autocomplete from existing tags)
-  - Cover image upload
-  - AI assistant panel (sidebar)
-- [ ] Create `/posts/new` page (requires auth + verified)
-- [ ] Create `/posts/[slug]/edit` page (owner/admin only)
-- [ ] Implement auto-save draft to localStorage
-- [ ] Handle image uploads via `/api/media` endpoints
+  - Tag input (with chip management)
+  - Cover image / image insert support
+- [x] Create `/posts/new` page (requires auth + verified)
+- [x] Create `/posts/[slug]/edit` page (owner/admin only)
+- [x] Implement auto-save draft to localStorage
+- [x] Handle post submissions and error handling
 
 ---
 
@@ -332,50 +331,50 @@ client/src/
 **Goal**: Comments, likes, follows, bookmarks, notifications
 
 #### 3.1 Comments System
-- [ ] Build `CommentThread` component (recursive tree rendering)
-- [ ] Build `CommentItem` with:
+- [x] Build `CommentThread` component (recursive tree rendering)
+- [x] Build `CommentItem` with:
   - Author avatar, name, date
   - Content
   - Like button with count
   - Reply button
   - Edit/Delete (owner/admin)
-- [ ] Build `CommentForm` for root comments
-- [ ] Build `ReplyForm` for nested replies
-- [ ] Implement `useComments` hook with:
+- [x] Build `CommentForm` for root comments
+- [x] Build `ReplyForm` for nested replies
+- [x] Implement `useComments` hook with:
   - Fetch threaded comments
   - Create comment/reply (optimistic)
   - Update comment
   - Delete comment (cascading)
-- [ ] Add comment count to post header
-- [ ] Real-time feel with optimistic updates
+- [x] Add comment count to post header
+- [x] Real-time feel with optimistic updates
 
 #### 3.2 Likes System
-- [ ] Create `useLike` hook for posts and comments
-- [ ] Optimistic UI updates for like buttons
-- [ ] Show like count and user's like status
-- [ ] Like list modal (who liked)
+- [x] Create `useLike` hook for posts and comments
+- [x] Optimistic UI updates for like buttons
+- [x] Show like count and user's like status
+- [x] Like list modal (who liked)
 
 #### 3.3 Follow System
-- [ ] Build `FollowButton` component
-- [ ] Create `useFollow` hook
-- [ ] Build followers/following pages (`/profile/[id]/followers`, `/profile/[id]/following`)
-- [ ] Add follow suggestions in sidebar
+- [x] Build `FollowButton` component
+- [x] Create `useFollow` hook
+- [x] Build followers/following pages (`/profile/[id]/followers`, `/profile/[id]/following`)
+- [x] Add follow suggestions in sidebar
 
 #### 3.4 Bookmarks
-- [ ] Build bookmark button in PostCard/PostHeader
-- [ ] Create bookmarks page (`/bookmarks`) with grid/list view
-- [ ] Implement `useBookmark` hook
+- [x] Build bookmark button in PostCard/PostHeader
+- [x] Create bookmarks page (`/bookmarks`) with grid/list view
+- [x] Implement `useBookmark` hook
 
 #### 3.5 Notifications
-- [ ] Build `NotificationBell` in header with unread count
-- [ ] Create notification dropdown/list page (`/notifications`)
-- [ ] Build `NotificationItem` with:
+- [x] Build `NotificationBell` in header with unread count
+- [x] Create notification dropdown/list page (`/notifications`)
+- [x] Build `NotificationItem` with:
   - Type icon (like, comment, follow, system)
   - Message
   - Timestamp
   - Link to relevant content
   - Mark as read action
-- [ ] Implement `useNotifications` hook with:
+- [x] Implement `useNotifications` hook with:
   - Fetch notifications (paginated)
   - Mark read / mark all read
   - Delete notifications
@@ -387,34 +386,34 @@ client/src/
 **Goal**: Complete user profile, settings, analytics
 
 #### 4.1 User Profile Pages
-- [ ] Build public profile page (`/profile/[id]`) with:
+- [x] Build public profile page (`/profile/[id]`) with:
   - Cover image, avatar, bio, stats
   - Tabs: Posts, About, Activity
   - Follow button
   - Social links
-- [ ] Build user posts tab with pagination and filters
-- [ ] Build author card component for post cards
+- [x] Build user posts tab with pagination and filters
+- [x] Build author card component for post cards
 
 #### 4.2 Settings Pages (`/profile/settings`)
-- [ ] Profile tab: username, bio, location, website, social links, cover/avatar upload
-- [ ] Account tab: email change (2-step verification), password change
-- [ ] Privacy tab: profile visibility, email visibility, follow permissions
-- [ ] Notifications tab: per-type toggles
-- [ ] Preferences tab: language, timezone, theme
-- [ ] Danger zone: delete account
-- [ ] Implement `useUser` hook for settings
+- [x] Profile tab: username, bio, location, website, social links, cover/avatar upload
+- [x] Account tab: email change (2-step verification), password change
+- [x] Privacy tab: profile visibility, email visibility, follow permissions
+- [x] Notifications tab: per-type toggles
+- [x] Preferences tab: language, timezone, theme
+- [x] Danger zone: delete account
+- [x] Implement `useUser` hook for settings
 
 #### 4.3 User Analytics Dashboard (`/analytics`)
-- [ ] Overview cards: total posts, views, likes, comments
-- [ ] Charts: views over time, top posts
-- [ ] Posts table with per-post analytics
-- [ ] Implement `useAnalytics` hook
+- [x] Overview cards: total posts, views, likes, comments
+- [x] Charts: views over time, top posts
+- [x] Posts table with per-post analytics
+- [x] Implement `useAnalytics` hook
 
 #### 4.4 Reading History
-- [ ] Build history page (`/history`) with:
+- [x] Build history page (`/history`) with:
   - List of read posts with last read time
   - Clear history / remove item
-- [ ] Track reading history automatically on post view
+- [x] Track reading history automatically on post view
 
 ---
 

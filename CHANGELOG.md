@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-10-22
+
+### Phase 3 & 4: Social Interactions, User Profiles, Settings & Analytics
+
+#### Added
+- **Interactive Comment System**: Full threaded hierarchical comment tree with optimistic likes, inline replies, edit/delete actions, and pagination.
+- **Likes & Bookmarks Engine**: Optimistic like toggling for posts and comments, "Who Liked" modal dialog (`LikesModal`), and a dedicated Library/Bookmarks page (`/bookmarks`).
+- **Creator Follow System**: Global `<FollowButton>` component with hover unfollow state, integrated across post headers, author footers, search results, and public profiles; plus a dedicated Following page (`/following`).
+- **Real-Time Notifications Center**: Unread badge counter, header notification dropdown, and full notifications feed (`/notifications`) with filters and mark-as-read controls.
+- **Public & Personal User Profiles (`/profile/[id]`)**: Dynamic author header, avatar, customizable banner photo, published stories tab with pagination, and an "About" tab with social links.
+- **Account & Profile Settings Hub (`/profile/settings`)**:
+  - Profile customization: name, username, bio, location, website, social handles.
+  - Avatar & cover banner management: direct multi-part file uploads (`POST /api/me/cover`, `POST /api/me/avatar`) and image URL inputs.
+  - Account security: password change form and email status badge.
+  - Granular privacy, notification preferences, and interface theme/timezone controls.
+  - Danger Zone: authenticated account deletion modal.
+- **Author Analytics Dashboard (`/analytics`)**: Aggregate stats (total views, likes, comments, stories), visual engagement bar charts for top posts, and a paginated performance breakdown table.
+- **Reading History (`/history`)**: Chronological reading feed with relative read timestamps, read counter badges, individual removal, and bulk clear history actions.
+- **Server Additions**:
+  - `GET /api/users/:id`: Public author profile endpoint returning metadata and follower/post counts.
+  - Flexible username and CUID resolution in `getUserPosts` and `getUserProfile`.
+
+#### Changed
+- Bumped monorepo, client, and server packages to `1.4.0`.
+- Integrated `Following` navigation item directly into Sidebar.
+
 ## [0.9.0] - 2026-07-20
 
 ### Added

@@ -1,5 +1,3 @@
-import { User } from './user';
-
 export interface Tag {
   id: string;
   name: string;
@@ -12,6 +10,7 @@ export interface PostAnalytics {
 export interface PostAuthor {
   id: string;
   name: string;
+  username?: string | null;
   email?: string;
   image?: string | null;
 }

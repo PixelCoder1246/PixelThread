@@ -33,13 +33,17 @@ export const notificationsService = {
   async getNotifications(
     page = 1,
     limit = 20,
-    filters?: { type?: string; isRead?: boolean }
+    filters?: { type?: string; isRead?: boolean; read?: string }
   ): Promise<NotificationsResponse> {
-    return api.get(API_ENDPOINTS.notifications.list, {
+    const params: Record<string, string | number | boolean | undefined> = {
       page,
       limit,
-      ...filters,
-    });
+    };
+    if (filters?.type) params.type = filters.type;
+    if (filters?.read !== undefined) params.read = filters.read;
+    else if (filters?.isRead !== undefined)
+      params.read = String(filters.isRead);
+    return api.get(API_ENDPOINTS.notifications.list, params);
   },
 
   async getUnreadCount(): Promise<UnreadCountResponse> {

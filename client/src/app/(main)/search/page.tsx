@@ -22,6 +22,7 @@ import {
 } from '@/features/search/useSearch';
 import { useDebounce } from '@/hooks/useDebounce';
 import { PostCard } from '@/components/post/PostCard';
+import { FollowButton } from '@/components/user/FollowButton';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
@@ -290,26 +291,39 @@ function SearchContent() {
                 )}
                 <div className={styles.usersList}>
                   {users.map((user) => (
-                    <Link
-                      key={user.id}
-                      href={`/users/${user.id}`}
-                      className={styles.userCard}
-                    >
-                      <Avatar
-                        src={user.image ?? undefined}
-                        alt={user.name}
-                        fallback={user.name}
-                        size="md"
+                    <div key={user.id} className={styles.userCard}>
+                      <Link
+                        href={`/users/${user.id}`}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          flex: 1,
+                          minWidth: 0,
+                          textDecoration: 'none',
+                          color: 'inherit',
+                        }}
+                      >
+                        <Avatar
+                          src={user.image ?? undefined}
+                          alt={user.name}
+                          fallback={user.name}
+                          size="md"
+                        />
+                        <div className={styles.userInfo}>
+                          <span className={styles.userName}>{user.name}</span>
+                          <span className={styles.userMeta}>
+                            {user.postsCount} posts · {user.followersCount}{' '}
+                            followers
+                          </span>
+                        </div>
+                      </Link>
+                      <FollowButton
+                        userId={user.id}
+                        userName={user.name}
+                        size="sm"
                       />
-                      <div className={styles.userInfo}>
-                        <span className={styles.userName}>{user.name}</span>
-                        <span className={styles.userMeta}>
-                          {user.postsCount} posts · {user.followersCount}{' '}
-                          followers
-                        </span>
-                      </div>
-                      <ArrowRight size={16} className={styles.userArrow} />
-                    </Link>
+                    </div>
                   ))}
                 </div>
               </section>

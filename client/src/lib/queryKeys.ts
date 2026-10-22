@@ -90,6 +90,7 @@ export const queryKeys = {
       [...USERS_KEYS, 'posts', userId, { page, limit, sort }] as const,
     profile: (username: string) =>
       [...USERS_KEYS, 'profile', username] as const,
+    detail: (id: string) => [...USERS_KEYS, 'detail', id] as const,
   },
   history: {
     all: HISTORY_KEYS,

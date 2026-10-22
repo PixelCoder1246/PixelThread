@@ -101,10 +101,17 @@ const getAllPosts = async ({ page, limit }) => {
 };
 
 const getPostBySlug = async (slug) => {
-  const post = await prisma.post.findUnique({
+  let post = await prisma.post.findUnique({
     where: { slug },
     include: postInclude,
   });
+
+  if (!post) {
+    post = await prisma.post.findUnique({
+      where: { id: slug },
+      include: postInclude,
+    });
+  }
 
   if (!post) {
     throw new ApiError(404, 'Post not found.');

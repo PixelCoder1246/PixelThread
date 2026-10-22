@@ -2,8 +2,15 @@ import { api } from '@/lib/api';
 import { API_ENDPOINTS } from '@/lib/api';
 import type { PostListItem } from '@/types/post';
 
+export interface BookmarkedPost extends PostListItem {
+  bookmarkedAt: string;
+  likes?: number;
+  comments?: number;
+  views?: number;
+}
+
 export interface BookmarksResponse {
-  posts: (PostListItem & { bookmarkedAt: string })[];
+  posts: BookmarkedPost[];
   pagination: {
     totalItems: number;
     totalPages: number;

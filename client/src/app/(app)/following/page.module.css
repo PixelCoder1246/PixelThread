@@ -1,25 +1,107 @@
 .followingPage {
-  max-width: 1280px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 var(--container-padding);
+  padding: var(--space-4) var(--space-4) var(--space-16);
 }
 
-.followingPage h1 {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
+.header {
   margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
 }
 
 .followingList {
   display: flex;
   flex-direction: column;
+  gap: var(--space-3);
+}
+
+.authorCard {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--space-4);
+  transition: all 0.2s ease;
 }
 
-.followingCard {
-  padding: var(--space-4);
+.authorCard:hover {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(139, 92, 246, 0.25);
+  transform: translateY(-1px);
 }
 
-.followingCard p {
-  color: var(--color-text-muted);
+.authorLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.authorDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.authorName {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.authorBio {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--space-16) var(--space-4);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-2xl);
+  background: rgba(15, 23, 42, 0.3);
+}
+
+.emptyIcon {
+  color: var(--color-text-dim);
+  margin-bottom: var(--space-3);
+}
+
+.emptyTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.emptyText {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  max-width: 440px;
+  margin: 0 auto;
 }

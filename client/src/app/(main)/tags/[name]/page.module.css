@@ -43,7 +43,11 @@
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.2) 0%,
+    rgba(99, 102, 241, 0.1) 100%
+  );
   border: 1px solid rgba(139, 92, 246, 0.3);
   color: var(--color-accent-primary);
   flex-shrink: 0;

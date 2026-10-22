@@ -16,6 +16,7 @@ import {
   ChevronRight,
   FileText,
   Hash,
+  Users,
 } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { ROUTES } from '@/lib/constants';
@@ -62,6 +63,11 @@ const navigation: NavigationItem[] = [
     name: 'Library',
     href: ROUTES.BOOKMARKS,
     icon: Bookmark,
+  },
+  {
+    name: 'Following',
+    href: ROUTES.FOLLOWING,
+    icon: Users,
   },
   {
     name: 'History',

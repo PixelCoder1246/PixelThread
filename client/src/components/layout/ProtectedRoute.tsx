@@ -25,8 +25,9 @@ export function ProtectedRoute({
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated) {
-        const callbackUrl = searchParams
-          ? `${pathname}?${searchParams.toString()}`
+        const queryString = searchParams?.toString();
+        const callbackUrl = queryString
+          ? `${pathname}?${queryString}`
           : pathname;
         router.replace(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
       } else if (requireVerified && user && !user.isEmailVerified) {

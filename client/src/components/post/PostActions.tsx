@@ -12,9 +12,9 @@ import {
   Edit,
   Trash2,
   Check,
-  Copy,
 } from 'lucide-react';
-import { usePostLikeStatus, useTogglePostLike } from '@/features/likes/useLike';
+import { usePostLikeInfo } from '@/features/likes/useLike';
+import { usePostCommentsCount } from '@/features/comments/useComments';
 import {
   useBookmarkStatus,
   useToggleBookmark,
@@ -36,22 +36,25 @@ export function PostActions({ post, onCommentsClick }: PostActionsProps) {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
 
-  const { data: likeStatus } = usePostLikeStatus(post.id, isAuthenticated);
+  const fallbackLikes =
+    (post as unknown as { likes?: number })?.likes ?? post._count?.likes ?? 0;
+  const fallbackComments =
+    (post as unknown as { comments?: number })?.comments ??
+    post._count?.comments ??
+    0;
+
+  const { isLiked, likeCount, toggleLike } = usePostLikeInfo(
+    post.id,
+    fallbackLikes
+  );
   const { data: bookmarkStatus } = useBookmarkStatus(post.id, isAuthenticated);
-  const toggleLike = useTogglePostLike(post.id);
   const toggleBookmark = useToggleBookmark(post.id);
   const deletePost = useDeletePost();
+  const commentCount = usePostCommentsCount(post.id, fallbackComments);
 
-  const isLiked = likeStatus?.liked ?? post.isLiked ?? false;
   const isBookmarked =
     bookmarkStatus?.isBookmarked ?? post.isBookmarked ?? false;
   const isAuthor = user?.id === post.authorId || user?.role === 'ADMIN';
-
-  const initialLikes = post._count?.likes ?? 0;
-  const likeCount = isLiked
-    ? Math.max(1, initialLikes)
-    : Math.max(0, initialLikes - (post.isLiked ? 1 : 0));
-  const commentCount = post._count?.comments ?? 0;
   const views = post.analytics?.views ?? 0;
 
   const handleLike = () => {

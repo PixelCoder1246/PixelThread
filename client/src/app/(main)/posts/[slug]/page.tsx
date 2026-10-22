@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Heart,
   Bookmark,
@@ -21,13 +21,17 @@ import {
   useRecordView,
   useDeletePost,
 } from '@/features/posts/usePosts';
-import { usePostLikeStatus, useTogglePostLike } from '@/features/likes/useLike';
+import { usePostLikeInfo } from '@/features/likes/useLike';
+import { usePostCommentsCount } from '@/features/comments/useComments';
 import {
   useBookmarkStatus,
   useToggleBookmark,
 } from '@/features/bookmarks/useBookmark';
 import { useAuth } from '@/features/auth/useAuth';
 import { PostContent } from '@/components/post/PostContent';
+import { CommentSection } from '@/components/comment/CommentSection';
+import { FollowButton } from '@/components/user/FollowButton';
+import { LikesModal } from '@/components/post/LikesModal';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
@@ -76,16 +80,22 @@ export default function PostPage() {
 
   const recordView = useRecordView();
   const deletePost = useDeletePost();
-  const { data: likeStatus } = usePostLikeStatus(
+  const { isLiked, likeCount, toggleLike } = usePostLikeInfo(
     post?.id ?? '',
-    isAuthenticated && !!post?.id
+    (post as unknown as { likes?: number })?.likes ?? post?._count?.likes ?? 0
   );
   const { data: bookmarkStatus } = useBookmarkStatus(
     post?.id ?? '',
     isAuthenticated && !!post?.id
   );
-  const toggleLike = useTogglePostLike(post?.id ?? '');
   const toggleBookmark = useToggleBookmark(post?.id ?? '');
+  const commentCount = usePostCommentsCount(
+    post?.id ?? '',
+    (post as unknown as { comments?: number })?.comments ??
+      post?._count?.comments ??
+      0
+  );
+  const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
 
   // Record view on mount
   useEffect(() => {
@@ -95,7 +105,6 @@ export default function PostPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post?.id]);
 
-  const isLiked = likeStatus?.liked ?? post?.isLiked ?? false;
   const isBookmarked =
     bookmarkStatus?.isBookmarked ?? post?.isBookmarked ?? false;
   const isOwner = user?.id === post?.authorId;
@@ -177,7 +186,7 @@ export default function PostPage() {
           {/* Author & Meta */}
           <div className={styles.postMeta}>
             <Link
-              href={`/users/${post.author?.id}`}
+              href={`/profile/${post.author?.username || post.author?.id}`}
               className={styles.authorLink}
             >
               <Avatar
@@ -193,6 +202,13 @@ export default function PostPage() {
                 <span className={styles.authorEmail}>{post.author?.email}</span>
               </div>
             </Link>
+
+            {post.author?.id && (
+              <FollowButton
+                userId={post.author.id}
+                userName={post.author.name}
+              />
+            )}
 
             <div className={styles.metaStats}>
               <span className={styles.metaStat}>
@@ -232,14 +248,22 @@ export default function PostPage() {
                 onClick={() => isAuthenticated && toggleLike.mutate()}
                 disabled={!isAuthenticated || toggleLike.isPending}
                 aria-label={isLiked ? 'Unlike post' : 'Like post'}
+                title={isLiked ? 'Unlike' : 'Like'}
               >
                 <Heart size={18} fill={isLiked ? 'currentColor' : 'none'} />
-                <span>{post._count?.likes ?? 0} likes</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsLikesModalOpen(true)}
+                className={styles.actionBtn}
+                title="View who liked this post"
+              >
+                <span>{likeCount} likes</span>
               </button>
 
               <a href="#comments" className={styles.actionBtn}>
                 <MessageSquare size={18} />
-                <span>{post._count?.comments ?? 0} comments</span>
+                <span>{commentCount} comments</span>
               </a>
             </div>
 
@@ -294,16 +318,14 @@ export default function PostPage() {
             </div>
           </div>
 
-          {/* Comments placeholder */}
-          <div className={styles.commentsSection} id="comments">
-            <h2 className={styles.commentsSectionTitle}>
-              <MessageSquare size={20} />
-              Comments ({post._count?.comments ?? 0})
-            </h2>
-            <div className={styles.commentsComingSoon}>
-              <p>Comments section — coming in Phase 3</p>
-            </div>
-          </div>
+          {/* Threaded Comments Section */}
+          <CommentSection postId={post.id} />
+
+          <LikesModal
+            postId={post.id}
+            isOpen={isLikesModalOpen}
+            onClose={() => setIsLikesModalOpen(false)}
+          />
         </main>
 
         {/* Sidebar */}
@@ -311,20 +333,29 @@ export default function PostPage() {
           {/* Author card */}
           <div className={styles.sidebarCard}>
             <h3 className={styles.sidebarTitle}>About the Author</h3>
-            <Link
-              href={`/users/${post.author?.id}`}
-              className={styles.sidebarAuthor}
-            >
-              <Avatar
-                src={post.author?.image ?? undefined}
-                alt={post.author?.name ?? 'Author'}
-                fallback={post.author?.name ?? 'A'}
-                size="lg"
-              />
-              <span className={styles.sidebarAuthorName}>
-                {post.author?.name ?? 'Anonymous'}
-              </span>
-            </Link>
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <Link
+                href={`/profile/${post.author?.username || post.author?.id}`}
+                className={styles.sidebarAuthor}
+              >
+                <Avatar
+                  src={post.author?.image ?? undefined}
+                  alt={post.author?.name ?? 'Author'}
+                  fallback={post.author?.name ?? 'A'}
+                  size="lg"
+                />
+                <span className={styles.sidebarAuthorName}>
+                  {post.author?.name ?? 'Anonymous'}
+                </span>
+              </Link>
+              {post.author?.id && (
+                <FollowButton
+                  userId={post.author.id}
+                  userName={post.author.name}
+                  size="sm"
+                />
+              )}
+            </div>
           </div>
 
           {/* Tags cloud */}

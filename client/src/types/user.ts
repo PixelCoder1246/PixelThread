@@ -105,7 +105,7 @@ export interface UpdateProfileInput {
   website?: string;
   image?: string;
   coverImage?: string;
-  socialLinks?: Record<string, string>;
+  socialLinks?: Record<string, string | undefined>;
 }
 
 export interface ChangeEmailInput {

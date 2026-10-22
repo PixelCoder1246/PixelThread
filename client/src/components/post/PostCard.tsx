@@ -6,7 +6,8 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { formatDate } from '@/lib/date';
 import { useAuth } from '@/features/auth/useAuth';
-import { usePostLikeStatus, useTogglePostLike } from '@/features/likes/useLike';
+import { usePostLikeInfo } from '@/features/likes/useLike';
+import { usePostCommentsCount } from '@/features/comments/useComments';
 import {
   useBookmarkStatus,
   useToggleBookmark,
@@ -39,16 +40,22 @@ function getTagName(tag: unknown): string {
 export function PostCard({ post, variant = 'default' }: PostCardProps) {
   const { isAuthenticated } = useAuth();
 
-  const { data: likeStatus } = usePostLikeStatus(post.id, isAuthenticated);
-  const { data: bookmarkStatus } = useBookmarkStatus(post.id, isAuthenticated);
-  const toggleLike = useTogglePostLike(post.id);
-  const toggleBookmark = useToggleBookmark(post.id);
+  const fallbackLikes =
+    (post as unknown as { likes?: number })?.likes ?? post._count?.likes ?? 0;
+  const fallbackComments =
+    (post as unknown as { comments?: number })?.comments ??
+    post._count?.comments ??
+    0;
 
-  const isLiked = likeStatus?.liked ?? post.isLiked ?? false;
+  const { isLiked, likeCount, toggleLike } = usePostLikeInfo(
+    post.id,
+    fallbackLikes
+  );
+  const { data: bookmarkStatus } = useBookmarkStatus(post.id, isAuthenticated);
+  const toggleBookmark = useToggleBookmark(post.id);
   const isBookmarked =
     bookmarkStatus?.isBookmarked ?? post.isBookmarked ?? false;
-  const likeCount = post._count?.likes ?? 0;
-  const commentCount = post._count?.comments ?? 0;
+  const commentCount = usePostCommentsCount(post.id, fallbackComments);
   const readTime = estimateReadTime(post.content);
 
   const handleLike = (e: React.MouseEvent) => {

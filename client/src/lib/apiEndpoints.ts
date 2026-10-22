@@ -56,6 +56,7 @@ export const API_ENDPOINTS = {
     following: (userId: string) => `/api/users/${userId}/following`,
   },
   users: {
+    profile: (idOrUsername: string) => `/api/users/${idOrUsername}`,
     posts: (userId: string) => `/api/users/${userId}/posts`,
   },
   tags: {

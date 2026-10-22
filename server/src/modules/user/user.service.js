@@ -27,8 +27,11 @@ const formatPost = (post) => ({
 });
 
 const getUserPosts = async ({ userId, page, limit, sort, currentUserId }) => {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [{ id: userId }, { username: userId }],
+      isActive: true,
+    },
     select: { id: true },
   });
 
@@ -36,10 +39,10 @@ const getUserPosts = async ({ userId, page, limit, sort, currentUserId }) => {
     throw new ApiError(404, 'User not found.');
   }
 
-  const isOwner = currentUserId === userId;
+  const isOwner = currentUserId === user.id;
 
   const where = {
-    authorId: userId,
+    authorId: user.id,
     ...(isOwner ? {} : { status: 'PUBLISHED', visibility: 'PUBLIC' }),
   };
 
@@ -72,4 +75,39 @@ const getUserPosts = async ({ userId, page, limit, sort, currentUserId }) => {
   };
 };
 
-module.exports = { getUserPosts };
+const getUserProfile = async (idOrUsername) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [{ id: idOrUsername }, { username: idOrUsername }],
+      isActive: true,
+    },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      image: true,
+      coverImage: true,
+      bio: true,
+      location: true,
+      website: true,
+      socialLinks: true,
+      profileVisibility: true,
+      createdAt: true,
+      _count: {
+        select: {
+          posts: { where: { status: 'PUBLISHED', visibility: 'PUBLIC' } },
+          followers: true,
+          following: true,
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new ApiError(404, 'User not found.');
+  }
+
+  return user;
+};
+
+module.exports = { getUserPosts, getUserProfile };

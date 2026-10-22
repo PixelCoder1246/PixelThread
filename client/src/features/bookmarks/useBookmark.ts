@@ -52,6 +52,20 @@ export function useToggleBookmark(postId: string) {
   });
 }
 
+export function useRemoveBookmark() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (postId: string) => bookmarksService.removeBookmark(postId),
+    onSuccess: (_data, postId) => {
+      queryClient.setQueryData(queryKeys.bookmarks.status(postId), {
+        isBookmarked: false,
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookmarks.all });
+    },
+  });
+}
+
 export function useMyBookmarks(page = 1, limit = 10, sort = 'newest') {
   return useQuery({
     queryKey: queryKeys.bookmarks.list(page, limit, sort),

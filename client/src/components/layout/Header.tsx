@@ -7,7 +7,6 @@ import {
   Menu,
   X,
   Search,
-  Bell,
   User,
   LogOut,
   Settings,
@@ -16,12 +15,15 @@ import {
 import { useAuth } from '@/features/auth/useAuth';
 import { Button, Input, Avatar, Dropdown, DropdownItem } from '@/components/ui';
 import { SearchBar } from '@/components/search/SearchBar';
+import { useRouter } from 'next/navigation';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 import styles from './Header.module.css';
 import { ROUTES } from '@/lib/constants';
 
 const s = styles as Record<string, string>;
 
 export function Header() {
+  const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -45,10 +47,15 @@ export function Header() {
   }, [isSearchOpen]);
 
   const userMenuItems: DropdownItem[] = [
-    { label: 'Profile', onClick: () => {}, icon: <User className="h-4 w-4" /> },
+    {
+      label: 'Profile',
+      onClick: () =>
+        router.push(user?.id ? `/profile/${user.id}` : '/dashboard'),
+      icon: <User className="h-4 w-4" />,
+    },
     {
       label: 'Settings',
-      onClick: () => {},
+      onClick: () => router.push('/profile/settings'),
       icon: <Settings className="h-4 w-4" />,
     },
     {
@@ -97,14 +104,7 @@ export function Header() {
         <div className={s['header-right']}>
           {isAuthenticated ? (
             <>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={`${s['header-btn']} relative`}
-              >
-                <Bell className={s['header-btn-icon']} />
-                <span className={s['header-notification-badge']}>3</span>
-              </Button>
+              <NotificationBell />
               <Dropdown
                 trigger={
                   <Button

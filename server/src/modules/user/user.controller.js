@@ -27,4 +27,16 @@ const getUserPosts = async (req, res, next) => {
   }
 };
 
-module.exports = { getUserPosts };
+const getUserProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await userService.getUserProfile(id);
+    return sendSuccess(res, 200, 'User profile fetched successfully.', {
+      user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getUserPosts, getUserProfile };

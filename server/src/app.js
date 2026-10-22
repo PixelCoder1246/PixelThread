@@ -32,7 +32,6 @@ const {
   readinessCheck,
   metricsHandler,
 } = require('./middleware/monitoring');
-const logger = require('./config/logger');
 
 const app = express();
 

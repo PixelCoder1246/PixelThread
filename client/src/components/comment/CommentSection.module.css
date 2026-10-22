@@ -1,0 +1,266 @@
+.commentSection {
+  margin-top: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--color-border-primary, #334155);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #f8fafc);
+}
+
+.countBadge {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  background-color: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+/* Form */
+.formContainer {
+  margin-bottom: 2.5rem;
+  background-color: var(--color-bg-secondary, #1e293b);
+  border: 1px solid var(--color-border-primary, #334155);
+  border-radius: var(--radius-xl, 1rem);
+  padding: 1.25rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.formContainer:focus-within {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.formAuthorRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.formAuthorName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #f8fafc);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 5rem;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary, #f8fafc);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.textarea::placeholder {
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.formFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border-primary, #334155);
+}
+
+.unauthPrompt {
+  padding: 1.75rem;
+  text-align: center;
+  background-color: var(--color-bg-secondary, #1e293b);
+  border: 1px dashed var(--color-border-primary, #334155);
+  border-radius: var(--radius-xl, 1rem);
+  margin-bottom: 2.5rem;
+}
+
+.unauthPrompt p {
+  color: var(--color-text-secondary, #94a3b8);
+  font-size: 0.9375rem;
+  margin-bottom: 1rem;
+}
+
+/* Comments list */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.emptyIcon {
+  margin: 0 auto 0.75rem;
+  opacity: 0.5;
+}
+
+/* Individual Comment Item */
+.itemWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.itemCard {
+  background-color: var(--color-bg-secondary, #1e293b);
+  border: 1px solid var(--color-border-primary, #334155);
+  border-radius: var(--radius-lg, 0.75rem);
+  padding: 1.125rem 1.25rem;
+  transition: border-color 0.15s ease;
+}
+
+.itemCard:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.625rem;
+}
+
+.authorMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.authorName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #f8fafc);
+  text-decoration: none;
+}
+
+.authorName:hover {
+  color: #818cf8;
+}
+
+.commentDate {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #64748b);
+}
+
+.editedBadge {
+  font-size: 0.7rem;
+  color: var(--color-text-muted, #64748b);
+  font-style: italic;
+}
+
+.itemContent {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--color-text-primary, #e2e8f0);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 0.875rem;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: transparent;
+  border: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-muted, #94a3b8);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-md, 0.375rem);
+  transition: all 0.15s ease;
+}
+
+.actionBtn:hover {
+  color: var(--color-text-primary, #f8fafc);
+  background-color: var(--color-bg-hover, rgba(255, 255, 255, 0.05));
+}
+
+.actionBtnActive {
+  color: #ef4444 !important;
+}
+
+.actionBtnActive svg {
+  fill: #ef4444;
+}
+
+.editForm {
+  margin: 0.75rem 0;
+}
+
+.editInput {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-bg-tertiary, #0f172a);
+  border: 1px solid var(--color-border-primary, #334155);
+  border-radius: var(--radius-md, 0.375rem);
+  color: var(--color-text-primary, #f8fafc);
+  font-family: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+  margin-bottom: 0.5rem;
+}
+
+.editActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Replies indent */
+.repliesContainer {
+  margin-left: 1.5rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--color-border-primary, #334155);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .repliesContainer {
+    margin-left: 0.75rem;
+    padding-left: 0.75rem;
+  }
+}
+
+.replyFormBox {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background-color: var(--color-bg-tertiary, #0f172a);
+  border: 1px solid var(--color-border-primary, #334155);
+  border-radius: var(--radius-lg, 0.5rem);
+}

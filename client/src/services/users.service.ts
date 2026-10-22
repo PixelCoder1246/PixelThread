@@ -15,6 +15,10 @@ export interface UserPostsResponse {
 }
 
 export const usersService = {
+  async getUserProfile(idOrUsername: string): Promise<{ user: UserProfile }> {
+    return api.get(API_ENDPOINTS.users.profile(idOrUsername));
+  },
+
   async getUserPosts(
     userId: string,
     page = 1,

@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { FloatingParticles } from '@/components/ui/FloatingParticles';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   ArrowRight,
   PenTool,
@@ -23,7 +22,6 @@ import {
   Rocket,
   Layers,
   LayoutDashboard,
-  Search,
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/useAuth';
 import { usePosts } from '@/features/posts/usePosts';
@@ -138,71 +136,6 @@ export default function HomePage() {
         <div className="landing-grid" />
         <FloatingParticles count={12} />
       </div>
-
-      {/* Top Navigation Bar */}
-      <header className="landing-navbar">
-        <div className="landing-navbar-container">
-          <Link href="/" className="landing-navbar-logo">
-            <Image
-              src="/PTfavicon.png"
-              alt="PixelThread"
-              width={30}
-              height={30}
-              className="rounded-lg"
-            />
-            <span className="landing-navbar-brand">PixelThread</span>
-          </Link>
-
-          <nav className="landing-navbar-links">
-            <Link href="/posts" className="landing-nav-link highlight">
-              <BookOpen className="h-4 w-4" />
-              <span>Read Posts</span>
-            </Link>
-            <Link href="/tags" className="landing-nav-link">
-              <Sparkles className="h-4 w-4" />
-              <span>Topics</span>
-            </Link>
-            <Link href="/search" className="landing-nav-link">
-              <Search className="h-4 w-4" />
-              <span>Search</span>
-            </Link>
-          </nav>
-
-          <div className="landing-navbar-actions">
-            <Link href="/posts">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hidden sm:inline-flex gap-2"
-              >
-                <BookOpen className="h-4 w-4" />
-                Browse Posts
-              </Button>
-            </Link>
-            {isAuthenticated ? (
-              <Link href="/dashboard">
-                <Button size="sm" variant="primary">
-                  Dashboard
-                </Button>
-              </Link>
-            ) : (
-              <>
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/posts">
-                  <Button size="sm" variant="primary" className="gap-2">
-                    Start Reading
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
 
       <main className="relative z-10">
         {/* Hero Section */}
