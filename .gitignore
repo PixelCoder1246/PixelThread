@@ -40,4 +40,9 @@ server/prisma/dev.db-journal
 # AI assets
 ai/recordings/
 
+# Uploaded files
+server/public/uploads/*
+server/src/public/uploads/*
+!server/src/public/uploads/.gitkeep
+
 /.opencode/plans/PLAN.md

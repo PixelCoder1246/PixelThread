@@ -118,4 +118,10 @@ export const API_ENDPOINTS = {
     generateSuggestions: '/api/ai/suggestions',
     applySuggestions: '/api/ai/suggestions/apply',
   },
+  media: {
+    upload: '/api/media',
+    replace: (id: string) => `/api/media/${id}`,
+    delete: (id: string) => `/api/media/${id}`,
+    mine: '/api/me/media',
+  },
 } as const;

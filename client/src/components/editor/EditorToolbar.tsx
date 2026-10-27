@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Editor } from '@tiptap/react';
 import {
   Bold,
   Italic,
   Strikethrough,
   Code,
+  FileCode,
   Heading1,
   Heading2,
   Heading3,
@@ -18,16 +19,30 @@ import {
   Redo,
   Link as LinkIcon,
   Image as ImageIcon,
+  ImagePlus,
+  Loader2,
+  Sparkles,
 } from 'lucide-react';
 import styles from './EditorToolbar.module.css';
 
 interface EditorToolbarProps {
   editor: Editor | null;
+  onToggleAI?: () => void;
+  isAIOpen?: boolean;
+  onUploadImage?: (file: File) => Promise<void>;
+  isUploadingImage?: boolean;
 }
 
-export function EditorToolbar({ editor }: EditorToolbarProps) {
+export function EditorToolbar({
+  editor,
+  onToggleAI,
+  isAIOpen,
+  onUploadImage,
+  isUploadingImage,
+}: EditorToolbarProps) {
   // Subscribe to editor transactions & selection updates so undo, redo, and active states update reactively
   const [, setTick] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!editor) return;
@@ -111,6 +126,14 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
     editor.chain().focus().setImage({ src: finalUrl }).run();
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onUploadImage) {
+      onUploadImage(file);
+    }
+    e.target.value = '';
+  };
+
   const canUndo = editor.can().undo();
   const canRedo = editor.can().redo();
 
@@ -154,6 +177,16 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         title="Inline Code"
       >
         <Code size={16} />
+      </button>
+
+      <button
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        className={`${styles.toolBtn} ${editor.isActive('codeBlock') ? styles.toolBtnActive : ''}`}
+        title="Code Block"
+      >
+        <FileCode size={16} />
       </button>
 
       <div className={styles.divider} />
@@ -242,12 +275,35 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         <LinkIcon size={16} />
       </button>
 
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        style={{ display: 'none' }}
+        onChange={handleFileSelect}
+      />
+
+      <button
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => fileInputRef.current?.click()}
+        disabled={isUploadingImage}
+        className={styles.toolBtn}
+        title="Upload Image from computer (or drag & drop / paste)"
+      >
+        {isUploadingImage ? (
+          <Loader2 size={16} className="animate-spin" />
+        ) : (
+          <ImagePlus size={16} />
+        )}
+      </button>
+
       <button
         type="button"
         onMouseDown={(e) => e.preventDefault()}
         onClick={addImage}
         className={styles.toolBtn}
-        title="Add Image URL"
+        title="Insert Image by URL"
       >
         <ImageIcon size={16} />
       </button>
@@ -279,6 +335,22 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         <Redo size={16} />
       </button>
+
+      {onToggleAI && (
+        <>
+          <div className={styles.divider} />
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={onToggleAI}
+            className={`${styles.toolBtn} ${isAIOpen ? styles.toolBtnActive : ''}`}
+            title="AI Writing Assistant"
+            style={{ color: '#c084fc' }}
+          >
+            <Sparkles size={16} />
+          </button>
+        </>
+      )}
     </div>
   );
 }

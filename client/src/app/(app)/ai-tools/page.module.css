@@ -1,0 +1,539 @@
+/* page.module.css - AI Tools Standalone Studio */
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 6rem;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c084fc;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.heroGradientText {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroSubtitle {
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  color: #94a3b8;
+  max-width: 680px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+}
+
+.statsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.statPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* Category Filter Bar */
+.filterBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px;
+  margin-bottom: 2.5rem;
+  scrollbar-width: none;
+}
+
+.filterBar::-webkit-scrollbar {
+  display: none;
+}
+
+.filterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 41, 59, 0.5);
+  color: #94a3b8;
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+}
+
+.filterBtnActive {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.25) 0%,
+    rgba(99, 102, 241, 0.25) 100%
+  );
+  border-color: rgba(139, 92, 246, 0.5);
+  color: #c084fc;
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+}
+
+/* Main Grid Layout */
+.toolsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Tool Card */
+.toolCard {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.toolCard:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(139, 92, 246, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cardIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #c084fc;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 4px 0;
+}
+
+.cardDescription {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Interactive Workbench in Card */
+.workbench {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+  background: rgba(30, 41, 59, 0.9);
+}
+
+.textarea {
+  min-height: 75px;
+  resize: vertical;
+}
+
+/* Tone Selector in Tool Card */
+.toneGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.toneBtn {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  text-align: center;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
+}
+
+.toneBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+}
+
+.toneBtnActive {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.3) 0%,
+    rgba(99, 102, 241, 0.3) 100%
+  );
+  border-color: rgba(139, 92, 246, 0.5);
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* Submit Action Button */
+.runBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.runBtn:hover:not(:disabled) {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4);
+}
+
+.runBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Tool Result Box */
+.resultBox {
+  background: rgba(10, 15, 30, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resultContent {
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+  max-height: 250px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.resultContentFormatted {
+  font-size: 0.84rem;
+  color: #cbd5e1;
+  line-height: 1.65;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.resultContentFormatted h1,
+.resultContentFormatted h2,
+.resultContentFormatted h3 {
+  color: #f8fafc;
+  margin: 10px 0 4px 0;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.resultContentFormatted h1 {
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+.resultContentFormatted h2 {
+  font-size: 0.98rem;
+  color: #c084fc;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  padding-bottom: 3px;
+}
+.resultContentFormatted h3 {
+  font-size: 0.9rem;
+  color: #93c5fd;
+}
+
+.resultContentFormatted p {
+  margin: 0 0 6px 0;
+}
+
+.resultContentFormatted ul,
+.resultContentFormatted ol {
+  padding-left: 18px;
+  margin: 6px 0 8px 0;
+}
+
+.resultContentFormatted li {
+  margin-bottom: 3px;
+}
+
+.resultContentFormatted blockquote {
+  border-left: 3px solid #8b5cf6;
+  padding-left: 8px;
+  margin: 6px 0;
+  color: #94a3b8;
+  font-style: italic;
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.resultContentFormatted code {
+  background: rgba(139, 92, 246, 0.2);
+  color: #c084fc;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.resultContentFormatted pre {
+  background: #090d16;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 6px;
+  padding: 8px 10px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.resultContentFormatted pre code {
+  background: transparent;
+  color: #38bdf8;
+  padding: 0;
+  font-size: 0.78rem;
+  display: block;
+  white-space: pre;
+  line-height: 1.45;
+}
+
+.resultContentFormatted strong {
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.viewModeToggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.viewModeBtn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.viewModeBtnActive {
+  background: rgba(139, 92, 246, 0.3);
+  color: #c084fc;
+  font-weight: 600;
+}
+
+.resultFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 8px;
+}
+
+.tokenTag {
+  font-size: 0.7rem;
+  color: #c084fc;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #c084fc;
+}
+
+.actionBtnPrimary {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.3) 0%,
+    rgba(99, 102, 241, 0.3) 100%
+  );
+  border-color: rgba(139, 92, 246, 0.5);
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+/* ============================================================
+   RESPONSIVENESS: TABLETS AND MOBILE DEVICES
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem 1rem 5rem;
+  }
+
+  .toolsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .hero {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .toolsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .filterBar {
+    justify-content: flex-start;
+  }
+
+  .runBtn,
+  .actionBtn,
+  .filterBtn {
+    min-height: 44px; /* Accessible touch target */
+  }
+}

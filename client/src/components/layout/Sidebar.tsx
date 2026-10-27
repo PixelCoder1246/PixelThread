@@ -17,6 +17,7 @@ import {
   FileText,
   Hash,
   Users,
+  Sparkles,
 } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { ROUTES } from '@/lib/constants';
@@ -53,6 +54,11 @@ const navigation: NavigationItem[] = [
     href: ROUTES.POST_NEW,
     icon: PenTool,
     highlight: true,
+  },
+  {
+    name: 'AI Tools',
+    href: ROUTES.AI_TOOLS,
+    icon: Sparkles,
   },
   {
     name: 'My Stories',

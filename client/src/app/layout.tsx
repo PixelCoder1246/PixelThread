@@ -10,6 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  ),
   title: {
     default: 'PixelThread - AI-powered Blogging Platform',
     template: '%s | PixelThread',
@@ -73,7 +76,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="dark"
+      data-scroll-behavior="smooth"
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

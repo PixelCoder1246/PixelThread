@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-10-27
+
+### Phase 5: AI Writing Assistant & Drag-and-Drop Media Uploads
+
+#### Added
+- **AI Writing Studio (`/ai-tools` & Inline Editor Dock/Drawer)**:
+  - 16 specialized AI mutations covering draft generation, title generator, title improver, excerpt, SEO metadata, auto-tagging, writing improver, tone rewriter, text expander/shortener, text continuation, summarizer (one-line & executive paragraph), FAQ generator, multi-platform social media posts, and content suggestions.
+  - Full mobile & tablet responsive drawer with glassmorphic accents, touch targets, and backdrop dismissal.
+  - Dedicated Complete Article Generator page at `/ai-tools` with topic, audience, keywords, category, and approximate length controls.
+- **Robust Markdown-to-HTML & Plain Text Engine (`lib/markdown.ts`)**:
+  - Automatically translates Markdown outputs (headings, bold/italic, blockquotes, lists, links) and syntax-highlighted code blocks (`<pre><code class="language-*">`) into semantic HTML for TipTap.
+  - Formatted vs. Raw Markdown preview toggle in both the inline AI studio and the standalone AI tools page.
+  - One-click "Markdown to Rich Text & Code" action in the editor toolbar.
+- **Drag-and-Drop & Clipboard Image Uploads**:
+  - Native Drag-and-Drop directly onto the story editor with illuminated dropzone overlay and animated visual cues.
+  - Clipboard paste (`Ctrl+V` / screenshots) directly into the story text.
+  - Direct device file picker button in `EditorToolbar` alongside URL input.
+  - Seamless upload pipeline connecting to `/api/media` with automatic Base64 data URL offline fallback.
+
+#### Changed
+- Bumped monorepo, client, and server packages to `1.5.0`.
+
 ## [1.4.0] - 2026-10-22
 
 ### Phase 3 & 4: Social Interactions, User Profiles, Settings & Analytics

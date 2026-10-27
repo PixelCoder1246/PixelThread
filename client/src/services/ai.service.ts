@@ -6,20 +6,42 @@ export interface AIGeneratePostInput {
   targetAudience?: string;
   tone?: string;
   category?: string;
-  keywords?: string[];
-  approximateLength?: number;
+  keywords?: string[] | string;
+  approximateLength?: 'short' | 'medium' | 'long' | 'comprehensive';
 }
 
 export interface AIGeneratePostResponse {
   title: string;
-  content: unknown;
+  content: string;
   excerpt: string;
-  tags: string[];
-  seo: {
+  suggestedTags: string[];
+  tags?: string[];
+  seoTitle?: string;
+  seoDescription?: string;
+  seo?: {
     metaTitle: string;
     metaDescription: string;
     keywords: string[];
   };
+  tokenUsage: {
+    model?: string;
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+    responseTime?: string;
+    finishReason?: string;
+  };
+}
+
+export interface AITitleItem {
+  title: string;
+  confidenceScore: number;
+  seoScore: number;
+  clickabilityScore: number;
+}
+
+export interface AITitlesResponse {
+  titles: (string | AITitleItem)[];
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -27,8 +49,9 @@ export interface AIGeneratePostResponse {
   };
 }
 
-export interface AITitlesResponse {
-  titles: string[];
+export interface AIImproveTitleResponse {
+  improvedTitle: string;
+  explanation: string;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -55,9 +78,13 @@ export interface AITagsResponse {
 }
 
 export interface AISeoResponse {
-  metaTitle: string;
-  metaDescription: string;
-  keywords: string[];
+  seoTitle?: string;
+  metaDescription?: string;
+  focusKeyword?: string;
+  canonicalSlug?: string;
+  recommendations?: string[];
+  metaTitle?: string;
+  keywords?: string[];
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -66,7 +93,9 @@ export interface AISeoResponse {
 }
 
 export interface AIImproveResponse {
-  content: unknown;
+  improvedContent: string;
+  changes?: string[];
+  content?: string;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -75,7 +104,9 @@ export interface AIImproveResponse {
 }
 
 export interface AIRewriteResponse {
-  content: unknown;
+  rewrittenContent: string;
+  tone?: string;
+  content?: string;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -84,7 +115,9 @@ export interface AIRewriteResponse {
 }
 
 export interface AIExpandResponse {
-  content: unknown;
+  expandedContent: string;
+  expansionNotes?: string[];
+  content?: string;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -93,7 +126,10 @@ export interface AIExpandResponse {
 }
 
 export interface AIShortenResponse {
-  content: unknown;
+  shortenedContent: string;
+  originalWordCount?: number;
+  newWordCount?: number;
+  content?: string;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -102,7 +138,9 @@ export interface AIShortenResponse {
 }
 
 export interface AIContinueResponse {
-  content: unknown;
+  continuation: string;
+  transitionNotes?: string;
+  content?: string;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -111,7 +149,10 @@ export interface AIContinueResponse {
 }
 
 export interface AISummarizeResponse {
-  summary: string;
+  oneLineSummary?: string;
+  paragraphSummary?: string;
+  bulletPoints?: string[];
+  summary?: string;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -128,10 +169,15 @@ export interface AIFAQResponse {
   };
 }
 
+export interface AISocialPlatformPost {
+  post: string;
+  hashtags?: string[];
+}
+
 export interface AISocialResponse {
-  twitter: string;
-  linkedin: string;
-  facebook: string;
+  twitter: string | AISocialPlatformPost;
+  linkedin: string | AISocialPlatformPost;
+  facebook?: string | AISocialPlatformPost;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -139,12 +185,17 @@ export interface AISocialResponse {
   };
 }
 
+export interface AISuggestionItem {
+  type: string;
+  suggestion: string;
+  severity: 'high' | 'medium' | 'low';
+  location?: string;
+  description?: string;
+  priority?: 'high' | 'medium' | 'low';
+}
+
 export interface AISuggestionsResponse {
-  suggestions: Array<{
-    type: string;
-    description: string;
-    priority: 'high' | 'medium' | 'low';
-  }>;
+  suggestions: AISuggestionItem[];
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -153,7 +204,11 @@ export interface AISuggestionsResponse {
 }
 
 export interface AIApplySuggestionsResponse {
-  content: unknown;
+  improvedContent: string;
+  changesApplied?: string[];
+  content?: string;
+  originalWordCount?: number;
+  newWordCount?: number;
   tokenUsage: {
     promptTokens: number;
     completionTokens: number;
@@ -167,7 +222,7 @@ export interface AIGeneratePostWithDataInput {
 
 export interface AITitleInput {
   content: string;
-  keywords?: string[];
+  keywords?: string[] | string;
 }
 
 export interface AIImproveTitleInput {
@@ -194,7 +249,7 @@ export interface AIImproveInput {
 
 export interface AIRewriteInput {
   content: string;
-  tone?: string;
+  tone: string;
 }
 
 export interface AIExpandInput {
@@ -227,10 +282,12 @@ export interface AISuggestionsInput {
 
 export interface AIApplySuggestionsInput {
   content: string;
-  suggestions: Array<{
-    type: string;
-    description: string;
-    priority: 'high' | 'medium' | 'low';
+  suggestions?: Array<{
+    type?: string;
+    suggestion?: string;
+    description?: string;
+    severity?: 'high' | 'medium' | 'low';
+    priority?: 'high' | 'medium' | 'low';
   }>;
 }
 
@@ -245,7 +302,9 @@ export const aiService = {
     return api.post(API_ENDPOINTS.ai.generateTitles, data);
   },
 
-  async improveTitle(data: AIImproveTitleInput): Promise<AITitlesResponse> {
+  async improveTitle(
+    data: AIImproveTitleInput
+  ): Promise<AIImproveTitleResponse> {
     return api.post(API_ENDPOINTS.ai.improveTitle, data);
   },
 

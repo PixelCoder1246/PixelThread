@@ -12,6 +12,7 @@ export const ROUTES = {
   POSTS: '/posts',
   POST_NEW: '/posts/new',
   POST_MY: '/posts/my-posts',
+  AI_TOOLS: '/ai-tools',
   POST_DETAIL: (slug: string) => `/posts/${slug}`,
   POST_EDIT: (id: string) => `/posts/${id}/edit`,
   PROFILE: (username: string) => `/users/${username}`,
