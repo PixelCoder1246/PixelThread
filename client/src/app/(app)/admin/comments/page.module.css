@@ -10,10 +10,10 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1.25rem;
-  background: rgba(15, 23, 42, 0.7);
+  background: var(--color-bg-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-primary);
   border-radius: 1rem;
   flex-wrap: wrap;
 }
@@ -36,10 +36,10 @@
 .searchInput {
   width: 100%;
   padding: 0.625rem 1rem 0.625rem 2.5rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.75rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   font-size: 0.875rem;
   outline: none;
   transition: all 0.2s ease;
@@ -51,23 +51,23 @@
 
 .filterSelect {
   padding: 0.625rem 1rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.75rem;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
   outline: none;
   cursor: pointer;
 }
 
 .tableCard {
-  background: rgba(15, 23, 42, 0.7);
+  background: var(--color-bg-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-primary);
   border-radius: 1.25rem;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-card);
 }
 
 .tableResponsive {
@@ -84,31 +84,31 @@
 
 .commentTable th {
   padding: 1rem 1.25rem;
-  background: rgba(30, 41, 59, 0.5);
-  color: #94a3b8;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-muted);
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--color-border-primary);
   white-space: nowrap;
 }
 
 .commentTable td {
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: #cbd5e1;
+  border-bottom: 1px solid var(--color-border-primary);
+  color: var(--color-text-secondary);
   vertical-align: middle;
 }
 
 .commentRow:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-bg-hover);
 }
 
 .commentBody {
   max-width: 380px;
   line-height: 1.5;
-  color: #f1f5f9;
+  color: var(--color-text-primary);
 }
 
 .postContextLink {
@@ -149,9 +149,9 @@
   border-radius: 0.5rem;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
-  color: #cbd5e1;
+  border: 1px solid var(--color-border-primary);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
   display: inline-flex;
@@ -160,8 +160,8 @@
 }
 
 .btnAction:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
+  background: var(--color-bg-hover-strong);
+  color: var(--color-text-primary);
 }
 
 .btnActionDanger {

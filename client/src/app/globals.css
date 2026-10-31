@@ -175,63 +175,107 @@
   --z-toast: 50;
 }
 
+/* Design tokens extensions in root */
+:root {
+  --color-bg-card-solid: #0f172a;
+  --color-bg-card-gradient: linear-gradient(
+    135deg,
+    rgba(30, 41, 59, 0.6) 0%,
+    rgba(15, 23, 42, 0.8) 100%
+  );
+  --color-bg-header: rgba(2, 6, 23, 0.85);
+  --color-btn-primary-text: #ffffff;
+  --gradient-text-brand: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+}
+
 /* Light theme overrides */
 [data-theme='light'] {
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f1f5f9;
-  --color-bg-card: #ffffff;
-  --color-bg-hover: #f1f5f9;
-  --color-bg-hover-strong: #e2e8f0;
+  /* Clean, premium slate-light palette (Vercel / Linear / Stripe inspired) */
+  --color-bg-primary: #f8fafc; /* Slate-50: crisp, modern, gives page depth */
+  --color-bg-secondary: #ffffff; /* Pure white for header, sidebar, cards */
+  --color-bg-tertiary: #f1f5f9; /* Slate-100 for subtle areas, tags, pills */
+  --color-bg-card: #ffffff; /* Crisp white card surface */
+  --color-bg-card-solid: #ffffff;
+  --color-bg-card-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  --color-bg-header: rgba(255, 255, 255, 0.88);
+  --color-bg-hover: rgba(15, 23, 42, 0.04);
+  --color-bg-hover-strong: rgba(15, 23, 42, 0.08);
 
-  --color-border-primary: #e2e8f0;
-  --color-border-secondary: #cbd5e1;
-  --color-border-accent: #94a3b8;
+  --color-border-primary: #e2e8f0; /* Crisp slate-200 border */
+  --color-border-secondary: #cbd5e1; /* Slate-300 on hover */
+  --color-border-accent: #6366f1; /* Indigo focus */
 
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #334155;
-  --color-text-muted: #64748b;
-  --color-text-dim: #94a3b8;
+  --color-text-primary: #0f172a; /* Slate-900: deep, high-contrast, effortless to read */
+  --color-text-secondary: #334155; /* Slate-700 */
+  --color-text-muted: #64748b; /* Slate-500 */
+  --color-text-dim: #94a3b8; /* Slate-400 */
 
-  --gradient-hero-start: rgba(148, 163, 184, 0.1);
-  --gradient-hero-mid: rgba(100, 116, 139, 0.1);
-  --gradient-hero-end: rgba(148, 163, 184, 0.1);
+  --color-accent-primary: #6366f1; /* Vibrant Indigo */
+  --color-accent-secondary: #4f46e5; /* Deep Indigo */
+  --color-accent-tertiary: #2563eb; /* Blue */
+
+  --gradient-hero-start: rgba(99, 102, 241, 0.05);
+  --gradient-hero-mid: rgba(139, 92, 246, 0.05);
+  --gradient-hero-end: rgba(99, 102, 241, 0.05);
 
   --gradient-glow-1: radial-gradient(
     ellipse at 20% 20%,
-    rgba(148, 163, 184, 0.08) 0%,
-    transparent 50%
+    rgba(99, 102, 241, 0.08) 0%,
+    transparent 60%
   );
   --gradient-glow-2: radial-gradient(
     ellipse at 80% 80%,
-    rgba(148, 163, 184, 0.06) 0%,
-    transparent 50%
+    rgba(139, 92, 246, 0.06) 0%,
+    transparent 60%
   );
   --gradient-glow-3: radial-gradient(
     ellipse at 50% 50%,
-    rgba(148, 163, 184, 0.04) 0%,
-    transparent 50%
+    rgba(99, 102, 241, 0.04) 0%,
+    transparent 60%
   );
 
   --gradient-card-hover: linear-gradient(
     to bottom right,
     transparent,
-    rgba(148, 163, 184, 0.05),
+    rgba(99, 102, 241, 0.03),
     transparent
   );
 
-  --gradient-btn-primary: linear-gradient(to right, #f1f5f9, #e2e8f0, #f1f5f9);
+  /* Vibrant high-contrast Primary Button (Indigo-Violet gradient with white text) */
+  --gradient-btn-primary: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
   --gradient-btn-primary-hover: linear-gradient(
+    135deg,
+    #4f46e5 0%,
+    #6d28d9 100%
+  );
+  --color-btn-primary-text: #ffffff;
+
+  --gradient-btn-outline: linear-gradient(
     to right,
-    #e2e8f0,
-    #cbd5e1,
-    #e2e8f0
+    rgba(0, 0, 0, 0.03),
+    transparent
   );
 
-  --gradient-text: linear-gradient(to right, #334155, #64748b);
+  --gradient-text: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  --gradient-text-brand: linear-gradient(135deg, #0f172a 0%, #4f46e5 100%);
 
-  --shadow-glow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
-  --shadow-glow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  /* Clean, elevated shadows in light mode */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  --shadow-glow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  --shadow-glow-hover: 0 14px 35px rgba(0, 0, 0, 0.1);
+  --shadow-card:
+    0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover:
+    0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-inner-glow: inset 0 0 20px -10px rgba(0, 0, 0, 0.05);
 }
 
 /* ============================================

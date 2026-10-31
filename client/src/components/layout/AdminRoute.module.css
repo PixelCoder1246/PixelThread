@@ -20,14 +20,12 @@
   max-width: 480px;
   width: 100%;
   padding: 2.5rem 2rem;
-  background: rgba(15, 23, 42, 0.85);
+  background: var(--color-bg-card-solid, var(--color-bg-card));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 1.25rem;
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(239, 68, 68, 0.1);
+  box-shadow: var(--shadow-xl);
   text-align: center;
   display: flex;
   flex-direction: column;

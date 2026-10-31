@@ -4,12 +4,13 @@
   border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  transition: all var(--transition-slower);
+  box-shadow: var(--shadow-card);
+  transition: all var(--transition-normal);
 }
 
 .card:hover {
   border-color: var(--color-border-secondary);
-  box-shadow: var(--shadow-inner-glow);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .card-content {

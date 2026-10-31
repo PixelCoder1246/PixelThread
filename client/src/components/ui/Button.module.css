@@ -35,16 +35,16 @@
 }
 
 .btn-primary {
-  background-image: var(--gradient-btn-primary);
-  color: var(--color-text-primary);
-  border-color: var(--color-border-primary);
-  box-shadow: var(--shadow-lg);
+  background: var(--gradient-btn-primary);
+  color: var(--color-btn-primary-text, #ffffff);
+  border-color: transparent;
+  box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-image: var(--gradient-btn-primary-hover);
+  background: var(--gradient-btn-primary-hover);
   box-shadow: var(--shadow-glow-hover);
-  transform: translateY(-4px);
+  transform: translateY(-2px);
 }
 
 .btn-outline {

@@ -1,13 +1,14 @@
 {
   "name": "pixelthread",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "node --test tests/*.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

@@ -11,10 +11,10 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1.25rem;
-  background: rgba(15, 23, 42, 0.7);
+  background: var(--color-bg-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-primary);
   border-radius: 1rem;
   flex-wrap: wrap;
 }
@@ -37,10 +37,10 @@
 .searchInput {
   width: 100%;
   padding: 0.625rem 1rem 0.625rem 2.5rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.75rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   font-size: 0.875rem;
   outline: none;
   transition: all 0.2s ease;
@@ -60,10 +60,10 @@
 
 .filterSelect {
   padding: 0.625rem 1rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.75rem;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
   outline: none;
   cursor: pointer;
@@ -75,13 +75,13 @@
 
 /* Table Card */
 .tableCard {
-  background: rgba(15, 23, 42, 0.7);
+  background: var(--color-bg-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-primary);
   border-radius: 1.25rem;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-card);
 }
 
 .tableResponsive {
@@ -98,25 +98,25 @@
 
 .userTable th {
   padding: 1rem 1.25rem;
-  background: rgba(30, 41, 59, 0.5);
-  color: #94a3b8;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-muted);
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--color-border-primary);
   white-space: nowrap;
 }
 
 .userTable td {
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: #cbd5e1;
+  border-bottom: 1px solid var(--color-border-primary);
+  color: var(--color-text-secondary);
   vertical-align: middle;
 }
 
 .userRow:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-bg-hover);
 }
 
 .userCol {
@@ -132,7 +132,7 @@
 
 .userName {
   font-weight: 600;
-  color: #f8fafc;
+  color: var(--color-text-primary);
 }
 
 .userHandle {
@@ -172,9 +172,9 @@
   align-items: center;
   padding: 0.2rem 0.6rem;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
+  background: var(--color-bg-hover-strong);
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-text-muted);
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -209,9 +209,9 @@
   border-radius: 0.5rem;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
-  color: #cbd5e1;
+  border: 1px solid var(--color-border-primary);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
   display: inline-flex;
@@ -220,8 +220,8 @@
 }
 
 .btnAction:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
+  background: var(--color-bg-hover-strong);
+  color: var(--color-text-primary);
 }
 
 .btnActionDanger {
@@ -252,7 +252,7 @@
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
@@ -265,7 +265,7 @@
 .modalBox {
   width: 100%;
   max-width: 440px;
-  background: #0f172a;
+  background: var(--color-bg-card-solid);
   border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 1.25rem;
   padding: 1.75rem;
@@ -298,7 +298,7 @@
 .modalTitle {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
@@ -312,7 +312,7 @@
 }
 
 .modalClose:hover {
-  color: #f8fafc;
+  color: var(--color-text-primary);
 }
 
 .modalBody {
@@ -324,16 +324,16 @@
 .modalLabel {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
 }
 
 .modalTextarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: #1e293b;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.75rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   font-size: 0.875rem;
   resize: vertical;
   min-height: 80px;

@@ -10,8 +10,13 @@
   height: 220px;
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #0f172a 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-secondary) 0%,
+    var(--color-accent-primary) 50%,
+    var(--color-bg-card) 100%
+  );
+  border: 1px solid var(--color-border-primary);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
@@ -27,7 +32,7 @@
   background: linear-gradient(
     to bottom,
     transparent 40%,
-    rgba(15, 23, 42, 0.8) 100%
+    var(--color-bg-card) 100%
   );
 }
 
@@ -40,9 +45,9 @@
   gap: var(--space-2);
   padding: 0.45rem 0.85rem;
   border-radius: var(--radius-full);
-  background: rgba(15, 23, 42, 0.75);
+  background: var(--color-bg-card-solid);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--color-border-secondary);
   color: #fff;
   font-size: var(--font-size-xs);
   font-weight: 600;
@@ -52,8 +57,8 @@
 }
 
 .changeBannerBtn:hover {
-  background: rgba(15, 23, 42, 0.95);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: var(--color-bg-card-solid);
+  border-color: var(--color-border-accent);
   transform: translateY(-1px);
 }
 
@@ -155,7 +160,7 @@
   align-items: center;
   gap: var(--space-6);
   padding-top: var(--space-4);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--color-border-primary);
 }
 
 .statItem {
@@ -180,7 +185,7 @@
 .tabsList {
   display: flex;
   gap: var(--space-4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--color-border-primary);
   margin-bottom: var(--space-6);
 }
 
@@ -227,9 +232,9 @@
 .emptyState {
   text-align: center;
   padding: var(--space-16) var(--space-4);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border: 1px dashed var(--color-border-primary);
   border-radius: var(--radius-xl);
-  background: rgba(15, 23, 42, 0.3);
+  background: var(--color-bg-tertiary);
 }
 
 .emptyIcon {
@@ -253,8 +258,8 @@
 
 /* About Card */
 .aboutCard {
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   display: flex;
@@ -284,7 +289,7 @@
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--color-border-primary);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   text-decoration: none;

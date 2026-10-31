@@ -27,7 +27,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           isCollapsed={isSidebarCollapsed}
           onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
-        <main className={s['main-layout-main']}>
+        <main id="main-content" className={s['main-layout-main']}>
           <div className={s['main-layout-content']}>{children}</div>
         </main>
       </div>

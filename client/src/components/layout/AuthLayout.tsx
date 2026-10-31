@@ -138,7 +138,9 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
                   </span>
                 </Link>
               </div>
-              <div className={s['auth-layout-card']}>{children}</div>
+              <main id="main-content" className={s['auth-layout-card']}>
+                {children}
+              </main>
             </div>
           </div>
         </div>

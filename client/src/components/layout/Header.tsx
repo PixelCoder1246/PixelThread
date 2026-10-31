@@ -12,8 +12,11 @@ import {
   Settings,
   ChevronDown,
   ShieldAlert,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/useAuth';
+import { useTheme } from '@/providers/ThemeProvider';
 import { Button, Input, Avatar, Dropdown, DropdownItem } from '@/components/ui';
 import { SearchBar } from '@/components/search/SearchBar';
 import { useRouter } from 'next/navigation';
@@ -26,6 +29,7 @@ const s = styles as Record<string, string>;
 export function Header() {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
+  const { resolvedTheme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -116,6 +120,32 @@ export function Header() {
 
         {/* Right: Actions */}
         <div className={s['header-right']}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={s['header-btn']}
+            onClick={toggleTheme}
+            aria-label={
+              resolvedTheme === 'dark'
+                ? 'Switch to light mode'
+                : 'Switch to dark mode'
+            }
+            title={
+              resolvedTheme === 'dark'
+                ? 'Switch to light mode'
+                : 'Switch to dark mode'
+            }
+          >
+            {resolvedTheme === 'dark' ? (
+              <Sun className="h-4 w-4" style={{ color: '#fbbf24' }} />
+            ) : (
+              <Moon
+                className="h-4 w-4"
+                style={{ color: 'var(--color-accent-primary)' }}
+              />
+            )}
+          </Button>
+
           {isAuthenticated ? (
             <>
               <NotificationBell />
@@ -189,6 +219,12 @@ export function Header() {
                   Settings
                 </Link>
                 <button
+                  onClick={toggleTheme}
+                  className={s['header-mobile-nav-link']}
+                >
+                  {resolvedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
+                </button>
+                <button
                   onClick={() => logout()}
                   className={s['header-mobile-nav-link']}
                 >
@@ -197,6 +233,12 @@ export function Header() {
               </nav>
             ) : (
               <nav className={s['header-mobile-nav']}>
+                <button
+                  onClick={toggleTheme}
+                  className={s['header-mobile-nav-link']}
+                >
+                  {resolvedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
+                </button>
                 <Link href="/posts" className={s['header-mobile-nav-link']}>
                   Explore Posts
                 </Link>

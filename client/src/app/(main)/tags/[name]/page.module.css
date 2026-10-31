@@ -107,9 +107,10 @@
   gap: var(--space-3);
   padding: var(--space-16) var(--space-8);
   text-align: center;
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border: 1px dashed var(--color-border-primary);
   border-radius: 1rem;
-  background: rgba(15, 23, 42, 0.3);
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-sm);
 }
 
 .emptyIcon {

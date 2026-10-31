@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/providers';
+import { SkipToContent } from '@/components/ui/SkipToContent';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -70,6 +71,26 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+const themeScript = `
+  (function() {
+    try {
+      var stored = localStorage.getItem('pixelthread_theme');
+      var theme = stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'dark';
+      var resolved = theme === 'system' 
+        ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+        : theme;
+      document.documentElement.setAttribute('data-theme', resolved);
+      if (resolved === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) {}
+  })();
+`;
+
 export default function RootLayout({
   children,
 }: {
@@ -89,8 +110,10 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
+        <SkipToContent />
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -137,7 +137,7 @@ export default function HomePage() {
         <FloatingParticles count={12} />
       </div>
 
-      <main className="relative z-10">
+      <main id="main-content" className="relative z-10">
         {/* Hero Section */}
         <section className="hero">
           <div className="container hero-content">

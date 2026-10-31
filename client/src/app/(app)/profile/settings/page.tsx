@@ -35,6 +35,7 @@ import {
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import { useTheme, type Theme } from '@/providers/ThemeProvider';
 import type { ProfileVisibility } from '@/types/user';
 import styles from './page.module.css';
 
@@ -49,6 +50,7 @@ type SettingsTab =
 export default function ProfileSettingsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { setTheme } = useTheme();
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
 
   // Fetch full settings from API
@@ -138,7 +140,10 @@ export default function ProfileSettingsPage() {
       setNotifyMentions(notifs.mentions !== false);
 
       if (s.language) setLanguage(s.language as string);
-      if (s.themePreference) setThemePreference(s.themePreference as string);
+      if (s.themePreference) {
+        setThemePreference(s.themePreference as string);
+        setTheme(s.themePreference as Theme);
+      }
       if (s.timezone) setTimezone(s.timezone as string);
     }
   }, [settings, user]);
@@ -1090,7 +1095,11 @@ export default function ProfileSettingsPage() {
                   <label className={styles.label}>Theme Appearance</label>
                   <select
                     value={themePreference}
-                    onChange={(e) => setThemePreference(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setThemePreference(val);
+                      setTheme(val as Theme);
+                    }}
                     className={styles.select}
                   >
                     <option value="dark">Dark Theme (Default)</option>

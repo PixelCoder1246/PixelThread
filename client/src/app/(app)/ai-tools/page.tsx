@@ -1390,7 +1390,8 @@ export default function AIToolsPage() {
                         <div
                           key={idx}
                           style={{
-                            background: 'rgba(30, 41, 59, 0.4)',
+                            background: 'var(--color-bg-tertiary)',
+                            border: '1px solid var(--color-border-primary)',
                             padding: '6px 8px',
                             borderRadius: '6px',
                             fontSize: '0.75rem',

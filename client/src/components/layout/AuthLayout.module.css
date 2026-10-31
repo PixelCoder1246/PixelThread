@@ -98,8 +98,8 @@
   padding: var(--space-12) var(--space-12);
   background: linear-gradient(
     135deg,
-    rgba(30, 41, 59, 0.95) 0%,
-    rgba(15, 23, 42, 0.98) 100%
+    var(--color-bg-card-solid) 0%,
+    var(--color-bg-primary) 100%
   );
   border-right: 1px solid var(--color-border-primary);
   position: relative;
@@ -286,10 +286,10 @@
 .auth-layout-card {
   width: 100%;
   max-width: 30rem;
-  background: rgba(15, 23, 42, 0.85);
+  background: var(--color-bg-card-solid);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-2xl);
   padding: var(--space-8);
   box-shadow:

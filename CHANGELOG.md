@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-10-31
+
+### Phase 7: Polish & Production Ready
+
+#### Added
+- **Theme & Dark Mode Architecture (`providers/ThemeProvider.tsx`)**:
+  - Full support for `light`, `dark`, and `system` appearance modes with persistent `localStorage` synchronization and OS media query listeners.
+  - Zero-FOUC (Flash of Unstyled Content) inline theme initialization script in root layout.
+  - Interactive theme toggle button in `Header` with animated `Sun` and `Moon` icons, ARIA descriptions, and tooltips.
+  - Live Theme Appearance selector in Profile Settings (`/profile/settings`) synchronized with the global theme provider.
+- **Light Theme Color Palette Overhaul**:
+  - Introduced clean, high-contrast, modern slate-light palette inspired by Linear/Vercel/Stripe (`#f8fafc` primary background, `#ffffff` elevated cards, `#0f172a` high-contrast typography, and crisp border elevation).
+  - Replaced over 100 hardcoded dark backgrounds (`rgba(15, 23, 42, ...)`, `rgba(30, 41, 59, ...)`) and white borders across all Admin, App, and Main views with dynamic theme tokens.
+  - Designed vibrant Indigo/Violet primary button styling (`--gradient-btn-primary`) ensuring WCAG AA compliant contrast in both light and dark themes.
+- **Resilience & Error Handling System**:
+  - Custom branded 404 page (`app/not-found.tsx`) with fast exploration and search navigation links.
+  - Route error boundary (`app/error.tsx`) with instant reload retry, return home shortcut, and collapsible technical error details.
+  - Root layout error boundary (`app/global-error.tsx`) catching critical runtime failures with adaptive theme tokens.
+  - Network status monitor (`components/ui/OfflineBanner.tsx`) rendering real-time floating status pills when offline/online.
+- **Accessibility & WCAG 2.1 AA Compliance**:
+  - Added `SkipToContent` link for keyboard and screen reader accessibility jumping directly to `#main-content`.
+  - Added semantic `id="main-content"` landmarks across `MainLayout`, `AuthLayout`, and `HomePage`.
+- **Reusable UI Components**:
+  - `components/ui/EmptyState.tsx`: Reusable fallback component for empty feeds, search results, and bookmarks with customizable icons and action CTA buttons.
+- **Unit Testing Suite**:
+  - Native Node.js test suites in `client/tests/utils.test.mjs` and `client/tests/markdown.test.mjs` testing text formatting, number abbreviations, slugification, and markdown parser.
+  - Added `npm test` script to root and client package definitions.
+
+#### Changed
+- Bumped version to `1.7.0` across monorepo root, client, and server packages.
+
 ## [1.6.1] - 2026-10-28
 
 ### Fixes & Enhancements: Admin Operations, Media Management & Modals

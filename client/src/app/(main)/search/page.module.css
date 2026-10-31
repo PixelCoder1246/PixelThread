@@ -49,8 +49,8 @@
 .searchInput {
   width: 100%;
   padding: 0.75rem 2.75rem 0.75rem 2.75rem;
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.75rem;
   font-size: var(--font-size-base);
   color: var(--color-text-primary);
@@ -84,7 +84,7 @@
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-hover-strong);
   border: none;
   cursor: pointer;
   color: var(--color-text-muted);
@@ -92,7 +92,7 @@
 }
 
 .clearBtn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--color-bg-hover-strong);
   color: var(--color-text-primary);
 }
 
@@ -102,8 +102,8 @@
   gap: var(--space-2);
   padding: 0.75rem 1.1rem;
   border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid var(--color-border-primary);
+  background: var(--color-bg-card);
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
   font-weight: 500;
@@ -114,7 +114,7 @@
 }
 
 .filterToggle:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--color-border-primary);
   color: var(--color-text-secondary);
 }
 
@@ -128,8 +128,9 @@
 .filtersPanel {
   margin-top: var(--space-4);
   padding: var(--space-4);
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
+  box-shadow: var(--shadow-md);
   border-radius: 0.75rem;
   animation: slideDown 0.15s ease;
 }
@@ -170,7 +171,7 @@
 .filterOption {
   padding: 0.3rem 0.8rem;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-bg-hover-strong);
   background: transparent;
   color: var(--color-text-dim);
   font-size: var(--font-size-xs);
@@ -181,7 +182,7 @@
 }
 
 .filterOption:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-border-secondary);
   color: var(--color-text-secondary);
 }
 
@@ -202,7 +203,7 @@
 .typeTabs {
   display: flex;
   gap: var(--space-1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid var(--color-border-primary);
   padding-bottom: 0;
 }
 
@@ -262,9 +263,9 @@
   padding: var(--space-16) var(--space-8);
   text-align: center;
   gap: var(--space-4);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border: 1px dashed var(--color-bg-hover-strong);
   border-radius: 1rem;
-  background: rgba(15, 23, 42, 0.3);
+  background: var(--color-bg-tertiary);
 }
 
 .emptyIcon {
@@ -320,15 +321,16 @@
   gap: var(--space-3);
   padding: var(--space-4);
   border-radius: 0.75rem;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
+  box-shadow: var(--shadow-sm);
   text-decoration: none;
   color: inherit;
   transition: all 0.15s ease;
 }
 
 .userCard:hover {
-  background: rgba(30, 41, 59, 0.8);
+  background: var(--color-bg-hover-strong);
   border-color: rgba(139, 92, 246, 0.3);
   transform: translateX(3px);
 }
@@ -375,8 +377,8 @@
   gap: var(--space-2);
   padding: 0.5rem 0.85rem;
   border-radius: 0.65rem;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
   text-decoration: none;
   color: inherit;
   transition: all 0.15s ease;
@@ -441,7 +443,7 @@
 }
 
 .trendingItem:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-bg-hover);
   color: var(--color-text-primary);
 }
 
@@ -454,7 +456,7 @@
   margin-left: auto;
   font-size: var(--font-size-xs);
   color: var(--color-text-dim);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-bg-hover);
   padding: 0.1rem 0.5rem;
   border-radius: 9999px;
 }
@@ -471,8 +473,8 @@
   justify-content: space-between;
   padding: 0.6rem 0.85rem;
   border-radius: 0.65rem;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
   text-decoration: none;
   transition: all 0.15s ease;
 }
@@ -491,7 +493,7 @@
 .popularTagCount {
   font-size: var(--font-size-xs);
   color: var(--color-text-dim);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-bg-hover);
   padding: 0.1rem 0.45rem;
   border-radius: 9999px;
 }

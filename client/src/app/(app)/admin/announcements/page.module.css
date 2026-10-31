@@ -12,10 +12,10 @@
 
 .card {
   padding: 1.5rem;
-  background: rgba(15, 23, 42, 0.7);
+  background: var(--color-bg-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-primary);
   border-radius: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@
 .cardTitle {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -41,7 +41,7 @@
 .label {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
 }
 
 .input,
@@ -49,10 +49,10 @@
 .textarea {
   width: 100%;
   padding: 0.625rem 0.875rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.75rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   font-size: 0.875rem;
   outline: none;
 }
@@ -76,8 +76,8 @@
 
 .announcementItem {
   padding: 1.25rem;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
@@ -94,13 +94,13 @@
 .itemTitle {
   font-size: 1rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .itemContent {
   font-size: 0.875rem;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
   line-height: 1.5;
   margin: 0;
 }
@@ -110,9 +110,9 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--color-border-primary);
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .badgeInfo {
