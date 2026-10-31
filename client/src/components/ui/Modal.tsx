@@ -1,6 +1,7 @@
 'use client';
 
-import { Fragment, ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import styles from './Modal.module.css';
 import { Button } from './Button';
@@ -17,7 +18,7 @@ interface ModalProps {
 
 const sizeClasses: Record<string, string> = {
   sm: styles['modal-sm'],
-  md: styles.modal,
+  md: '',
   lg: styles['modal-lg'],
   xl: styles['modal-lg'],
   full: styles['modal-full'],
@@ -32,8 +33,13 @@ export function Modal({
   size = 'md',
   showClose = true,
 }: ModalProps) {
+  const [mounted, setMounted] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     function handleEscape(event: KeyboardEvent) {
@@ -51,37 +57,27 @@ export function Modal({
     };
   }, [isOpen, onClose]);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (overlayRef.current && overlayRef.current === event.target) {
-        onClose();
-      }
-    }
+  if (!isOpen || !mounted) return null;
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  return (
-    <Fragment>
-      <div
-        ref={overlayRef}
-        className={styles['modal-overlay']}
-        onClick={onClose}
-        aria-hidden="true"
-      />
+  const modalElement = (
+    <div
+      ref={overlayRef}
+      className={styles['modal-overlay']}
+      onClick={(e) => {
+        if (e.target === overlayRef.current) {
+          onClose();
+        }
+      }}
+      role="presentation"
+    >
       <div
         ref={contentRef}
-        className={sizeClasses[size]}
+        className={`${styles.modal} ${sizeClasses[size] || ''}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
         aria-describedby={description ? 'modal-description' : undefined}
+        onClick={(e) => e.stopPropagation()}
       >
         {(title || showClose) && (
           <div className={styles['modal-header']}>
@@ -118,6 +114,8 @@ export function Modal({
         )}
         <div className={styles['modal-body']}>{children}</div>
       </div>
-    </Fragment>
+    </div>
   );
+
+  return createPortal(modalElement, document.body);
 }

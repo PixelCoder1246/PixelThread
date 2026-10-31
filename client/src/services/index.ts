@@ -13,3 +13,4 @@ export * from './analytics.service';
 export * from './ai.service';
 export * from './settings.service';
 export * from './media.service';
+export * from './admin.service';

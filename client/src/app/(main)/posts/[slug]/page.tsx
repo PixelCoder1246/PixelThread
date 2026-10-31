@@ -270,7 +270,9 @@ export default function PostPage() {
             <div className={styles.actionsRight}>
               <button
                 className={`${styles.actionBtn} ${isBookmarked ? styles.bookmarked : ''}`}
-                onClick={() => isAuthenticated && toggleBookmark.mutate()}
+                onClick={() =>
+                  isAuthenticated && toggleBookmark.mutate(isBookmarked)
+                }
                 disabled={!isAuthenticated || toggleBookmark.isPending}
                 aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark post'}
               >

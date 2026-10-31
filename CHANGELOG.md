@@ -5,6 +5,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-10-28
+
+### Fixes & Enhancements: Admin Operations, Media Management & Modals
+
+#### Fixed
+- **Bookmark Mutation Race Condition (`features/bookmarks/useBookmark.ts`)**:
+  - Fixed an inverted optimistic cache state bug where `onMutate` was toggling the cache status *before* `mutationFn` read it, causing initial bookmarking attempts on own posts to dispatch `DELETE` instead of `POST` (resulting in HTTP 404).
+  - Explicitly passed `currentlyBookmarked` parameter across `PostCard`, `PostActions`, and single post pages.
+- **Admin Media Route Shadowing & Orphaned Cleanup (`features/admin/useAdmin.ts`)**:
+  - Resolved backend Express route shadowing on `DELETE /api/admin/media/orphaned` by orchestrating orphaned media cleanup on the client: fetches unreferenced items via `getOrphanedMedia()` and batch-deletes each via `deleteMedia(id)` using `Promise.allSettled`.
+  - Added error toast handling across all administrative mutations (`deleteMedia`, `cleanOrphanedMedia`, `deleteAnnouncement`, `updateSettings`).
+- **Modal Component Architecture (`components/ui/Modal.tsx` & `Modal.module.css`)**:
+  - Re-architected `Modal` to render inside `createPortal(..., document.body)` with SSR mount guards to eliminate layout and container clipping.
+  - Fixed structure where modal dialog content was previously rendered as an unpositioned sibling outside of the overlay, causing it to fall out of view.
+  - Properly applied combined base `.modal` styling and size modifier classes (`modal-sm`, `modal-lg`, etc.).
+  - Set overlay `z-index: 9999` and dialog `z-index: 10000` with background blur backdrop and stop-propagation to ensure modal dialogs always appear centered and interactive on top of navigation headers and sidebars.
+- **Admin Media Library Deletion UX (`admin/media/page.tsx`)**:
+  - Added dedicated confirmation modals for both single-file permanent deletion (with image thumbnail preview, file name, formatted size, and impact warning) and bulk storage cleanup.
+  - Added granular loading spinners and disabled states during active deletion operations.
+
+## [1.6.0] - 2026-10-27
+
+### Phase 6: Admin Dashboard & Operations Portal
+
+#### Added
+- **Admin Hub & Security Guard (`components/layout/AdminRoute.tsx`)**:
+  - Route guard checking for `ADMIN` or `SUPER_ADMIN` user role with glassmorphic Access Denied fallback and return navigation.
+  - Dedicated persistent navigation tab bar in Admin layout (`/admin`, `/admin/users`, `/admin/posts`, `/admin/comments`, `/admin/media`, `/admin/announcements`, `/admin/audit-logs`, `/admin/settings`).
+  - Conditional "Admin Hub" navigation link with shield icon in both sidebar and user profile dropdown.
+- **Admin Overview Dashboard (`/admin`)**:
+  - Live platform health status with KPI cards for total registered users, published posts, engagement activity, and open reports.
+  - Quick action shortcuts to moderation and platform configuration tools.
+- **User Management Portal (`/admin/users`)**:
+  - Searchable, role-filterable, and status-filterable user table.
+  - Interactive Role Change modal (`USER`, `ADMIN`, `SUPER_ADMIN`) with confirmation.
+  - Ban / Unban modal with custom reason specification and instant status updates.
+  - Email verification override action.
+- **Post Moderation Engine (`/admin/posts`)**:
+  - Comprehensive post management table with status filtering (all, published, draft, archived).
+  - Pin/Unpin toggle for highlighting platform announcements and featured content.
+  - Feature/Unfeature spotlight controls.
+  - Soft-archive and restore workflows with confirmation modal.
+  - Permanent post deletion with confirmation modal.
+- **Comment Moderation System (`/admin/comments`)**:
+  - Moderation queue with hide/approve toggles for reported or flaggable discussion items.
+  - Direct comment deletion with parent post references.
+- **Media Optimization & Storage Hub (`/admin/media`)**:
+  - Visual asset explorer displaying image thumbnails, MIME types, file sizes, and creation dates.
+  - One-click public media URL clipboard copy.
+  - 1-click orphaned media scanner and cleanup utility to reclaim cloud and local disk storage.
+- **Broadcast Announcements (`/admin/announcements`)**:
+  - Broadcast creator form supporting announcement title, body, priority types (`INFO`, `WARNING`, `CRITICAL`), and banner styling.
+  - Feed of active announcements with one-click deletion.
+- **Audit Trail & Activity Log (`/admin/audit-logs`)**:
+  - Real-time audit log viewer recording security, user moderation, content lifecycle, and administrative events.
+  - Action-type badge highlighting, IP address tracking, actor attribution, and inspectable JSON metadata.
+- **Platform Configuration Hub (`/admin/settings`)**:
+  - Unified platform settings editor for site name, maintenance mode toggle, open registration toggle, comment permissions, email verification requirements, and daily AI quota limits.
+- **Type-Safe Admin Service & React Query Hooks**:
+  - `client/src/services/admin.service.ts`: Full API client for all `/api/admin/*` endpoints.
+  - `client/src/features/admin/useAdmin.ts`: 9 query hooks and 13 mutation hooks with cache invalidation and toast feedback.
+
+#### Changed
+- Bumped monorepo and client package versions to `1.6.0`.
+
 ## [1.5.0] - 2026-10-27
 
 ### Phase 5: AI Writing Assistant & Drag-and-Drop Media Uploads

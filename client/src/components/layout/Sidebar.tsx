@@ -18,6 +18,7 @@ import {
   Hash,
   Users,
   Sparkles,
+  ShieldAlert,
 } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { ROUTES } from '@/lib/constants';
@@ -109,7 +110,17 @@ export function Sidebar({
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   // Render all navigation items so visitors can explore every feature
-  const navItems = navigation;
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
+  const navItems = isAdmin
+    ? [
+        ...navigation,
+        {
+          name: 'Admin Hub',
+          href: ROUTES.ADMIN,
+          icon: ShieldAlert,
+        },
+      ]
+    : navigation;
 
   return (
     <>

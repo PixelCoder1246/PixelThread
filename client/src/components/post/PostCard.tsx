@@ -70,7 +70,7 @@ export function PostCard({ post, variant = 'default' }: PostCardProps) {
     e.preventDefault();
     e.stopPropagation();
     if (isAuthenticated) {
-      toggleBookmark.mutate();
+      toggleBookmark.mutate(isBookmarked);
     }
   };
 

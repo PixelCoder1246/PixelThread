@@ -27,6 +27,14 @@ export const ROUTES = {
   TAG_POSTS: (name: string) => `/tags/${name}`,
   SETTINGS: '/settings',
   DASHBOARD: '/dashboard',
+  ADMIN: '/admin',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_POSTS: '/admin/posts',
+  ADMIN_COMMENTS: '/admin/comments',
+  ADMIN_MEDIA: '/admin/media',
+  ADMIN_ANNOUNCEMENTS: '/admin/announcements',
+  ADMIN_AUDIT_LOGS: '/admin/audit-logs',
+  ADMIN_SETTINGS: '/admin/settings',
 } as const;
 
 export const STORAGE_KEYS = {

@@ -11,6 +11,7 @@ import {
   LogOut,
   Settings,
   ChevronDown,
+  ShieldAlert,
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/useAuth';
 import { Button, Input, Avatar, Dropdown, DropdownItem } from '@/components/ui';
@@ -46,6 +47,8 @@ export function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isSearchOpen]);
 
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
+
   const userMenuItems: DropdownItem[] = [
     {
       label: 'Profile',
@@ -53,6 +56,17 @@ export function Header() {
         router.push(user?.id ? `/profile/${user.id}` : '/dashboard'),
       icon: <User className="h-4 w-4" />,
     },
+    ...(isAdmin
+      ? [
+          {
+            label: 'Admin Hub',
+            onClick: () => router.push(ROUTES.ADMIN),
+            icon: (
+              <ShieldAlert className="h-4 w-4" style={{ color: '#f87171' }} />
+            ),
+          },
+        ]
+      : []),
     {
       label: 'Settings',
       onClick: () => router.push('/profile/settings'),

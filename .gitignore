@@ -45,4 +45,6 @@ server/public/uploads/*
 server/src/public/uploads/*
 !server/src/public/uploads/.gitkeep
 
-/.opencode/plans/PLAN.md
+# OpenCode files
+.opencode/
+

@@ -78,7 +78,7 @@ export function PostActions({ post, onCommentsClick }: PostActionsProps) {
       });
       return;
     }
-    toggleBookmark.mutate();
+    toggleBookmark.mutate(isBookmarked);
     toast({
       title: isBookmarked ? 'Removed from bookmarks' : 'Saved to bookmarks',
       message: isBookmarked

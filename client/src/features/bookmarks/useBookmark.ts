@@ -15,27 +15,46 @@ export function useToggleBookmark(postId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
-      const status = queryClient.getQueryData(
-        queryKeys.bookmarks.status(postId)
-      ) as { isBookmarked: boolean } | undefined;
-      if (status?.isBookmarked) {
+    mutationFn: async (currentlyBookmarked?: boolean) => {
+      let isBookmarked: boolean;
+
+      if (typeof currentlyBookmarked === 'boolean') {
+        isBookmarked = currentlyBookmarked;
+      } else {
+        const cached = queryClient.getQueryData(
+          queryKeys.bookmarks.status(postId)
+        ) as { isBookmarked: boolean; _optimistic?: boolean } | undefined;
+
+        if (cached?._optimistic) {
+          isBookmarked = !cached.isBookmarked;
+        } else {
+          isBookmarked = cached?.isBookmarked ?? false;
+        }
+      }
+
+      if (isBookmarked) {
         return bookmarksService.removeBookmark(postId);
       }
       return bookmarksService.bookmarkPost(postId);
     },
-    onMutate: async () => {
+    onMutate: async (currentlyBookmarked?: boolean) => {
       await queryClient.cancelQueries({
         queryKey: queryKeys.bookmarks.status(postId),
       });
       const prev = queryClient.getQueryData(
         queryKeys.bookmarks.status(postId)
       ) as { isBookmarked: boolean } | undefined;
-      if (prev !== undefined) {
-        queryClient.setQueryData(queryKeys.bookmarks.status(postId), {
-          isBookmarked: !prev.isBookmarked,
-        });
-      }
+
+      const wasBookmarked =
+        typeof currentlyBookmarked === 'boolean'
+          ? currentlyBookmarked
+          : (prev?.isBookmarked ?? false);
+
+      queryClient.setQueryData(queryKeys.bookmarks.status(postId), {
+        isBookmarked: !wasBookmarked,
+        _optimistic: true,
+      });
+
       return { prev };
     },
     onError: (_err, _vars, ctx) => {
