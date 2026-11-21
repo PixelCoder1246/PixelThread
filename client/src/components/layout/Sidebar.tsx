@@ -6,8 +6,6 @@ import { useUIStore } from '@/store';
 import { useAuthStore } from '@/store';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import ThemeToggle from '@/components/common/ThemeToggle';
-import { useThemeMode } from '@/hooks/useTheme';
 import {
   Rss,
   Compass,
@@ -33,7 +31,6 @@ export default function Sidebar() {
   const { user } = useAuthStore();
   const pathname = usePathname();
 
-  const { toggleTheme } = useThemeMode();
   const isCollapsed = !sidebarOpen;
   const initials = user ? getInitials(user.name) : '';
   const avatarColor = user ? getRandomColor(user.name) : '';
@@ -44,11 +41,14 @@ export default function Sidebar() {
         className={cn(
           styles.sidebar,
           isCollapsed && styles.collapsed,
-          mobileMenuOpen && styles.open,
+          mobileMenuOpen && styles.open
         )}
       >
         <div className={styles.logoSection}>
-          <Link href="/" className={cn(styles.logo, isCollapsed && styles.logoCollapsed)}>
+          <Link
+            href="/"
+            className={cn(styles.logo, isCollapsed && styles.logoCollapsed)}
+          >
             {isCollapsed ? 'PT' : 'PixelThread'}
           </Link>
         </div>
@@ -58,12 +58,16 @@ export default function Sidebar() {
             <span className={styles.navLabel}>Navigation</span>
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + '/');
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={cn(styles.navItem, isActive && styles.navItemActive)}
+                  className={cn(
+                    styles.navItem,
+                    isActive && styles.navItemActive
+                  )}
                   onClick={() => mobileMenuOpen && toggleMobileMenu()}
                 >
                   <span className={styles.navIcon}>
@@ -88,13 +92,6 @@ export default function Sidebar() {
             <span className={styles.navText}>Settings</span>
           </Link>
 
-          <span className={styles.navItem} onClick={toggleTheme} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && toggleTheme()}>
-            <span className={styles.navIcon}>
-              <ThemeToggle />
-            </span>
-            <span className={styles.navText}>Theme</span>
-          </span>
-
           {user && (
             <Link
               href="/profile"
@@ -102,7 +99,11 @@ export default function Sidebar() {
               onClick={() => mobileMenuOpen && toggleMobileMenu()}
             >
               {user.image ? (
-                <img src={user.image} alt={user.name} className={styles.userAvatar} />
+                <img
+                  src={user.image}
+                  alt={user.name}
+                  className={styles.userAvatar}
+                />
               ) : (
                 <span
                   className={styles.userAvatarFallback}
@@ -113,7 +114,9 @@ export default function Sidebar() {
               )}
               <div className={styles.userDetails}>
                 <span className={styles.userName}>{user.name}</span>
-                <span className={styles.userRole}>{user.role === 'ADMIN' ? 'Admin' : 'Member'}</span>
+                <span className={styles.userRole}>
+                  {user.role === 'ADMIN' ? 'Admin' : 'Member'}
+                </span>
               </div>
             </Link>
           )}

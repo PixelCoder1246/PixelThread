@@ -30,7 +30,8 @@ const parseAIResponse = (response) => {
   if (!response || !response.choices || response.choices.length === 0) {
     throw new Error('Empty AI response received');
   }
-  return response.choices[0].message.content;
+  const message = response.choices[0].message;
+  return message?.content || message?.reasoning_content || '';
 };
 
 const tryParse = (str) => {
@@ -123,7 +124,7 @@ const extractJSON = (text) => {
   logger.warn('No parseable JSON found in AI response', {
     preview: cleaned.slice(0, 500),
   });
-  
+
   // Return a fallback object instead of throwing
   return {
     content: cleaned,
@@ -137,7 +138,6 @@ const extractJSON = (text) => {
 };
 
 const repairJSON = (raw) => {
-  let depth = 0;
   let inString = false;
   let escaped = false;
   let result = '';

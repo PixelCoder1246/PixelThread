@@ -2,7 +2,7 @@ const openapi = {
   openapi: '3.1.0',
   info: {
     title: 'PixelThread API',
-    version: '1.0.0',
+    version: '1.2.0',
     description: `AI-powered blogging platform API.
 
 ## Authentication

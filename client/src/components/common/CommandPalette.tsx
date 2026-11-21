@@ -4,8 +4,18 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store';
-import { useThemeMode } from '@/hooks/useTheme';
-import { Search, FileText, BarChart3, Settings, Bookmark, Bell, Sun, Moon, Users, LayoutDashboard, Command, ArrowRight } from 'lucide-react';
+import {
+  Search,
+  FileText,
+  BarChart3,
+  Settings,
+  Bookmark,
+  Bell,
+  Users,
+  LayoutDashboard,
+  Command,
+  ArrowRight,
+} from 'lucide-react';
 import styles from './CommandPalette.module.css';
 
 interface Action {
@@ -23,7 +33,6 @@ export default function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { isDark, toggleTheme } = useThemeMode();
 
   const actions: Action[] = [
     {
@@ -75,24 +84,20 @@ export default function CommandPalette() {
       group: 'Navigation',
       onSelect: () => router.push('/admin'),
     },
-    {
-      id: 'theme',
-      label: `Switch to ${isDark ? 'light' : 'dark'} mode`,
-      icon: isDark ? <Sun size={16} /> : <Moon size={16} />,
-      group: 'Actions',
-      onSelect: () => toggleTheme(),
-    },
   ];
 
   const filteredActions = query
     ? actions.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()))
     : actions;
 
-  const groups = filteredActions.reduce<Record<string, Action[]>>((acc, action) => {
-    if (!acc[action.group]) acc[action.group] = [];
-    acc[action.group].push(action);
-    return acc;
-  }, {});
+  const groups = filteredActions.reduce<Record<string, Action[]>>(
+    (acc, action) => {
+      if (!acc[action.group]) acc[action.group] = [];
+      acc[action.group].push(action);
+      return acc;
+    },
+    {}
+  );
 
   const flatActions = filteredActions;
   const hasResults = flatActions.length > 0;
@@ -127,7 +132,9 @@ export default function CommandPalette() {
         break;
       case 'ArrowUp':
         e.preventDefault();
-        setSelectedIndex((prev) => (prev - 1 + flatActions.length) % flatActions.length);
+        setSelectedIndex(
+          (prev) => (prev - 1 + flatActions.length) % flatActions.length
+        );
         break;
       case 'Enter':
         e.preventDefault();
@@ -142,7 +149,9 @@ export default function CommandPalette() {
 
   useEffect(() => {
     if (listRef.current) {
-      const selected = listRef.current.querySelector(`[data-index="${selectedIndex}"]`);
+      const selected = listRef.current.querySelector(
+        `[data-index="${selectedIndex}"]`
+      );
       if (selected) {
         selected.scrollIntoView({ block: 'nearest' });
       }
@@ -163,7 +172,13 @@ export default function CommandPalette() {
   if (!commandPaletteOpen) return null;
 
   return (
-    <div className={styles.overlay} onClick={close} role="dialog" aria-modal="true" aria-label="Command palette">
+    <div
+      className={styles.overlay}
+      onClick={close}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command palette"
+    >
       <div
         className={styles.palette}
         onClick={(e) => e.stopPropagation()}
@@ -196,7 +211,10 @@ export default function CommandPalette() {
                       key={action.id}
                       type="button"
                       data-index={actionIndex}
-                      className={cn(styles.action, selectedIndex === actionIndex && styles.actionSelected)}
+                      className={cn(
+                        styles.action,
+                        selectedIndex === actionIndex && styles.actionSelected
+                      )}
                       onClick={() => handleSelect(actionIndex)}
                       onMouseEnter={() => setSelectedIndex(actionIndex)}
                     >

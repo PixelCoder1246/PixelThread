@@ -34,7 +34,7 @@ export function Providers({ children }: ProvidersProps) {
 
     async function initAuth() {
       useAuthStore.getState().setLoading(true);
-      
+
       timeoutId = setTimeout(() => {
         if (!cancelled) {
           console.warn('Auth initialization timed out, clearing auth state');
@@ -49,8 +49,8 @@ export function Providers({ children }: ProvidersProps) {
           useAuthStore.getState().setUser(userData);
         }
       } catch (_error) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const _ = _error;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const _ = _error;
         if (!cancelled) {
           clearTimeout(timeoutId);
           useAuthStore.getState().clearAuth();
@@ -70,7 +70,8 @@ export function Providers({ children }: ProvidersProps) {
       <ThemeProvider
         attribute="data-theme"
         defaultTheme="dark"
-        enableSystem
+        forcedTheme="dark"
+        enableSystem={false}
         disableTransitionOnChange
       >
         <RouteProgress />

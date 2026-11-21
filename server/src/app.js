@@ -32,7 +32,6 @@ const {
   readinessCheck,
   metricsHandler,
 } = require('./middleware/monitoring');
-const logger = require('./config/logger');
 
 const app = express();
 
@@ -72,9 +71,25 @@ app.use(
 
 app.use(compression());
 
+const configuredOrigins = (process.env.CLIENT_URL || 'http://localhost:3000')
+  .split(',')
+  .map((url) => url.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const isAllowed =
+        configuredOrigins.includes(origin) ||
+        origin === 'http://localhost:3000' ||
+        /^https:\/\/.*\.vercel\.app$/.test(origin);
+
+      if (isAllowed) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS origin not allowed: ${origin}`));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

@@ -141,7 +141,12 @@ export interface AiGenerationResponse {
   metaDescription?: string;
   keywords?: string[];
   canonicalUrl?: string;
-  tokenUsage: TokenUsage;
+  faqs?: Array<{ question: string; answer: string }>;
+  continuation?: string;
+  socialPost?: string | Record<string, unknown>;
+  twitter?: string;
+  linkedin?: string;
+  tokenUsage?: TokenUsage;
 }
 
 export interface TokenUsage {

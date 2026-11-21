@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import {
-  Settings,
   Edit3,
   Heart,
   MessageCircle,
@@ -22,7 +21,14 @@ import AuthLoader from '@/components/common/AuthLoader';
 import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
 import EmptyState from '@/components/common/EmptyState';
-import { formatRelativeDate, formatNumber, getInitials, getRandomColor, cn, calculateReadingTime } from '@/lib/utils';
+import {
+  formatRelativeDate,
+  formatNumber,
+  getInitials,
+  getRandomColor,
+  cn,
+  calculateReadingTime,
+} from '@/lib/utils';
 import type { Post } from '@/types';
 import styles from './page.module.css';
 
@@ -36,7 +42,13 @@ function extractFirstImage(content: unknown): string | null {
   }
   if (Array.isArray(content)) {
     for (const block of content) {
-      if (block && typeof block === 'object' && 'url' in block && typeof block.url === 'string' && block.url) {
+      if (
+        block &&
+        typeof block === 'object' &&
+        'url' in block &&
+        typeof block.url === 'string' &&
+        block.url
+      ) {
         return block.url;
       }
       if (block && typeof block === 'object' && 'content' in block) {
@@ -54,7 +66,11 @@ export default function ProfilePage() {
   const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<ProfileTab>('posts');
-  const { data: postsData, isLoading: postsLoading, isError } = usePosts({ limit: 20 });
+  const {
+    data: postsData,
+    isLoading: postsLoading,
+    isError,
+  } = usePosts({ limit: 20 });
 
   const { data: followersData } = useQuery({
     queryKey: ['followers', user?.id],
@@ -83,16 +99,21 @@ export default function ProfilePage() {
   const publishedPosts = posts.filter((p) => p.status === 'PUBLISHED');
   const draftPosts = posts.filter((p) => p.status === 'DRAFT');
 
-  const displayPosts = activeTab === 'drafts' ? draftPosts : activeTab === 'liked' ? [] : publishedPosts;
+  const displayPosts =
+    activeTab === 'drafts'
+      ? draftPosts
+      : activeTab === 'liked'
+        ? []
+        : publishedPosts;
 
   const stats = {
     posts: publishedPosts.length,
     drafts: draftPosts.length,
     followers: followersData?.pagination
-      ? (followersData.pagination as { total?: number }).total ?? 0
+      ? ((followersData.pagination as { total?: number }).total ?? 0)
       : 0,
     following: followingData?.pagination
-      ? (followingData.pagination as { total?: number }).total ?? 0
+      ? ((followingData.pagination as { total?: number }).total ?? 0)
       : 0,
   };
 
@@ -114,7 +135,10 @@ export default function ProfilePage() {
             {user.image ? (
               <img src={user.image} alt={user.name} className={styles.avatar} />
             ) : (
-              <div className={styles.avatarPlaceholder} style={{ background: avatarBg }}>
+              <div
+                className={styles.avatarPlaceholder}
+                style={{ background: avatarBg }}
+              >
                 {initials}
               </div>
             )}
@@ -133,28 +157,26 @@ export default function ProfilePage() {
             >
               Edit Profile
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              leftIcon={<Settings size={14} />}
-              onClick={() => router.push('/settings')}
-            >
-              Settings
-            </Button>
           </div>
         </div>
 
         <div className={styles.stats}>
           <div className={styles.stat}>
-            <span className={styles.statValue}>{formatNumber(stats.posts)}</span>
+            <span className={styles.statValue}>
+              {formatNumber(stats.posts)}
+            </span>
             <span className={styles.statLabel}>Posts</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statValue}>{formatNumber(stats.followers)}</span>
+            <span className={styles.statValue}>
+              {formatNumber(stats.followers)}
+            </span>
             <span className={styles.statLabel}>Followers</span>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statValue}>{formatNumber(stats.following)}</span>
+            <span className={styles.statValue}>
+              {formatNumber(stats.following)}
+            </span>
             <span className={styles.statLabel}>Following</span>
           </div>
         </div>
@@ -162,21 +184,30 @@ export default function ProfilePage() {
         <div className={styles.tabs}>
           <button
             type="button"
-            className={cn(styles.tab, activeTab === 'posts' && styles.tabActive)}
+            className={cn(
+              styles.tab,
+              activeTab === 'posts' && styles.tabActive
+            )}
             onClick={() => setActiveTab('posts')}
           >
             My Posts
           </button>
           <button
             type="button"
-            className={cn(styles.tab, activeTab === 'drafts' && styles.tabActive)}
+            className={cn(
+              styles.tab,
+              activeTab === 'drafts' && styles.tabActive
+            )}
             onClick={() => setActiveTab('drafts')}
           >
             Drafts {draftPosts.length > 0 && `(${draftPosts.length})`}
           </button>
           <button
             type="button"
-            className={cn(styles.tab, activeTab === 'liked' && styles.tabActive)}
+            className={cn(
+              styles.tab,
+              activeTab === 'liked' && styles.tabActive
+            )}
             onClick={() => setActiveTab('liked')}
           >
             Liked Posts
@@ -207,35 +238,63 @@ export default function ProfilePage() {
                   : 'Posts you like will appear here'
             }
             actionLabel={activeTab === 'posts' ? 'Create Post' : undefined}
-            onAction={activeTab === 'posts' ? () => router.push('/posts/create') : undefined}
+            onAction={
+              activeTab === 'posts'
+                ? () => router.push('/posts/create')
+                : undefined
+            }
           />
         ) : (
           <div className={styles.postGrid}>
             {displayPosts.map((post) => {
               const coverImg = extractFirstImage(post.content);
-              const readingTime = calculateReadingTime(post.content || post.excerpt || '');
+              const readingTime = calculateReadingTime(
+                post.content || post.excerpt || ''
+              );
               return (
-                <Link key={post.id} href={`/posts/${post.slug}`} className={styles.postCard}>
+                <Link
+                  key={post.id}
+                  href={`/posts/${post.slug}`}
+                  className={styles.postCard}
+                >
                   {coverImg && (
                     <div className={styles.postCardImage}>
-                      <img src={coverImg} alt="" className={styles.postCardImg} />
+                      <img
+                        src={coverImg}
+                        alt=""
+                        className={styles.postCardImg}
+                      />
                     </div>
                   )}
                   <div className={styles.postCardBody}>
                     {post.tags?.length > 0 && (
                       <div className={styles.postCardTags}>
                         {post.tags.slice(0, 3).map((tag) => (
-                          <Badge key={tag.id} variant="primary" size="sm">#{tag.name}</Badge>
+                          <Badge key={tag.id} variant="primary" size="sm">
+                            #{tag.name}
+                          </Badge>
                         ))}
                       </div>
                     )}
                     <h3 className={styles.postCardTitle}>{post.title}</h3>
-                    {post.excerpt && <p className={styles.postCardExcerpt}>{post.excerpt}</p>}
+                    {post.excerpt && (
+                      <p className={styles.postCardExcerpt}>{post.excerpt}</p>
+                    )}
                     <div className={styles.postCardMeta}>
                       <div className={styles.postCardMetaLeft}>
-                        <span>{formatRelativeDate(post.publishedAt || post.createdAt)}</span>
+                        <span>
+                          {formatRelativeDate(
+                            post.publishedAt || post.createdAt
+                          )}
+                        </span>
                         <span className={styles.metaDot} />
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 4,
+                          }}
+                        >
                           <Clock size={12} />
                           {readingTime} min read
                         </span>
