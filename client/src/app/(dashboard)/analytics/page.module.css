@@ -94,12 +94,24 @@
   opacity: 0.6;
 }
 
-.statCardPrimary::before { background: var(--primary-500); }
-.statCardAccent::before { background: var(--accent-500); }
-.statCardEmerald::before { background: var(--emerald-500); }
-.statCardAmber::before { background: var(--amber-500); }
-.statCardRose::before { background: var(--rose-500); }
-.statCardInfo::before { background: var(--color-info); }
+.statCardPrimary::before {
+  background: var(--primary-500);
+}
+.statCardAccent::before {
+  background: var(--accent-500);
+}
+.statCardEmerald::before {
+  background: var(--emerald-500);
+}
+.statCardAmber::before {
+  background: var(--amber-500);
+}
+.statCardRose::before {
+  background: var(--rose-500);
+}
+.statCardInfo::before {
+  background: var(--color-info);
+}
 
 .statCard:hover {
   background: var(--bg-tertiary);
@@ -124,12 +136,30 @@
   border-radius: var(--radius-xl);
 }
 
-.statIconPrimary { background: color-mix(in srgb, var(--primary-500) 12%, transparent); color: var(--primary-500); }
-.statIconAccent { background: color-mix(in srgb, var(--accent-500) 12%, transparent); color: var(--accent-500); }
-.statIconEmerald { background: color-mix(in srgb, var(--emerald-500) 12%, transparent); color: var(--emerald-500); }
-.statIconAmber { background: color-mix(in srgb, var(--amber-500) 12%, transparent); color: var(--amber-500); }
-.statIconRose { background: color-mix(in srgb, var(--rose-500) 12%, transparent); color: var(--rose-500); }
-.statIconInfo { background: color-mix(in srgb, var(--color-info) 12%, transparent); color: var(--color-info); }
+.statIconPrimary {
+  background: color-mix(in srgb, var(--primary-500) 12%, transparent);
+  color: var(--primary-500);
+}
+.statIconAccent {
+  background: color-mix(in srgb, var(--accent-500) 12%, transparent);
+  color: var(--accent-500);
+}
+.statIconEmerald {
+  background: color-mix(in srgb, var(--emerald-500) 12%, transparent);
+  color: var(--emerald-500);
+}
+.statIconAmber {
+  background: color-mix(in srgb, var(--amber-500) 12%, transparent);
+  color: var(--amber-500);
+}
+.statIconRose {
+  background: color-mix(in srgb, var(--rose-500) 12%, transparent);
+  color: var(--rose-500);
+}
+.statIconInfo {
+  background: color-mix(in srgb, var(--color-info) 12%, transparent);
+  color: var(--color-info);
+}
 
 .statTrend {
   display: flex;
@@ -257,9 +287,15 @@
   color: var(--text-tertiary);
 }
 
-.topPostRankGold { color: var(--amber-500); }
-.topPostRankSilver { color: var(--text-tertiary); }
-.topPostRankBronze { color: var(--amber-700); }
+.topPostRankGold {
+  color: var(--amber-500);
+}
+.topPostRankSilver {
+  color: var(--text-tertiary);
+}
+.topPostRankBronze {
+  color: var(--amber-700);
+}
 
 .topPostTitle {
   font-size: var(--fs-sm);
@@ -309,11 +345,32 @@
   margin-top: var(--space-0_5);
 }
 
-.activityIconLike { background: var(--color-error-bg); color: var(--color-error); }
-.activityIconComment { background: var(--color-info-bg); color: var(--color-info); }
-.activityIconPost { background: color-mix(in srgb, var(--primary-500) 12%, transparent); color: var(--primary-500); }
-.activityIconNotice { background: color-mix(in srgb, var(--accent-500) 12%, transparent); color: var(--accent-500); }
-.emptyChart { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-tertiary); font-size: var(--fs-sm); padding: var(--space-8); text-align: center; }
+.activityIconLike {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+.activityIconComment {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+.activityIconPost {
+  background: color-mix(in srgb, var(--primary-500) 12%, transparent);
+  color: var(--primary-500);
+}
+.activityIconNotice {
+  background: color-mix(in srgb, var(--accent-500) 12%, transparent);
+  color: var(--accent-500);
+}
+.emptyChart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-tertiary);
+  font-size: var(--fs-sm);
+  padding: var(--space-8);
+  text-align: center;
+}
 
 .activityContent {
   flex: 1;

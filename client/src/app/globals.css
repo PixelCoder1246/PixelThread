@@ -22,7 +22,9 @@ body {
   line-height: var(--lh-normal);
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color var(--transition-base), color var(--transition-base);
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
   min-height: 100vh;
 }
 
@@ -59,7 +61,12 @@ select {
   color: inherit;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: var(--fw-semibold);
   line-height: var(--lh-tight);
   letter-spacing: -0.025em;
@@ -69,7 +76,8 @@ p {
   line-height: var(--lh-relaxed);
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -131,8 +139,12 @@ table {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
@@ -182,7 +194,8 @@ table {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

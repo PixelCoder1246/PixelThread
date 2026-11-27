@@ -10,7 +10,11 @@ interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
+export default function AuthLayout({
+  title,
+  subtitle,
+  children,
+}: AuthLayoutProps) {
   return (
     <div className={styles.layout}>
       <div className={styles.brandPanel}>
@@ -22,8 +26,8 @@ export default function AuthLayout({ title, subtitle, children }: AuthLayoutProp
             PixelThread
           </Link>
           <p className={styles.brandDescription}>
-            Create, publish, and grow your audience with powerful writing tools and AI-powered
-            insights.
+            Create, publish, and grow your audience with powerful writing tools
+            and AI-powered insights.
           </p>
         </div>
       </div>

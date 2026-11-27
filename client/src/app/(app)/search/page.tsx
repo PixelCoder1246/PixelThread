@@ -40,7 +40,10 @@ function saveRecentSearch(query: string) {
   try {
     const recent = getRecentSearches().filter((s) => s !== query);
     recent.unshift(query);
-    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
+    localStorage.setItem(
+      RECENT_SEARCHES_KEY,
+      JSON.stringify(recent.slice(0, MAX_RECENT))
+    );
   } catch {
     // silently fail
   }
@@ -60,7 +63,9 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get('q') || '');
-  const [selectedTag, setSelectedTag] = useState<string | undefined>(searchParams.get('tag') ?? undefined);
+  const [selectedTag, setSelectedTag] = useState<string | undefined>(
+    searchParams.get('tag') ?? undefined
+  );
   const [sort, setSort] = useState<string>(SORT_OPTIONS.RELEVANCE);
   const [tags, setTags] = useState<Tag[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -70,7 +75,10 @@ export default function SearchPage() {
 
   useEffect(() => {
     setRecentSearches(getRecentSearches());
-    tagsService.getAll({ limit: 30 }).then((res) => setTags(res.tags)).catch(() => {});
+    tagsService
+      .getAll({ limit: 30 })
+      .then((res) => setTags(res.tags))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -83,7 +91,8 @@ export default function SearchPage() {
     if (tag) setSelectedTag(tag);
   }, [searchParams]);
 
-  const searchEnabled = hasSubmitted && debouncedQuery.length >= SEARCH_MIN_QUERY;
+  const searchEnabled =
+    hasSubmitted && debouncedQuery.length >= SEARCH_MIN_QUERY;
   const { data, isLoading, isError, error } = useSearchPosts(
     searchEnabled
       ? { q: debouncedQuery, tag: selectedTag, sort }
@@ -107,23 +116,29 @@ export default function SearchPage() {
     }
   }, [query, selectedTag, router]);
 
-  const handleRecentClick = useCallback((q: string) => {
-    setQuery(q);
-    saveRecentSearch(q);
-    setRecentSearches(getRecentSearches());
-    setHasSubmitted(true);
-    const params = new URLSearchParams({ q });
-    if (selectedTag) params.set('tag', selectedTag);
-    router.push(`/search?${params.toString()}`);
-  }, [selectedTag, router]);
+  const handleRecentClick = useCallback(
+    (q: string) => {
+      setQuery(q);
+      saveRecentSearch(q);
+      setRecentSearches(getRecentSearches());
+      setHasSubmitted(true);
+      const params = new URLSearchParams({ q });
+      if (selectedTag) params.set('tag', selectedTag);
+      router.push(`/search?${params.toString()}`);
+    },
+    [selectedTag, router]
+  );
 
   const handleTagFilter = useCallback((tagName: string) => {
     setSelectedTag((prev) => (prev === tagName ? undefined : tagName));
   }, []);
 
-  const handleSortChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSort(e.target.value);
-  }, []);
+  const handleSortChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSort(e.target.value);
+    },
+    []
+  );
 
   const clearFilters = useCallback(() => {
     setSelectedTag(undefined);
@@ -139,28 +154,47 @@ export default function SearchPage() {
             value={query}
             onChange={handleSearch}
             placeholder="Search posts..."
-            onClear={() => { setQuery(''); setHasSubmitted(false); }}
+            onClear={() => {
+              setQuery('');
+              setHasSubmitted(false);
+            }}
           />
         </div>
         <p className={styles.prompt}>
-          Search by title, content, or tags. Minimum {SEARCH_MIN_QUERY} characters.
+          Search by title, content, or tags. Minimum {SEARCH_MIN_QUERY}{' '}
+          characters.
         </p>
       </div>
 
       {!hasSubmitted && recentSearches.length > 0 && (
         <section className={styles.recentSearches}>
           <h2 className={styles.recentTitle}>
-            <Clock size={14} style={{ display: 'inline', marginRight: 'var(--space-1)', verticalAlign: 'middle' }} />
+            <Clock
+              size={14}
+              style={{
+                display: 'inline',
+                marginRight: 'var(--space-1)',
+                verticalAlign: 'middle',
+              }}
+            />
             Recent Searches
           </h2>
           <div className={styles.recentList}>
             {recentSearches.map((q) => (
-              <span key={q} className={styles.recentItem} onClick={() => handleRecentClick(q)}>
+              <span
+                key={q}
+                className={styles.recentItem}
+                onClick={() => handleRecentClick(q)}
+              >
                 {q}
                 <button
                   type="button"
                   className={styles.recentRemove}
-                  onClick={(e) => { e.stopPropagation(); removeRecentSearch(q); setRecentSearches(getRecentSearches()); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeRecentSearch(q);
+                    setRecentSearches(getRecentSearches());
+                  }}
                   aria-label={`Remove ${q}`}
                 >
                   <X size={12} />
@@ -194,7 +228,9 @@ export default function SearchPage() {
             aria-label="Sort by"
           >
             {SORT_OPTIONS_LIST.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
             ))}
           </select>
         </div>
@@ -204,10 +240,17 @@ export default function SearchPage() {
         <LoadingState message="Searching..." />
       ) : isError ? (
         <div className={styles.error}>
-          <p style={{ color: 'var(--color-error)', marginBottom: 'var(--space-3)' }}>
+          <p
+            style={{
+              color: 'var(--color-error)',
+              marginBottom: 'var(--space-3)',
+            }}
+          >
             {(error as Error)?.message || 'Search failed'}
           </p>
-          <Button variant="secondary" onClick={handleSearchSubmit}>Try Again</Button>
+          <Button variant="secondary" onClick={handleSearchSubmit}>
+            Try Again
+          </Button>
         </div>
       ) : hasSubmitted && posts.length === 0 ? (
         <EmptyState
@@ -215,8 +258,10 @@ export default function SearchPage() {
           title="No results found"
           description={`No posts match "${query}"${selectedTag ? ` in #${selectedTag}` : ''}. Try different keywords or filters.`}
           action={
-            (selectedTag || sort !== SORT_OPTIONS.RELEVANCE) ? (
-              <Button variant="secondary" onClick={clearFilters}>Clear Filters</Button>
+            selectedTag || sort !== SORT_OPTIONS.RELEVANCE ? (
+              <Button variant="secondary" onClick={clearFilters}>
+                Clear Filters
+              </Button>
             ) : undefined
           }
         />
@@ -235,18 +280,26 @@ export default function SearchPage() {
               {post.tags?.length > 0 && (
                 <div className={styles.resultTags}>
                   {post.tags.map((tag) => (
-                    <Badge key={tag.id} variant="default" size="sm">#{tag.name}</Badge>
+                    <Badge key={tag.id} variant="default" size="sm">
+                      #{tag.name}
+                    </Badge>
                   ))}
                 </div>
               )}
               <div className={styles.resultMeta}>
                 <span>{post.author.name}</span>
                 <span>&middot;</span>
-                <span>{formatRelativeDate(post.publishedAt ?? post.createdAt)}</span>
+                <span>
+                  {formatRelativeDate(post.publishedAt ?? post.createdAt)}
+                </span>
                 <span>&middot;</span>
-                <span className={styles.metaCount}>{formatNumber(post.analytics.views)} views</span>
+                <span className={styles.metaCount}>
+                  {formatNumber(post.analytics.views)} views
+                </span>
                 <span>&middot;</span>
-                <span className={styles.metaCount}>{formatNumber(post.analytics.likes)} likes</span>
+                <span className={styles.metaCount}>
+                  {formatNumber(post.analytics.likes)} likes
+                </span>
               </div>
             </article>
           ))}

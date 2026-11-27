@@ -13,7 +13,12 @@ interface SearchSuggestions {
 }
 
 export const searchService = {
-  async search(params: { q: string; type?: string; page?: number; limit?: number }): Promise<SearchResults & { pagination: unknown }> {
+  async search(params: {
+    q: string;
+    type?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<SearchResults & { pagination: unknown }> {
     const res = await api.get('/search', { params });
     return res.data.data;
   },
@@ -28,7 +33,9 @@ export const searchService = {
     return res.data.data;
   },
 
-  async getSearchHistory(): Promise<{ queries: { query: string; createdAt: string }[] }> {
+  async getSearchHistory(): Promise<{
+    queries: { query: string; createdAt: string }[];
+  }> {
     const res = await api.get('/search/history');
     return res.data.data;
   },
@@ -42,7 +49,11 @@ export const searchService = {
     return res.data.data;
   },
 
-  async getAuthors(params: { q?: string; page?: number; limit?: number }): Promise<{ authors: User[]; pagination: unknown }> {
+  async getAuthors(params: {
+    q?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<{ authors: User[]; pagination: unknown }> {
     const res = await api.get('/search/authors', { params });
     return res.data.data;
   },

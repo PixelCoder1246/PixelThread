@@ -355,13 +355,68 @@ const getSuggestions = async (q) => {
   return { posts, users, tags };
 };
 
+const CURATED_TRENDING = [
+  { keyword: 'Artificial Intelligence', count: 48 },
+  { keyword: 'Web Engineering', count: 36 },
+  { keyword: 'Next.js & React', count: 29 },
+  { keyword: 'Design Systems', count: 24 },
+  { keyword: 'Future of Work', count: 18 },
+  { keyword: 'Cloud & Architecture', count: 15 },
+];
+
+const CURATED_TAGS = [
+  { id: 'tag-ai', name: 'ai', postCount: 14 },
+  { id: 'tag-webdev', name: 'webdev', postCount: 11 },
+  { id: 'tag-react', name: 'react', postCount: 9 },
+  { id: 'tag-typescript', name: 'typescript', postCount: 8 },
+  { id: 'tag-design', name: 'design', postCount: 7 },
+  { id: 'tag-productivity', name: 'productivity', postCount: 6 },
+  { id: 'tag-technology', name: 'technology', postCount: 5 },
+  { id: 'tag-career', name: 'career', postCount: 4 },
+];
+
 const getTrending = async () => {
-  const trending = await prisma.trendingSearch.findMany({
-    orderBy: { count: 'desc' },
-    take: TRENDING_LIMIT,
-    select: { keyword: true, count: true },
-  });
-  return trending;
+  try {
+    const trending = await prisma.trendingSearch.findMany({
+      orderBy: { count: 'desc' },
+      take: TRENDING_LIMIT,
+      select: { keyword: true, count: true },
+    });
+
+    if (trending.length >= 4) {
+      return trending;
+    }
+
+    const topTags = await prisma.tag.findMany({
+      take: 6,
+      orderBy: { posts: { _count: 'desc' } },
+      select: { name: true, _count: { select: { posts: true } } },
+    });
+
+    const combined = [...trending];
+    const existingKeywords = new Set(
+      trending.map((t) => t.keyword.toLowerCase())
+    );
+
+    for (const tag of topTags) {
+      if (!existingKeywords.has(tag.name.toLowerCase())) {
+        combined.push({ keyword: tag.name, count: tag._count.posts || 5 });
+        existingKeywords.add(tag.name.toLowerCase());
+      }
+    }
+
+    for (const item of CURATED_TRENDING) {
+      if (!existingKeywords.has(item.keyword.toLowerCase())) {
+        combined.push(item);
+        existingKeywords.add(item.keyword.toLowerCase());
+      }
+      if (combined.length >= TRENDING_LIMIT) break;
+    }
+
+    return combined.slice(0, TRENDING_LIMIT);
+  } catch {
+    return CURATED_TRENDING;
+  }
 };
 
 const recordTrending = async (keyword) => {
@@ -398,16 +453,37 @@ const deleteHistory = async (userId) => {
 };
 
 const getPopularTags = async () => {
-  const tags = await prisma.tag.findMany({
-    orderBy: { posts: { _count: 'desc' } },
-    take: TRENDING_LIMIT,
-    select: {
-      id: true,
-      name: true,
-      _count: { select: { posts: true } },
-    },
-  });
-  return tags.map(formatTag);
+  try {
+    const tags = await prisma.tag.findMany({
+      orderBy: { posts: { _count: 'desc' } },
+      take: TRENDING_LIMIT,
+      select: {
+        id: true,
+        name: true,
+        _count: { select: { posts: true } },
+      },
+    });
+
+    const formatted = tags.map(formatTag);
+    if (formatted.length >= 4) {
+      return formatted;
+    }
+
+    const existingNames = new Set(formatted.map((t) => t.name.toLowerCase()));
+    const combined = [...formatted];
+
+    for (const tag of CURATED_TAGS) {
+      if (!existingNames.has(tag.name.toLowerCase())) {
+        combined.push(tag);
+        existingNames.add(tag.name.toLowerCase());
+      }
+      if (combined.length >= TRENDING_LIMIT) break;
+    }
+
+    return combined.slice(0, TRENDING_LIMIT);
+  } catch {
+    return CURATED_TAGS;
+  }
 };
 
 const getDiscoverAuthors = async ({ page, limit }) => {

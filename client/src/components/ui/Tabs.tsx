@@ -17,7 +17,12 @@ interface TabsProps {
   className?: string;
 }
 
-export default function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
+export default function Tabs({
+  tabs,
+  activeTab,
+  onChange,
+  className,
+}: TabsProps) {
   return (
     <div className={cn(styles.wrapper, className)} role="tablist">
       {tabs.map((tab) => (

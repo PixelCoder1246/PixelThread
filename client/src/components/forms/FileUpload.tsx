@@ -39,13 +39,14 @@ export default function FileUpload({
     [onDrop]
   );
 
-  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
-    onDrop: handleDrop,
-    accept,
-    maxFiles,
-    maxSize,
-    disabled: files.length >= maxFiles,
-  });
+  const { getRootProps, getInputProps, isDragActive, isDragReject } =
+    useDropzone({
+      onDrop: handleDrop,
+      accept,
+      maxFiles,
+      maxSize,
+      disabled: files.length >= maxFiles,
+    });
 
   const isImageFile = (file: File) => file.type.startsWith('image/');
 
@@ -64,10 +65,13 @@ export default function FileUpload({
         <input {...getInputProps()} />
         <Upload size={24} className={styles.uploadIcon} />
         <p className={styles.dropText}>
-          {isDragActive ? 'Drop files here' : 'Drag & drop files or click to browse'}
+          {isDragActive
+            ? 'Drop files here'
+            : 'Drag & drop files or click to browse'}
         </p>
         <p className={styles.dropHint}>
-          Max {maxFiles} file{maxFiles !== 1 ? 's' : ''} up to {Math.round(maxSize / 1024 / 1024)}MB each
+          Max {maxFiles} file{maxFiles !== 1 ? 's' : ''} up to{' '}
+          {Math.round(maxSize / 1024 / 1024)}MB each
         </p>
       </div>
       {error && <p className={styles.error}>{error}</p>}
@@ -77,10 +81,18 @@ export default function FileUpload({
             <li key={index} className={styles.previewItem}>
               <div className={styles.previewInfo}>
                 {isImageFile(item.file) && item.preview ? (
-                  <img src={item.preview} alt={item.file.name} className={styles.thumbnail} />
+                  <img
+                    src={item.preview}
+                    alt={item.file.name}
+                    className={styles.thumbnail}
+                  />
                 ) : (
                   <div className={styles.fileIcon}>
-                    {isImageFile(item.file) ? <Image size={20} /> : <File size={20} />}
+                    {isImageFile(item.file) ? (
+                      <Image size={20} />
+                    ) : (
+                      <File size={20} />
+                    )}
                   </div>
                 )}
                 <div className={styles.fileDetails}>

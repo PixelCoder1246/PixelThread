@@ -48,7 +48,10 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Sign in to your account to continue">
+    <AuthLayout
+      title="Welcome back"
+      subtitle="Sign in to your account to continue"
+    >
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         {submitError && (
           <div className={styles.errorAlert} role="alert">
@@ -92,7 +95,12 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <Button type="submit" fullWidth isLoading={isLoggingIn} className={styles.submitButton}>
+        <Button
+          type="submit"
+          fullWidth
+          isLoading={isLoggingIn}
+          className={styles.submitButton}
+        >
           Sign in
         </Button>
       </form>

@@ -1,7 +1,10 @@
 export const APP_NAME = 'PixelThread';
-export const APP_DESCRIPTION = 'Where Ideas Come to Life — AI-powered blogging platform for thinkers, creators, and storytellers.';
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+export const APP_DESCRIPTION =
+  'Where Ideas Come to Life — AI-powered blogging platform for thinkers, creators, and storytellers.';
+export const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export const ROUTES = {
   HOME: '/',
@@ -97,6 +100,11 @@ export const DEBOUNCE_DELAY = 300;
 export const SEARCH_MIN_QUERY = 2;
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024;
-export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+export const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+];
 
 export const READING_SPEED = 200;

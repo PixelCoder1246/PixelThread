@@ -12,11 +12,20 @@ interface SwitchProps {
   className?: string;
 }
 
-export default function Switch({ checked, onChange, label, disabled = false, className }: SwitchProps) {
+export default function Switch({
+  checked,
+  onChange,
+  label,
+  disabled = false,
+  className,
+}: SwitchProps) {
   const id = useId();
 
   return (
-    <label htmlFor={id} className={cn(styles.wrapper, disabled && styles.disabled, className)}>
+    <label
+      htmlFor={id}
+      className={cn(styles.wrapper, disabled && styles.disabled, className)}
+    >
       <button
         id={id}
         role="switch"

@@ -332,8 +332,12 @@
   animation: fadeInUp 0.2s ease;
 }
 
-.toastSuccess { border-left: 3px solid var(--color-success); }
-.toastError { border-left: 3px solid var(--color-error); }
+.toastSuccess {
+  border-left: 3px solid var(--color-success);
+}
+.toastError {
+  border-left: 3px solid var(--color-error);
+}
 
 .toastMessage {
   font-size: var(--fs-sm);

@@ -27,7 +27,12 @@ export default function AdminPage() {
   const { isLoading: authLoading } = useRequireAdmin();
   const router = useRouter();
 
-  const { data: analytics, isLoading, isError, refetch } = useQuery({
+  const {
+    data: analytics,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ['admin', 'analytics'],
     queryFn: analyticsService.getAdminAnalytics,
     enabled: !authLoading,
@@ -59,28 +64,98 @@ export default function AdminPage() {
     return (
       <div className={styles.page}>
         <div className={styles.error}>
-          <div className={styles.errorTitle}>Failed to load admin dashboard</div>
-          <p className={styles.errorMessage}>Something went wrong. Please try again.</p>
-          <Button variant="primary" onClick={() => refetch()}>Retry</Button>
+          <div className={styles.errorTitle}>
+            Failed to load admin dashboard
+          </div>
+          <p className={styles.errorMessage}>
+            Something went wrong. Please try again.
+          </p>
+          <Button variant="primary" onClick={() => refetch()}>
+            Retry
+          </Button>
         </div>
       </div>
     );
   }
 
   const stats = [
-    { key: 'users', icon: Users, label: 'Total Users', value: analytics?.totalUsers ?? 0, iconClass: 'statIconUsers' },
-    { key: 'posts', icon: FileText, label: 'Total Posts', value: analytics?.totalPosts ?? 0, iconClass: 'statIconPosts' },
-    { key: 'published', icon: CheckCircle, label: 'Published', value: analytics?.publishedPosts ?? 0, iconClass: 'statIconPublished' },
-    { key: 'drafts', icon: Clock, label: 'Drafts', value: analytics?.draftPosts ?? 0, iconClass: 'statIconDrafts' },
-    { key: 'comments', icon: MessageCircle, label: 'Comments', value: analytics?.totalComments ?? 0, iconClass: 'statIconComments' },
-    { key: 'views', icon: Eye, label: 'Total Views', value: analytics?.totalViews ?? 0, iconClass: 'statIconViews' },
+    {
+      key: 'users',
+      icon: Users,
+      label: 'Total Users',
+      value: analytics?.totalUsers ?? 0,
+      iconClass: 'statIconUsers',
+    },
+    {
+      key: 'posts',
+      icon: FileText,
+      label: 'Total Posts',
+      value: analytics?.totalPosts ?? 0,
+      iconClass: 'statIconPosts',
+    },
+    {
+      key: 'published',
+      icon: CheckCircle,
+      label: 'Published',
+      value: analytics?.publishedPosts ?? 0,
+      iconClass: 'statIconPublished',
+    },
+    {
+      key: 'drafts',
+      icon: Clock,
+      label: 'Drafts',
+      value: analytics?.draftPosts ?? 0,
+      iconClass: 'statIconDrafts',
+    },
+    {
+      key: 'comments',
+      icon: MessageCircle,
+      label: 'Comments',
+      value: analytics?.totalComments ?? 0,
+      iconClass: 'statIconComments',
+    },
+    {
+      key: 'views',
+      icon: Eye,
+      label: 'Total Views',
+      value: analytics?.totalViews ?? 0,
+      iconClass: 'statIconViews',
+    },
   ];
 
   const quickActions = [
-    { key: 'users', icon: Users, label: 'Manage Users', desc: 'View, edit, and manage user accounts', route: '/admin/users', iconClass: 'quickActionIconUsers' },
-    { key: 'posts', icon: FileText, label: 'Manage Posts', desc: 'Review and moderate all posts', route: '/admin/posts', iconClass: 'quickActionIconPosts' },
-    { key: 'reports', icon: Flag, label: 'View Reports', desc: 'Handle reported content', route: '/admin/reports', iconClass: 'quickActionIconReports' },
-    { key: 'settings', icon: Settings, label: 'Platform Settings', desc: 'Configure site-wide preferences', route: '/admin/settings', iconClass: 'quickActionIconSettings' },
+    {
+      key: 'users',
+      icon: Users,
+      label: 'Manage Users',
+      desc: 'View, edit, and manage user accounts',
+      route: '/admin/users',
+      iconClass: 'quickActionIconUsers',
+    },
+    {
+      key: 'posts',
+      icon: FileText,
+      label: 'Manage Posts',
+      desc: 'Review and moderate all posts',
+      route: '/admin/posts',
+      iconClass: 'quickActionIconPosts',
+    },
+    {
+      key: 'reports',
+      icon: Flag,
+      label: 'View Reports',
+      desc: 'Handle reported content',
+      route: '/admin/reports',
+      iconClass: 'quickActionIconReports',
+    },
+    {
+      key: 'settings',
+      icon: Settings,
+      label: 'Platform Settings',
+      desc: 'Configure site-wide preferences',
+      route: '/admin/settings',
+      iconClass: 'quickActionIconSettings',
+    },
   ];
 
   return (
@@ -102,7 +177,9 @@ export default function AdminPage() {
           return (
             <div key={stat.key} className={styles.statCard}>
               <div className={styles.statHeader}>
-                <div className={`${styles.statIconWrapper} ${styles[stat.iconClass]}`}>
+                <div
+                  className={`${styles.statIconWrapper} ${styles[stat.iconClass]}`}
+                >
                   <Icon size={18} />
                 </div>
               </div>
@@ -127,7 +204,9 @@ export default function AdminPage() {
                 className={styles.quickActionCard}
                 onClick={() => router.push(action.route)}
               >
-                <div className={`${styles.quickActionIcon} ${styles[action.iconClass]}`}>
+                <div
+                  className={`${styles.quickActionIcon} ${styles[action.iconClass]}`}
+                >
                   <Icon size={22} />
                 </div>
                 <div className={styles.quickActionInfo}>
@@ -144,57 +223,123 @@ export default function AdminPage() {
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Recent Users</h2>
-          <button type="button" className={styles.sectionLink} onClick={() => router.push('/admin/users')}>
+          <button
+            type="button"
+            className={styles.sectionLink}
+            onClick={() => router.push('/admin/users')}
+          >
             View all
           </button>
         </div>
         {recentUsers?.users?.length ? (
-          recentUsers.users.slice(0, 5).map((user: { id: string; name: string; email: string; role: string; image: string | null; createdAt: string }) => (
-            <div key={user.id} className={styles.userRow}>
-              {user.image ? (
-                <img src={user.image} alt="" className={styles.userAvatar} />
-              ) : (
-                <div className={styles.userAvatar}>{getInitials(user.name)}</div>
-              )}
-              <div>
-                <div className={styles.userName}>{user.name}</div>
-                <div className={styles.userEmail}>{user.email}</div>
-              </div>
-              <div className={styles.userRole}>
-                <Badge variant={user.role === 'ADMIN' ? 'accent' : 'default'} size="sm">{user.role}</Badge>
-              </div>
-              <span className={styles.postDate}>{formatRelativeDate(user.createdAt)}</span>
-            </div>
-          ))
+          recentUsers.users
+            .slice(0, 5)
+            .map(
+              (user: {
+                id: string;
+                name: string;
+                email: string;
+                role: string;
+                image: string | null;
+                createdAt: string;
+              }) => (
+                <div key={user.id} className={styles.userRow}>
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt=""
+                      className={styles.userAvatar}
+                    />
+                  ) : (
+                    <div className={styles.userAvatar}>
+                      {getInitials(user.name)}
+                    </div>
+                  )}
+                  <div>
+                    <div className={styles.userName}>{user.name}</div>
+                    <div className={styles.userEmail}>{user.email}</div>
+                  </div>
+                  <div className={styles.userRole}>
+                    <Badge
+                      variant={user.role === 'ADMIN' ? 'accent' : 'default'}
+                      size="sm"
+                    >
+                      {user.role}
+                    </Badge>
+                  </div>
+                  <span className={styles.postDate}>
+                    {formatRelativeDate(user.createdAt)}
+                  </span>
+                </div>
+              )
+            )
         ) : (
-          <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-sm)', padding: 'var(--space-4)' }}>No users found.</p>
+          <p
+            style={{
+              color: 'var(--text-tertiary)',
+              fontSize: 'var(--fs-sm)',
+              padding: 'var(--space-4)',
+            }}
+          >
+            No users found.
+          </p>
         )}
       </div>
 
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Recent Posts</h2>
-          <button type="button" className={styles.sectionLink} onClick={() => router.push('/admin/posts')}>
+          <button
+            type="button"
+            className={styles.sectionLink}
+            onClick={() => router.push('/admin/posts')}
+          >
             View all
           </button>
         </div>
         {recentPosts?.posts?.length ? (
-          recentPosts.posts.slice(0, 5).map((post: { id: string; title: string; status: string; views?: number; createdAt: string }) => (
-            <div key={post.id} className={styles.postRow}>
-              <div className={styles.postTitle}>{post.title}</div>
-              <div className={styles.postStat}>
-                <Badge
-                  variant={post.status === 'PUBLISHED' ? 'success' : post.status === 'DRAFT' ? 'warning' : 'default'}
-                  size="sm"
-                >
-                  {post.status}
-                </Badge>
-              </div>
-              <div className={styles.postDate}>{formatRelativeDate(post.createdAt)}</div>
-            </div>
-          ))
+          recentPosts.posts
+            .slice(0, 5)
+            .map(
+              (post: {
+                id: string;
+                title: string;
+                status: string;
+                views?: number;
+                createdAt: string;
+              }) => (
+                <div key={post.id} className={styles.postRow}>
+                  <div className={styles.postTitle}>{post.title}</div>
+                  <div className={styles.postStat}>
+                    <Badge
+                      variant={
+                        post.status === 'PUBLISHED'
+                          ? 'success'
+                          : post.status === 'DRAFT'
+                            ? 'warning'
+                            : 'default'
+                      }
+                      size="sm"
+                    >
+                      {post.status}
+                    </Badge>
+                  </div>
+                  <div className={styles.postDate}>
+                    {formatRelativeDate(post.createdAt)}
+                  </div>
+                </div>
+              )
+            )
         ) : (
-          <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-sm)', padding: 'var(--space-4)' }}>No posts found.</p>
+          <p
+            style={{
+              color: 'var(--text-tertiary)',
+              fontSize: 'var(--fs-sm)',
+              padding: 'var(--space-4)',
+            }}
+          >
+            No posts found.
+          </p>
         )}
       </div>
     </div>

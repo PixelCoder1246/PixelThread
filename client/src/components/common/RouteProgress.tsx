@@ -55,7 +55,13 @@ export default function RouteProgress() {
 
       const href = anchor.getAttribute('href');
       if (!href) return;
-      if (href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+      if (
+        href.startsWith('#') ||
+        href.startsWith('http') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:')
+      )
+        return;
       if (anchor.target === '_blank') return;
 
       start();
@@ -70,6 +76,10 @@ export default function RouteProgress() {
   }, [pathname, finish]);
 
   return (
-    <div className={cn(styles.bar, visible && styles.visible)} style={{ transform: `scaleX(${progress / 100})` }} aria-hidden="true" />
+    <div
+      className={cn(styles.bar, visible && styles.visible)}
+      style={{ transform: `scaleX(${progress / 100})` }}
+      aria-hidden="true"
+    />
   );
 }

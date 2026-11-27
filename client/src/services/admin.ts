@@ -13,12 +13,17 @@ export const adminService = {
   },
 
   async getUserById(userId: string): Promise<User> {
-    const res = await api.get<ApiResponse<{ user: User }>>(`/admin/users/${userId}`);
+    const res = await api.get<ApiResponse<{ user: User }>>(
+      `/admin/users/${userId}`
+    );
     return res.data.data.user;
   },
 
   async updateUserRole(userId: string, role: 'USER' | 'ADMIN'): Promise<User> {
-    const res = await api.patch<ApiResponse<{ user: User }>>(`/admin/users/${userId}/role`, { role });
+    const res = await api.patch<ApiResponse<{ user: User }>>(
+      `/admin/users/${userId}/role`,
+      { role }
+    );
     return res.data.data.user;
   },
 
@@ -170,7 +175,10 @@ export const adminService = {
     return res.data.data;
   },
 
-  async createAnnouncement(data: { title: string; content: string }): Promise<void> {
+  async createAnnouncement(data: {
+    title: string;
+    content: string;
+  }): Promise<void> {
     await api.post('/admin/announcements', data);
   },
 

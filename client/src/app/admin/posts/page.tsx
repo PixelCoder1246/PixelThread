@@ -22,17 +22,24 @@ export default function AdminPostsPage() {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<Post | null>(null);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
   const limit = 10;
 
-  const showToast = useCallback((type: 'success' | 'error', message: string) => {
-    setToast({ type, message });
-    setTimeout(() => setToast(null), 3000);
-  }, []);
+  const showToast = useCallback(
+    (type: 'success' | 'error', message: string) => {
+      setToast({ type, message });
+      setTimeout(() => setToast(null), 3000);
+    },
+    []
+  );
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['admin', 'posts', page, statusFilter],
-    queryFn: () => adminService.getPosts({ page, limit, status: statusFilter || undefined }),
+    queryFn: () =>
+      adminService.getPosts({ page, limit, status: statusFilter || undefined }),
     enabled: !authLoading,
   });
 
@@ -76,8 +83,12 @@ export default function AdminPostsPage() {
       <div className={styles.page}>
         <div className={styles.error}>
           <div className={styles.errorTitle}>Failed to load posts</div>
-          <p className={styles.errorMessage}>Something went wrong. Please try again.</p>
-          <Button variant="primary" onClick={() => refetch()}>Retry</Button>
+          <p className={styles.errorMessage}>
+            Something went wrong. Please try again.
+          </p>
+          <Button variant="primary" onClick={() => refetch()}>
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -93,7 +104,10 @@ export default function AdminPostsPage() {
         <div className={styles.filters}>
           <select
             value={statusFilter}
-            onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
             className={styles.statusSelect}
           >
             <option value="">All Status</option>
@@ -122,7 +136,14 @@ export default function AdminPostsPage() {
           <tbody>
             {posts.length === 0 ? (
               <tr>
-                <td colSpan={9} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-tertiary)' }}>
+                <td
+                  colSpan={9}
+                  style={{
+                    textAlign: 'center',
+                    padding: 'var(--space-8)',
+                    color: 'var(--text-tertiary)',
+                  }}
+                >
                   No posts found.
                 </td>
               </tr>
@@ -135,37 +156,80 @@ export default function AdminPostsPage() {
                   <td>
                     <div className={styles.authorCell}>
                       {post.author.image ? (
-                        <img src={post.author.image} alt="" className={styles.authorAvatar} />
+                        <img
+                          src={post.author.image}
+                          alt=""
+                          className={styles.authorAvatar}
+                        />
                       ) : (
-                        <div className={styles.authorAvatarPlaceholder}>{getInitials(post.author.name)}</div>
+                        <div className={styles.authorAvatarPlaceholder}>
+                          {getInitials(post.author.name)}
+                        </div>
                       )}
-                      <span className={styles.authorName}>{post.author.name}</span>
+                      <span className={styles.authorName}>
+                        {post.author.name}
+                      </span>
                     </div>
                   </td>
                   <td>
                     <Badge
-                      variant={post.status === 'PUBLISHED' ? 'success' : post.status === 'DRAFT' ? 'warning' : 'default'}
+                      variant={
+                        post.status === 'PUBLISHED'
+                          ? 'success'
+                          : post.status === 'DRAFT'
+                            ? 'warning'
+                            : 'default'
+                      }
                       size="sm"
                     >
                       {post.status}
                     </Badge>
                   </td>
                   <td>
-                    <Badge variant={post.visibility === 'PUBLIC' ? 'primary' : 'default'} size="sm">
+                    <Badge
+                      variant={
+                        post.visibility === 'PUBLIC' ? 'primary' : 'default'
+                      }
+                      size="sm"
+                    >
                       {post.visibility}
                     </Badge>
                   </td>
-                  <td style={{ textAlign: 'right', fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)' }}>
+                  <td
+                    style={{
+                      textAlign: 'right',
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
                     {formatNumber(post.analytics?.views ?? 0)}
                   </td>
-                  <td style={{ textAlign: 'right', fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)' }}>
+                  <td
+                    style={{
+                      textAlign: 'right',
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
                     {formatNumber(post.analytics?.likes ?? 0)}
                   </td>
-                  <td style={{ textAlign: 'right', fontSize: 'var(--fs-sm)', color: 'var(--text-secondary)' }}>
+                  <td
+                    style={{
+                      textAlign: 'right',
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
                     {formatNumber(post.analytics?.comments ?? 0)}
                   </td>
                   <td>
-                    <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>
+                    <span
+                      style={{
+                        fontSize: 'var(--fs-xs)',
+                        color: 'var(--text-tertiary)',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       {formatDate(post.createdAt)}
                     </span>
                   </td>
@@ -205,16 +269,18 @@ export default function AdminPostsPage() {
             >
               Prev
             </button>
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                type="button"
-                className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
-                onClick={() => setPage(p)}
-              >
-                {p}
-              </button>
-            ))}
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+              (p) => (
+                <button
+                  key={p}
+                  type="button"
+                  className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              )
+            )}
             <button
               type="button"
               className={styles.pageBtn}
@@ -223,23 +289,30 @@ export default function AdminPostsPage() {
             >
               Next
             </button>
-            <span className={styles.pageInfo}>
-              {pagination.total} total
-            </span>
+            <span className={styles.pageInfo}>{pagination.total} total</span>
           </div>
         )}
       </div>
 
       {deleteTarget && (
-        <div className={styles.confirmOverlay} onClick={() => setDeleteTarget(null)}>
-          <div className={styles.confirmDialog} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={styles.confirmOverlay}
+          onClick={() => setDeleteTarget(null)}
+        >
+          <div
+            className={styles.confirmDialog}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className={styles.confirmTitle}>Delete Post</h3>
             <p className={styles.confirmMessage}>
-              Are you sure you want to delete <strong>{deleteTarget.title}</strong>?
-              This action cannot be undone.
+              Are you sure you want to delete{' '}
+              <strong>{deleteTarget.title}</strong>? This action cannot be
+              undone.
             </p>
             <div className={styles.confirmActions}>
-              <Button variant="ghost" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+              <Button variant="ghost" onClick={() => setDeleteTarget(null)}>
+                Cancel
+              </Button>
               <Button
                 variant="danger"
                 isLoading={deleteMutation.isPending}
@@ -253,7 +326,9 @@ export default function AdminPostsPage() {
       )}
 
       {toast && (
-        <div className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}>
+        <div
+          className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}
+        >
           <span className={styles.toastMessage}>{toast.message}</span>
         </div>
       )}

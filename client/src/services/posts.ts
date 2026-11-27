@@ -27,9 +27,13 @@ export const postsService = {
       data.files.forEach((file) => formData.append('files', file));
     }
 
-    const res = await api.post<ApiResponse<{ post: Post }>>('/posts', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const res = await api.post<ApiResponse<{ post: Post }>>(
+      '/posts',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
     return res.data.data.post;
   },
 
@@ -45,9 +49,13 @@ export const postsService = {
       }
     });
 
-    const res = await api.put<ApiResponse<{ post: Post }>>(`/posts/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const res = await api.put<ApiResponse<{ post: Post }>>(
+      `/posts/${id}`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
     return res.data.data.post;
   },
 
@@ -72,8 +80,14 @@ export const postsService = {
     return res.data.data;
   },
 
-  async updateSeo(id: string, data: Partial<SeoMetadata>): Promise<SeoMetadata> {
-    const res = await api.patch<ApiResponse<SeoMetadata>>(`/posts/${id}/seo`, data);
+  async updateSeo(
+    id: string,
+    data: Partial<SeoMetadata>
+  ): Promise<SeoMetadata> {
+    const res = await api.patch<ApiResponse<SeoMetadata>>(
+      `/posts/${id}/seo`,
+      data
+    );
     return res.data.data;
   },
 
@@ -81,7 +95,9 @@ export const postsService = {
     await api.post(`/posts/${id}/view`);
   },
 
-  async getAnalytics(id: string): Promise<{ views: number; likes: number; comments: number }> {
+  async getAnalytics(
+    id: string
+  ): Promise<{ views: number; likes: number; comments: number }> {
     const res = await api.get(`/posts/${id}/analytics`);
     return res.data;
   },

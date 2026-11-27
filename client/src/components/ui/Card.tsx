@@ -29,7 +29,7 @@ export default function Card({
         styles[variant],
         styles[`padding-${padding}`],
         hoverable && styles.hoverable,
-        className,
+        className
       )}
     >
       {children}

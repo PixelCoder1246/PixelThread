@@ -60,8 +60,12 @@ function NotificationSkeleton() {
         <div key={i} className={styles.skeletonItem}>
           <div className={styles.skeletonIcon} />
           <div className={styles.skeletonBody}>
-            <div className={cn(styles.skeletonLine, styles.skeletonLineMedium)} />
-            <div className={cn(styles.skeletonLine, styles.skeletonLineShort)} />
+            <div
+              className={cn(styles.skeletonLine, styles.skeletonLineMedium)}
+            />
+            <div
+              className={cn(styles.skeletonLine, styles.skeletonLineShort)}
+            />
           </div>
         </div>
       ))}
@@ -82,37 +86,43 @@ export default function NotificationsPage() {
   const [markingAll, setMarkingAll] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const fetchNotifications = useCallback(async (p: number, append: boolean) => {
-    if (append) {
-      setIsLoadingMore(true);
-    } else {
-      setIsLoadingData(true);
-    }
-    setError(null);
-
-    try {
-      const res = await notificationsService.getAll({
-        page: p,
-        limit: PAGINATION.DEFAULT_LIMIT,
-        type: filter === 'unread' ? 'unread' : undefined,
-      });
-      const items = res.notifications;
-      const pagination = res.pagination as { hasNextPage: boolean; page: number };
-
+  const fetchNotifications = useCallback(
+    async (p: number, append: boolean) => {
       if (append) {
-        setNotifications((prev) => [...prev, ...items]);
+        setIsLoadingMore(true);
       } else {
-        setNotifications(items);
+        setIsLoadingData(true);
       }
-      setHasMore(pagination.hasNextPage);
-      setPage(p);
-    } catch {
-      setError('Failed to load notifications');
-    } finally {
-      setIsLoadingData(false);
-      setIsLoadingMore(false);
-    }
-  }, [filter]);
+      setError(null);
+
+      try {
+        const res = await notificationsService.getAll({
+          page: p,
+          limit: PAGINATION.DEFAULT_LIMIT,
+          type: filter === 'unread' ? 'unread' : undefined,
+        });
+        const items = res.notifications;
+        const pagination = res.pagination as {
+          hasNextPage: boolean;
+          page: number;
+        };
+
+        if (append) {
+          setNotifications((prev) => [...prev, ...items]);
+        } else {
+          setNotifications(items);
+        }
+        setHasMore(pagination.hasNextPage);
+        setPage(p);
+      } catch {
+        setError('Failed to load notifications');
+      } finally {
+        setIsLoadingData(false);
+        setIsLoadingMore(false);
+      }
+    },
+    [filter]
+  );
 
   useEffect(() => {
     if (isLoading || !isAuthenticated) return;
@@ -154,21 +164,26 @@ export default function NotificationsPage() {
     }
   }, []);
 
-  const handleNotificationClick = useCallback(async (notification: Notification) => {
-    if (!notification.read) {
-      try {
-        await notificationsService.markAsRead(notification.id);
-        setNotifications((prev) =>
-          prev.map((n) => (n.id === notification.id ? { ...n, read: true } : n))
-        );
-      } catch {
-        // silently fail
+  const handleNotificationClick = useCallback(
+    async (notification: Notification) => {
+      if (!notification.read) {
+        try {
+          await notificationsService.markAsRead(notification.id);
+          setNotifications((prev) =>
+            prev.map((n) =>
+              n.id === notification.id ? { ...n, read: true } : n
+            )
+          );
+        } catch {
+          // silently fail
+        }
       }
-    }
-    if (notification.link) {
-      router.push(notification.link);
-    }
-  }, [router]);
+      if (notification.link) {
+        router.push(notification.link);
+      }
+    },
+    [router]
+  );
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -183,7 +198,9 @@ export default function NotificationsPage() {
           <Button
             variant="ghost"
             size="sm"
-            leftIcon={markingAll ? <Spinner size="sm" /> : <CheckCheck size={16} />}
+            leftIcon={
+              markingAll ? <Spinner size="sm" /> : <CheckCheck size={16} />
+            }
             onClick={handleMarkAllRead}
             disabled={markingAll}
           >
@@ -197,12 +214,21 @@ export default function NotificationsPage() {
           <button
             key={f.id}
             type="button"
-            className={cn(styles.filterTab, filter === f.id && styles.filterTabActive)}
+            className={cn(
+              styles.filterTab,
+              filter === f.id && styles.filterTabActive
+            )}
             onClick={() => setFilter(f.id)}
           >
             {f.label}
             {f.id === 'unread' && unreadCount > 0 && (
-              <span style={{ marginLeft: 'var(--space-1_5)', fontSize: 'var(--fs-xs)', color: 'var(--primary-500)' }}>
+              <span
+                style={{
+                  marginLeft: 'var(--space-1_5)',
+                  fontSize: 'var(--fs-xs)',
+                  color: 'var(--primary-500)',
+                }}
+              >
                 ({unreadCount})
               </span>
             )}
@@ -218,8 +244,18 @@ export default function NotificationsPage() {
         <NotificationSkeleton />
       ) : error ? (
         <div className={styles.error}>
-          <p style={{ color: 'var(--color-error)', marginBottom: 'var(--space-3)' }}>{error}</p>
-          <Button variant="secondary" onClick={() => fetchNotifications(PAGINATION.DEFAULT_PAGE, false)}>
+          <p
+            style={{
+              color: 'var(--color-error)',
+              marginBottom: 'var(--space-3)',
+            }}
+          >
+            {error}
+          </p>
+          <Button
+            variant="secondary"
+            onClick={() => fetchNotifications(PAGINATION.DEFAULT_PAGE, false)}
+          >
             Try Again
           </Button>
         </div>
@@ -237,11 +273,16 @@ export default function NotificationsPage() {
         <>
           <div className={styles.list}>
             {notifications.map((notification) => {
-              const { icon: Icon, className: iconClass } = getNotificationIcon(notification.type);
+              const { icon: Icon, className: iconClass } = getNotificationIcon(
+                notification.type
+              );
               return (
                 <div
                   key={notification.id}
-                  className={cn(styles.item, !notification.read && styles.itemUnread)}
+                  className={cn(
+                    styles.item,
+                    !notification.read && styles.itemUnread
+                  )}
                   onClick={() => handleNotificationClick(notification)}
                 >
                   <div className={cn(styles.iconWrapper, iconClass)}>

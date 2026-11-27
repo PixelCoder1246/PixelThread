@@ -36,7 +36,11 @@ export default function RadioGroup({
           {label}
         </span>
       )}
-      <div className={styles.options} role="radiogroup" aria-labelledby={label ? groupId : undefined}>
+      <div
+        className={styles.options}
+        role="radiogroup"
+        aria-labelledby={label ? groupId : undefined}
+      >
         {options.map((option) => {
           const optionId = `${name}-${option.value}`;
           const isSelected = value === option.value;
@@ -55,8 +59,12 @@ export default function RadioGroup({
                 onChange={() => onChange(option.value)}
                 className={styles.input}
               />
-              <span className={cn(styles.radio, isSelected && styles.radioSelected)}>
-                <span className={cn(styles.dot, isSelected && styles.dotVisible)} />
+              <span
+                className={cn(styles.radio, isSelected && styles.radioSelected)}
+              >
+                <span
+                  className={cn(styles.dot, isSelected && styles.dotVisible)}
+                />
               </span>
               <span className={styles.optionLabel}>{option.label}</span>
             </label>

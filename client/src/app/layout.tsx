@@ -7,8 +7,11 @@ export const metadata: Metadata = {
     default: 'PixelThread — Where Ideas Come to Life',
     template: '%s | PixelThread',
   },
-  description: 'AI-powered blogging platform for thinkers, creators, and storytellers.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  description:
+    'AI-powered blogging platform for thinkers, creators, and storytellers.',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  ),
   icons: {
     icon: '/PTfavicon.png',
     shortcut: '/PTfavicon.png',
@@ -16,14 +19,16 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'PixelThread — Where Ideas Come to Life',
-    description: 'AI-powered blogging platform for thinkers, creators, and storytellers.',
+    description:
+      'AI-powered blogging platform for thinkers, creators, and storytellers.',
     siteName: 'PixelThread',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PixelThread — Where Ideas Come to Life',
-    description: 'AI-powered blogging platform for thinkers, creators, and storytellers.',
+    description:
+      'AI-powered blogging platform for thinkers, creators, and storytellers.',
   },
   robots: {
     index: true,

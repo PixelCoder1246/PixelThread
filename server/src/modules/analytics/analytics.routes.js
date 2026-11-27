@@ -1,5 +1,9 @@
 const { Router } = require('express');
-const { protect, restrictTo, optionalAuth } = require('../../middleware/auth.middleware');
+const {
+  protect,
+  restrictTo,
+  optionalAuth,
+} = require('../../middleware/auth.middleware');
 const {
   recordView,
   getPostAnalytics,

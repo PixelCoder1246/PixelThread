@@ -11,7 +11,6 @@ import {
   Bot,
   X,
   ImagePlus,
-  Keyboard,
   Clock,
   BookOpen,
   Settings,
@@ -25,7 +24,6 @@ import { toast } from 'sonner';
 import EditorLayout from '@/components/layout/EditorLayout';
 import { useCreatePost } from '@/hooks/usePosts';
 import { useDebounce } from '@/hooks/useDebounce';
-import { useKeyboard } from '@/hooks/useKeyboard';
 import { aiService } from '@/services/ai';
 import { cn, calculateReadingTime } from '@/lib/utils';
 import type { PostFormData, AiGenerationResponse } from '@/types';
@@ -47,7 +45,6 @@ export default function CreatePostPage() {
   const [excerpt, setExcerpt] = useState('');
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [showAiPanel, setShowAiPanel] = useState(true);
-  const [showShortcuts, setShowShortcuts] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveState, setSaveState] = useState<
@@ -386,201 +383,6 @@ export default function CreatePostPage() {
     [handleAiAction]
   );
 
-  useKeyboard([
-    // Save
-    {
-      key: 's',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        handleSave();
-      },
-    },
-    {
-      key: 's',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        handleSave();
-      },
-    },
-    // Shortcuts modal
-    {
-      key: 'k',
-      modifiers: ['meta'],
-      handler: () => setShowShortcuts((prev) => !prev),
-    },
-    {
-      key: 'k',
-      modifiers: ['ctrl'],
-      handler: () => setShowShortcuts((prev) => !prev),
-    },
-    // AI Panel toggle
-    {
-      key: 'a',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleAiPanel();
-      },
-    },
-    {
-      key: 'a',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleAiPanel();
-      },
-    },
-    // Settings toggle
-    {
-      key: ',',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        setShowSettings((prev) => !prev);
-      },
-    },
-    {
-      key: ',',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        setShowSettings((prev) => !prev);
-      },
-    },
-    // AI Actions (Alt + letter for AI)
-    {
-      key: 'i',
-      modifiers: ['alt'],
-      handler: (e) => {
-        e.preventDefault();
-        aiImprove();
-      },
-    },
-    {
-      key: 't',
-      modifiers: ['alt'],
-      handler: (e) => {
-        e.preventDefault();
-        aiGenerateTitle();
-      },
-    },
-    {
-      key: 'g',
-      modifiers: ['alt'],
-      handler: (e) => {
-        e.preventDefault();
-        aiGenerateTags();
-      },
-    },
-    {
-      key: 'e',
-      modifiers: ['alt'],
-      handler: (e) => {
-        e.preventDefault();
-        aiGenerateExcerpt();
-      },
-    },
-    // Formatting (Cmd/Ctrl + key)
-    {
-      key: 'b',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleBold();
-      },
-    },
-    {
-      key: 'b',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleBold();
-      },
-    },
-    {
-      key: 'i',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleItalic();
-      },
-    },
-    {
-      key: 'i',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleItalic();
-      },
-    },
-    {
-      key: '`',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleCode();
-      },
-    },
-    {
-      key: '`',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleCode();
-      },
-    },
-    {
-      key: '1',
-      modifiers: ['meta', 'shift'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleHeading1();
-      },
-    },
-    {
-      key: '2',
-      modifiers: ['meta', 'shift'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleHeading2();
-      },
-    },
-    {
-      key: '3',
-      modifiers: ['meta', 'shift'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleHeading3();
-      },
-    },
-    {
-      key: 'l',
-      modifiers: ['meta', 'shift'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleBulletList();
-      },
-    },
-    {
-      key: 'o',
-      modifiers: ['meta', 'shift'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleOrderedList();
-      },
-    },
-    {
-      key: 'q',
-      modifiers: ['meta', 'shift'],
-      handler: (e) => {
-        e.preventDefault();
-        toggleBlockquote();
-      },
-    },
-  ]);
-
   useEffect(() => {
     if (debouncedContent && debouncedContent !== content) {
       // Auto-save handled by debounce
@@ -683,7 +485,7 @@ export default function CreatePostPage() {
           />
 
           <div className={styles.editorWrapper}>
-            <div className={styles.editor} ref={editorRef}>
+            <div className={styles.editor}>
               <Editor
                 ref={editorRef}
                 content={content}
@@ -837,9 +639,6 @@ export default function CreatePostPage() {
                             {action.requirement}
                           </span>
                         </div>
-                        <span className={styles.aiButtonShortcut}>
-                          {action.shortcut}
-                        </span>
                       </button>
                     );
                   })}
@@ -1045,174 +844,6 @@ export default function CreatePostPage() {
             </div>
           </div>
         </aside>
-
-        {showShortcuts && (
-          <div
-            className={styles.shortcutModal}
-            onClick={() => setShowShortcuts(false)}
-          >
-            <div
-              className={styles.shortcutContent}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h2 className={styles.shortcutTitle}>Keyboard Shortcuts</h2>
-              <div className={styles.shortcutGrid}>
-                <div className={styles.shortcutSection}>
-                  <h3 className={styles.shortcutSectionTitle}>General</h3>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Save draft</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>S</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>
-                      Toggle shortcuts
-                    </span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>K</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>
-                      Toggle AI panel
-                    </span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>A</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>
-                      Toggle settings
-                    </span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>⇧</span>
-                      <span className={styles.shortcutKey}>S</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.shortcutSection}>
-                  <h3 className={styles.shortcutSectionTitle}>AI Assistant</h3>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>
-                      Improve writing
-                    </span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌥</span>
-                      <span className={styles.shortcutKey}>I</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Generate title</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌥</span>
-                      <span className={styles.shortcutKey}>T</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Generate tags</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌥</span>
-                      <span className={styles.shortcutKey}>G</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>
-                      Generate excerpt
-                    </span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌥</span>
-                      <span className={styles.shortcutKey}>E</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.shortcutSection}>
-                  <h3 className={styles.shortcutSectionTitle}>Formatting</h3>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Bold</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>B</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Italic</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>I</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Inline code</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>`</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Heading 1</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>⇧</span>
-                      <span className={styles.shortcutKey}>1</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Heading 2</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>⇧</span>
-                      <span className={styles.shortcutKey}>2</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Heading 3</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>⇧</span>
-                      <span className={styles.shortcutKey}>3</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Bullet list</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>⇧</span>
-                      <span className={styles.shortcutKey}>L</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Ordered list</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>⇧</span>
-                      <span className={styles.shortcutKey}>O</span>
-                    </div>
-                  </div>
-                  <div className={styles.shortcutRow}>
-                    <span className={styles.shortcutLabel}>Blockquote</span>
-                    <div className={styles.shortcutKeys}>
-                      <span className={styles.shortcutKey}>⌘</span>
-                      <span className={styles.shortcutKey}>⇧</span>
-                      <span className={styles.shortcutKey}>Q</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                className={styles.shortcutCloseBtn}
-                onClick={() => setShowShortcuts(false)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className={styles.bottomBar}>
@@ -1258,14 +889,6 @@ export default function CreatePostPage() {
           >
             <Bot size={14} />
             AI
-          </button>
-          <button
-            type="button"
-            className={styles.shortcutsHint}
-            onClick={() => setShowShortcuts(true)}
-          >
-            <Keyboard size={14} />
-            Shortcuts
           </button>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <BookOpen size={14} />

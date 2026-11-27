@@ -17,12 +17,19 @@ interface DropdownProps {
   align?: 'start' | 'end';
 }
 
-export default function Dropdown({ trigger, items, align = 'start' }: DropdownProps) {
+export default function Dropdown({
+  trigger,
+  items,
+  align = 'start',
+}: DropdownProps) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = useCallback((e: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target as Node)
+    ) {
       setOpen(false);
     }
   }, []);
@@ -34,14 +41,11 @@ export default function Dropdown({ trigger, items, align = 'start' }: DropdownPr
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open, handleClickOutside]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpen(false);
-      }
-    },
-    []
-  );
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setOpen(false);
+    }
+  }, []);
 
   return (
     <div ref={dropdownRef} className={styles.wrapper} onKeyDown={handleKeyDown}>
@@ -62,7 +66,10 @@ export default function Dropdown({ trigger, items, align = 'start' }: DropdownPr
         {trigger}
       </div>
       {open && (
-        <div className={cn(styles.menu, align === 'end' && styles.menuEnd)} role="menu">
+        <div
+          className={cn(styles.menu, align === 'end' && styles.menuEnd)}
+          role="menu"
+        >
           {items.map((item, index) => (
             <React.Fragment key={index}>
               {item.divider && index > 0 && <div className={styles.divider} />}
@@ -75,7 +82,9 @@ export default function Dropdown({ trigger, items, align = 'start' }: DropdownPr
                   setOpen(false);
                 }}
               >
-                {item.icon && <span className={styles.itemIcon}>{item.icon}</span>}
+                {item.icon && (
+                  <span className={styles.itemIcon}>{item.icon}</span>
+                )}
                 <span>{item.label}</span>
               </button>
             </React.Fragment>

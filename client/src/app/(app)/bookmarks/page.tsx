@@ -21,13 +21,19 @@ export default function BookmarksPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState<number>(PAGINATION.DEFAULT_PAGE);
-  const [pagination, setPagination] = useState<{ totalPages: number; page: number } | null>(null);
+  const [pagination, setPagination] = useState<{
+    totalPages: number;
+    page: number;
+  } | null>(null);
 
   const fetchBookmarks = useCallback(async (p: number) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await bookmarksService.getAll({ page: p, limit: PAGINATION.DEFAULT_LIMIT });
+      const res = await bookmarksService.getAll({
+        page: p,
+        limit: PAGINATION.DEFAULT_LIMIT,
+      });
       setBookmarks(res.posts);
       setPagination(res.pagination as { totalPages: number; page: number });
     } catch {
@@ -41,15 +47,18 @@ export default function BookmarksPage() {
     fetchBookmarks(page);
   }, [page, fetchBookmarks]);
 
-  const handleRemoveBookmark = useCallback(async (postId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    try {
-      await bookmarksService.toggle(postId);
-      setBookmarks((prev) => prev.filter((p) => p.id !== postId));
-    } catch {
-      // silently fail
-    }
-  }, []);
+  const handleRemoveBookmark = useCallback(
+    async (postId: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      try {
+        await bookmarksService.toggle(postId);
+        setBookmarks((prev) => prev.filter((p) => p.id !== postId));
+      } catch {
+        // silently fail
+      }
+    },
+    []
+  );
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
@@ -86,7 +95,14 @@ export default function BookmarksPage() {
         </div>
       ) : error ? (
         <div className={styles.error}>
-          <p style={{ color: 'var(--color-error)', marginBottom: 'var(--space-3)' }}>{error}</p>
+          <p
+            style={{
+              color: 'var(--color-error)',
+              marginBottom: 'var(--space-3)',
+            }}
+          >
+            {error}
+          </p>
           <Button variant="secondary" onClick={() => fetchBookmarks(page)}>
             Try Again
           </Button>
@@ -129,7 +145,9 @@ export default function BookmarksPage() {
                 {post.tags?.length > 0 && (
                   <div className={styles.cardTags}>
                     {post.tags.map((tag) => (
-                      <Badge key={tag.id} variant="default" size="sm">#{tag.name}</Badge>
+                      <Badge key={tag.id} variant="default" size="sm">
+                        #{tag.name}
+                      </Badge>
                     ))}
                   </div>
                 )}

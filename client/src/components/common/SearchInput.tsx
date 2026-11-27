@@ -19,23 +19,9 @@ export default function SearchInput({
   onChange,
   placeholder = 'Search...',
   onClear,
-  shortcut,
   className,
 }: SearchInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        const target = e.target as HTMLElement;
-        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return;
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   const handleClear = () => {
     onChange('');
@@ -63,9 +49,6 @@ export default function SearchInput({
         >
           <X size={14} />
         </button>
-      )}
-      {shortcut && !value && (
-        <kbd className={styles.shortcut}>{shortcut}</kbd>
       )}
     </div>
   );

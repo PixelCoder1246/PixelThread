@@ -10,7 +10,9 @@
   height: 4rem;
   padding: 0 var(--space-6);
   background: transparent;
-  transition: background var(--transition-base), box-shadow var(--transition-base);
+  transition:
+    background var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 .scrolled {

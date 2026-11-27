@@ -11,7 +11,6 @@ import {
   Bot,
   X,
   ImagePlus,
-  Keyboard,
   Clock,
   BookOpen,
   Settings,
@@ -27,7 +26,6 @@ import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
 import { usePost, useUpdatePost } from '@/hooks/usePosts';
 import { useDebounce } from '@/hooks/useDebounce';
-import { useKeyboard } from '@/hooks/useKeyboard';
 import { aiService } from '@/services/ai';
 import { cn, calculateReadingTime } from '@/lib/utils';
 import type { PostFormData, AiGenerationResponse } from '@/types';
@@ -62,7 +60,6 @@ export default function EditPostPage({ params }: EditPostPageProps) {
   const [excerpt, setExcerpt] = useState('');
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [showAiPanel, setShowAiPanel] = useState(true);
-  const [showShortcuts, setShowShortcuts] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveState, setSaveState] = useState<
@@ -342,67 +339,6 @@ export default function EditPostPage({ params }: EditPostPageProps) {
     [title, content, excerpt, tags, handleContentChange, handleTitleChange]
   );
 
-  useKeyboard([
-    {
-      key: 'k',
-      modifiers: ['meta'],
-      handler: () => setShowShortcuts((prev) => !prev),
-    },
-    {
-      key: 'k',
-      modifiers: ['ctrl'],
-      handler: () => setShowShortcuts((prev) => !prev),
-    },
-    {
-      key: 's',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        handleSave();
-      },
-    },
-    {
-      key: 's',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        handleSave();
-      },
-    },
-    {
-      key: 'a',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        setShowAiPanel((prev) => !prev);
-      },
-    },
-    {
-      key: 'a',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        setShowAiPanel((prev) => !prev);
-      },
-    },
-    {
-      key: ',',
-      modifiers: ['meta'],
-      handler: (e) => {
-        e.preventDefault();
-        setShowSettings((prev) => !prev);
-      },
-    },
-    {
-      key: ',',
-      modifiers: ['ctrl'],
-      handler: (e) => {
-        e.preventDefault();
-        setShowSettings((prev) => !prev);
-      },
-    },
-  ]);
-
   const aiActions = [
     {
       id: 'generate',
@@ -673,9 +609,6 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                             {action.requirement}
                           </span>
                         </div>
-                        <span className={styles.aiButtonShortcut}>
-                          {action.shortcut}
-                        </span>
                       </button>
                     );
                   })}
@@ -881,74 +814,6 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             </div>
           </div>
         </aside>
-
-        {showShortcuts && (
-          <div
-            className={styles.shortcutModal}
-            onClick={() => setShowShortcuts(false)}
-          >
-            <div
-              className={styles.shortcutContent}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h2 className={styles.shortcutTitle}>Keyboard Shortcuts</h2>
-              <div className={styles.shortcutGrid}>
-                <div className={styles.shortcutRow}>
-                  <span className={styles.shortcutLabel}>Save draft</span>
-                  <div className={styles.shortcutKeys}>
-                    <span className={styles.shortcutKey}>⌘</span>
-                    <span className={styles.shortcutKey}>S</span>
-                  </div>
-                </div>
-                <div className={styles.shortcutRow}>
-                  <span className={styles.shortcutLabel}>Toggle AI panel</span>
-                  <div className={styles.shortcutKeys}>
-                    <span className={styles.shortcutKey}>⌘</span>
-                    <span className={styles.shortcutKey}>A</span>
-                  </div>
-                </div>
-                <div className={styles.shortcutRow}>
-                  <span className={styles.shortcutLabel}>Toggle settings</span>
-                  <div className={styles.shortcutKeys}>
-                    <span className={styles.shortcutKey}>⌘</span>
-                    <span className={styles.shortcutKey}>⇧</span>
-                    <span className={styles.shortcutKey}>S</span>
-                  </div>
-                </div>
-                <div className={styles.shortcutRow}>
-                  <span className={styles.shortcutLabel}>Bold</span>
-                  <div className={styles.shortcutKeys}>
-                    <span className={styles.shortcutKey}>⌘</span>
-                    <span className={styles.shortcutKey}>B</span>
-                  </div>
-                </div>
-                <div className={styles.shortcutRow}>
-                  <span className={styles.shortcutLabel}>Italic</span>
-                  <div className={styles.shortcutKeys}>
-                    <span className={styles.shortcutKey}>⌘</span>
-                    <span className={styles.shortcutKey}>I</span>
-                  </div>
-                </div>
-                <div className={styles.shortcutRow}>
-                  <span className={styles.shortcutLabel}>
-                    Keyboard shortcuts
-                  </span>
-                  <div className={styles.shortcutKeys}>
-                    <span className={styles.shortcutKey}>⌘</span>
-                    <span className={styles.shortcutKey}>K</span>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                className={styles.shortcutCloseBtn}
-                onClick={() => setShowShortcuts(false)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className={styles.bottomBar}>
@@ -994,14 +859,6 @@ export default function EditPostPage({ params }: EditPostPageProps) {
           >
             <Bot size={14} />
             AI
-          </button>
-          <button
-            type="button"
-            className={styles.shortcutsHint}
-            onClick={() => setShowShortcuts(true)}
-          >
-            <Keyboard size={14} />
-            Shortcuts
           </button>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <BookOpen size={14} />

@@ -38,7 +38,9 @@ export default function Checkbox({
         />
         <label htmlFor={checkboxId} className={styles.label}>
           <span className={cn(styles.checkbox, checked && styles.checked)}>
-            {checked && <Check size={14} strokeWidth={3} className={styles.icon} />}
+            {checked && (
+              <Check size={14} strokeWidth={3} className={styles.icon} />
+            )}
           </span>
           {label && <span className={styles.text}>{label}</span>}
         </label>

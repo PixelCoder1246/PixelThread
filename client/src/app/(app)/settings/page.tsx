@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { Upload } from 'lucide-react';
 import SettingsLayout from '@/components/layout/SettingsLayout';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
 import Switch from '@/components/ui/Switch';
 import { useAuth } from '@/hooks/useAuth';
 import { usersService } from '@/services/users';
@@ -323,71 +324,32 @@ export default function SettingsPage() {
                 gap: 'var(--space-5)',
               }}
             >
-              <div className={styles.fieldGroup}>
-                <label className={styles.label} htmlFor="currentPassword">
-                  Current Password
-                </label>
-                <input
-                  id="currentPassword"
-                  type="password"
-                  className={cn(
-                    styles.input,
-                    passwordForm.formState.errors.currentPassword &&
-                      styles.inputError
-                  )}
-                  {...passwordForm.register('currentPassword')}
-                  placeholder="Enter current password"
-                />
-                {passwordForm.formState.errors.currentPassword && (
-                  <span className={styles.error}>
-                    {passwordForm.formState.errors.currentPassword.message}
-                  </span>
-                )}
-              </div>
+              <Input
+                label="Current Password"
+                type="password"
+                placeholder="Enter current password"
+                error={passwordForm.formState.errors.currentPassword?.message}
+                {...passwordForm.register('currentPassword')}
+                fullWidth
+              />
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.label} htmlFor="newPassword">
-                  New Password
-                </label>
-                <input
-                  id="newPassword"
-                  type="password"
-                  className={cn(
-                    styles.input,
-                    passwordForm.formState.errors.newPassword &&
-                      styles.inputError
-                  )}
-                  {...passwordForm.register('newPassword')}
-                  placeholder="Enter new password"
-                />
-                {passwordForm.formState.errors.newPassword && (
-                  <span className={styles.error}>
-                    {passwordForm.formState.errors.newPassword.message}
-                  </span>
-                )}
-              </div>
+              <Input
+                label="New Password"
+                type="password"
+                placeholder="Enter new password"
+                error={passwordForm.formState.errors.newPassword?.message}
+                {...passwordForm.register('newPassword')}
+                fullWidth
+              />
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.label} htmlFor="confirmPassword">
-                  Confirm New Password
-                </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  className={cn(
-                    styles.input,
-                    passwordForm.formState.errors.confirmPassword &&
-                      styles.inputError
-                  )}
-                  {...passwordForm.register('confirmPassword')}
-                  placeholder="Confirm new password"
-                />
-                {passwordForm.formState.errors.confirmPassword && (
-                  <span className={styles.error}>
-                    {passwordForm.formState.errors.confirmPassword.message}
-                  </span>
-                )}
-              </div>
+              <Input
+                label="Confirm New Password"
+                type="password"
+                placeholder="Confirm new password"
+                error={passwordForm.formState.errors.confirmPassword?.message}
+                {...passwordForm.register('confirmPassword')}
+                fullWidth
+              />
 
               <div className={styles.actions}>
                 <Button type="submit" isLoading={isSavingPassword}>

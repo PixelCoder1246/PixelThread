@@ -11,7 +11,10 @@ interface MediaItem {
 }
 
 export const mediaService = {
-  async getMyMedia(params?: { page?: number; limit?: number }): Promise<{ media: MediaItem[]; pagination: unknown }> {
+  async getMyMedia(params?: {
+    page?: number;
+    limit?: number;
+  }): Promise<{ media: MediaItem[]; pagination: unknown }> {
     const res = await api.get('/me/media', { params });
     return res.data.data;
   },
@@ -21,9 +24,13 @@ export const mediaService = {
     formData.append('file', file);
     if (folder) formData.append('folder', folder);
 
-    const res = await api.post<ApiResponse<{ media: MediaItem }>>('/media', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const res = await api.post<ApiResponse<{ media: MediaItem }>>(
+      '/media',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
     return res.data.data.media;
   },
 
@@ -31,9 +38,13 @@ export const mediaService = {
     const formData = new FormData();
     formData.append('file', file);
 
-    const res = await api.patch<ApiResponse<{ media: MediaItem }>>(`/media/${mediaId}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const res = await api.patch<ApiResponse<{ media: MediaItem }>>(
+      `/media/${mediaId}`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
     return res.data.data.media;
   },
 

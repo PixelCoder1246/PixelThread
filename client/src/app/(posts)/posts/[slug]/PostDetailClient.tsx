@@ -20,12 +20,25 @@ import Button from '@/components/ui/Button';
 import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
 import { usePost, useRecordView } from '@/hooks/usePosts';
-import { useComments, useCreateComment, useReplyToComment } from '@/hooks/useComments';
+import {
+  useComments,
+  useCreateComment,
+  useReplyToComment,
+} from '@/hooks/useComments';
 import { useTogglePostLike } from '@/hooks/useLikes';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuth } from '@/hooks/useAuth';
 import { bookmarksService } from '@/services/bookmarks';
-import { formatDate, formatRelativeDate, formatNumber, getInitials, getRandomColor, cn, extractTextFromContent, blocksToMarkdown } from '@/lib/utils';
+import {
+  formatDate,
+  formatRelativeDate,
+  formatNumber,
+  getInitials,
+  getRandomColor,
+  cn,
+  extractTextFromContent,
+  blocksToMarkdown,
+} from '@/lib/utils';
 import type { Post, Comment } from '@/types';
 import styles from './page.module.css';
 
@@ -33,12 +46,16 @@ interface PostDetailClientProps {
   post: Post;
 }
 
-export default function PostDetailClient({ post: initialPost }: PostDetailClientProps) {
+export default function PostDetailClient({
+  post: initialPost,
+}: PostDetailClientProps) {
   const { data: post, isLoading, isError } = usePost(initialPost.slug);
   const { user } = useAuth();
   const recordView = useRecordView(initialPost.id);
   const toggleLike = useTogglePostLike();
-  const { data: comments, isLoading: commentsLoading } = useComments(initialPost.id);
+  const { data: comments, isLoading: commentsLoading } = useComments(
+    initialPost.id
+  );
   const createComment = useCreateComment(initialPost.id);
   const replyToComment = useReplyToComment(initialPost.id);
 
@@ -49,7 +66,9 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
   const [commentText, setCommentText] = useState('');
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
-  const [isBookmarked, setIsBookmarked] = useState(initialPost.isBookmarked || false);
+  const [isBookmarked, setIsBookmarked] = useState(
+    initialPost.isBookmarked || false
+  );
   const [activeHeading, setActiveHeading] = useState('');
   const [showBackToTop, setShowBackToTop] = useState(false);
 
@@ -138,7 +157,10 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
     async (commentId: string) => {
       if (!replyText.trim()) return;
       try {
-        await replyToComment.mutateAsync({ commentId, content: replyText.trim() });
+        await replyToComment.mutateAsync({
+          commentId,
+          content: replyText.trim(),
+        });
         setReplyText('');
         setReplyingTo(null);
         toast.success('Reply posted');
@@ -146,7 +168,7 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
         toast.error('Failed to post reply');
       }
     },
-    [replyText, replyToComment],
+    [replyText, replyToComment]
   );
 
   const renderComment = (comment: Comment, isReply = false) => {
@@ -157,20 +179,37 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
       <div key={comment.id}>
         <div className={styles.comment}>
           {comment.author.image ? (
-            <img src={comment.author.image} alt={comment.author.name} className={styles.commentAvatar} />
+            <img
+              src={comment.author.image}
+              alt={comment.author.name}
+              className={styles.commentAvatar}
+            />
           ) : (
-            <div className={styles.commentAvatarPlaceholder} style={{ background: avatarBg }}>
+            <div
+              className={styles.commentAvatarPlaceholder}
+              style={{ background: avatarBg }}
+            >
               {initials}
             </div>
           )}
           <div className={styles.commentBody}>
             <div className={styles.commentHeader}>
-              <span className={styles.commentAuthor}>{comment.author.name}</span>
-              <span className={styles.commentTime}>{formatRelativeDate(comment.createdAt)}</span>
+              <span className={styles.commentAuthor}>
+                {comment.author.name}
+              </span>
+              <span className={styles.commentTime}>
+                {formatRelativeDate(comment.createdAt)}
+              </span>
             </div>
             <p className={styles.commentContent}>{comment.content}</p>
             <div className={styles.commentActions}>
-              <button type="button" className={cn(styles.commentActionBtn, comment.isLiked && styles.liked)}>
+              <button
+                type="button"
+                className={cn(
+                  styles.commentActionBtn,
+                  comment.isLiked && styles.liked
+                )}
+              >
                 <Heart size={12} />
                 {formatNumber(comment.likeCount)}
               </button>
@@ -178,7 +217,9 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
                 <button
                   type="button"
                   className={styles.commentActionBtn}
-                  onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
+                  onClick={() =>
+                    setReplyingTo(replyingTo === comment.id ? null : comment.id)
+                  }
                 >
                   <MessageCircle size={12} />
                   Reply
@@ -198,7 +239,14 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
               rows={3}
             />
             <div className={styles.replyFormActions}>
-              <Button variant="ghost" size="sm" onClick={() => { setReplyingTo(null); setReplyText(''); }}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setReplyingTo(null);
+                  setReplyText('');
+                }}
+              >
                 Cancel
               </Button>
               <Button
@@ -248,13 +296,19 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
         <div className={styles.hero}>
           <div className={styles.heroInner}>
             {currentPost.tags && currentPost.tags.length > 0 && (
-              <span className={styles.category}>{currentPost.tags[0].name}</span>
+              <span className={styles.category}>
+                {currentPost.tags[0].name}
+              </span>
             )}
             <h1 className={styles.title}>{currentPost.title}</h1>
             <div className={styles.meta}>
               <div className={styles.authorInfo}>
                 {author?.image ? (
-                  <img src={author.image} alt={author.name} className={styles.authorAvatar} />
+                  <img
+                    src={author.image}
+                    alt={author.name}
+                    className={styles.authorAvatar}
+                  />
                 ) : author ? (
                   <div
                     className={styles.authorAvatarPlaceholder}
@@ -263,36 +317,63 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
                     {getInitials(author.name)}
                   </div>
                 ) : null}
-                {author && <span className={styles.authorName}>{author.name}</span>}
+                {author && (
+                  <span className={styles.authorName}>{author.name}</span>
+                )}
               </div>
               <span className={styles.metaDot} />
               <span className={styles.metaText}>
-                {currentPost.publishedAt ? formatDate(currentPost.publishedAt) : formatDate(currentPost.createdAt)}
+                {currentPost.publishedAt
+                  ? formatDate(currentPost.publishedAt)
+                  : formatDate(currentPost.createdAt)}
               </span>
               <span className={styles.metaDot} />
               <span className={styles.metaText}>
-                <Clock size={14} style={{ display: 'inline', marginRight: 4, verticalAlign: 'middle' }} />
+                <Clock
+                  size={14}
+                  style={{
+                    display: 'inline',
+                    marginRight: 4,
+                    verticalAlign: 'middle',
+                  }}
+                />
                 {Math.max(1, Math.ceil(wordCount / 200))} min read
               </span>
             </div>
             <div className={styles.actions}>
               <button
                 type="button"
-                className={cn(styles.actionButton, currentPost.isLiked && styles.liked)}
+                className={cn(
+                  styles.actionButton,
+                  currentPost.isLiked && styles.liked
+                )}
                 onClick={handleLike}
               >
-                <Heart size={16} fill={currentPost.isLiked ? 'currentColor' : 'none'} />
+                <Heart
+                  size={16}
+                  fill={currentPost.isLiked ? 'currentColor' : 'none'}
+                />
                 {formatNumber(currentPost.analytics?.likes || 0)}
               </button>
               <button
                 type="button"
-                className={cn(styles.actionButton, isBookmarked && styles.bookmarked)}
+                className={cn(
+                  styles.actionButton,
+                  isBookmarked && styles.bookmarked
+                )}
                 onClick={handleBookmark}
               >
-                <Bookmark size={16} fill={isBookmarked ? 'currentColor' : 'none'} />
+                <Bookmark
+                  size={16}
+                  fill={isBookmarked ? 'currentColor' : 'none'}
+                />
                 {isBookmarked ? 'Saved' : 'Save'}
               </button>
-              <button type="button" className={styles.actionButton} onClick={handleShare}>
+              <button
+                type="button"
+                className={styles.actionButton}
+                onClick={handleShare}
+              >
                 <Share2 size={16} />
                 Share
               </button>
@@ -310,17 +391,29 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
                   h1: ({ children, ...props }) => {
                     const text = extractTextFromContent(children);
                     const id = text.toLowerCase().replace(/[^\w]+/g, '-');
-                    return <h1 id={id} {...props}>{children}</h1>;
+                    return (
+                      <h1 id={id} {...props}>
+                        {children}
+                      </h1>
+                    );
                   },
                   h2: ({ children, ...props }) => {
                     const text = extractTextFromContent(children);
                     const id = text.toLowerCase().replace(/[^\w]+/g, '-');
-                    return <h2 id={id} {...props}>{children}</h2>;
+                    return (
+                      <h2 id={id} {...props}>
+                        {children}
+                      </h2>
+                    );
                   },
                   h3: ({ children, ...props }) => {
                     const text = extractTextFromContent(children);
                     const id = text.toLowerCase().replace(/[^\w]+/g, '-');
-                    return <h3 id={id} {...props}>{children}</h3>;
+                    return (
+                      <h3 id={id} {...props}>
+                        {children}
+                      </h3>
+                    );
                   },
                   code: ({ className, children, ...props }) => {
                     const text = extractTextFromContent(children);
@@ -328,7 +421,12 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
                   },
                   pre: ({ children }) => <pre>{children}</pre>,
                   a: ({ href, children, ...props }) => (
-                    <a href={href} target={href?.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" {...props}>
+                    <a
+                      href={href}
+                      target={href?.startsWith('http') ? '_blank' : undefined}
+                      rel="noopener noreferrer"
+                      {...props}
+                    >
                       {children}
                     </a>
                   ),
@@ -344,7 +442,11 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
             {currentPost.tags && currentPost.tags.length > 0 && (
               <div className={styles.tags}>
                 {currentPost.tags.map((tag) => (
-                  <Link key={tag.id} href={`/explore?tag=${tag.name}`} className={styles.tag}>
+                  <Link
+                    key={tag.id}
+                    href={`/explore?tag=${tag.name}`}
+                    className={styles.tag}
+                  >
                     #{tag.name}
                   </Link>
                 ))}
@@ -353,7 +455,8 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
 
             <div className={styles.commentsSection}>
               <h2 className={styles.commentsTitle}>
-                Comments ({comments?.length || currentPost.analytics?.comments || 0})
+                Comments (
+                {comments?.length || currentPost.analytics?.comments || 0})
               </h2>
 
               <div className={styles.commentForm}>
@@ -382,7 +485,12 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
                   {comments.map((comment) => renderComment(comment))}
                 </div>
               ) : (
-                <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-sm)' }}>
+                <p
+                  style={{
+                    color: 'var(--text-tertiary)',
+                    fontSize: 'var(--fs-sm)',
+                  }}
+                >
                   No comments yet. Be the first to share your thoughts!
                 </p>
               )}
@@ -398,7 +506,10 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
                     <a
                       key={item.text}
                       href={`#${item.id}`}
-                      className={cn(styles.tocItem, activeHeading === item.text && styles.active)}
+                      className={cn(
+                        styles.tocItem,
+                        activeHeading === item.text && styles.active
+                      )}
                       style={{ paddingLeft: `${item.level * 12 + 8}px` }}
                     >
                       {item.text}
@@ -413,7 +524,11 @@ export default function PostDetailClient({ post: initialPost }: PostDetailClient
               {author && (
                 <div className={styles.authorCard}>
                   {author.image ? (
-                    <img src={author.image} alt={author.name} className={styles.authorCardAvatar} />
+                    <img
+                      src={author.image}
+                      alt={author.name}
+                      className={styles.authorCardAvatar}
+                    />
                   ) : (
                     <div
                       className={styles.authorCardAvatarPlaceholder}

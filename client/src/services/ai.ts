@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { config } from '@/config';
-import type { AiGenerationResponse, ApiResponse, AiPostFormData } from '@/types';
+import type {
+  AiGenerationResponse,
+  ApiResponse,
+  AiPostFormData,
+} from '@/types';
 
 const aiApi = axios.create({
   baseURL: config.api.baseUrl,
@@ -33,7 +37,11 @@ aiApi.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const isAuthEndpoint = originalRequest.url?.includes('/auth/');
-    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isAuthEndpoint
+    ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -65,82 +73,163 @@ aiApi.interceptors.response.use(
 
 export const aiService = {
   async generatePost(data: AiPostFormData): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/generate-post', data);
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/generate-post',
+      data
+    );
     return res.data.data;
   },
 
-  async generateTitles(content: string, keywords?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/title', { content, keywords });
+  async generateTitles(
+    content: string,
+    keywords?: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/title',
+      { content, keywords }
+    );
     return res.data.data;
   },
 
-  async improveTitle(currentTitle: string, targetKeyword?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/title/improve', { currentTitle, targetKeyword });
+  async improveTitle(
+    currentTitle: string,
+    targetKeyword?: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/title/improve',
+      { currentTitle, targetKeyword }
+    );
     return res.data.data;
   },
 
   async generateExcerpt(content: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/excerpt', { content });
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/excerpt',
+      { content }
+    );
     return res.data.data;
   },
 
   async generateTags(content: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/tags', { content });
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/tags',
+      { content }
+    );
     return res.data.data;
   },
 
-  async generateSeo(title: string, content: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/seo', { title, content });
+  async generateSeo(
+    title: string,
+    content: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/seo', {
+      title,
+      content,
+    });
     return res.data.data;
   },
 
   async improveWriting(content: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/improve', { content });
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/improve',
+      { content }
+    );
     return res.data.data;
   },
 
   async rewrite(content: string, tone?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/rewrite', { content, tone });
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/rewrite',
+      { content, tone }
+    );
     return res.data.data;
   },
 
-  async expand(content: string, context?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/expand', { content, context });
+  async expand(
+    content: string,
+    context?: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/expand',
+      { content, context }
+    );
     return res.data.data;
   },
 
-  async shorten(content: string, targetLength?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/shorten', { content, targetLength });
+  async shorten(
+    content: string,
+    targetLength?: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/shorten',
+      { content, targetLength }
+    );
     return res.data.data;
   },
 
-  async continueWriting(content: string, context?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/continue', { content, context });
+  async continueWriting(
+    content: string,
+    context?: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/continue',
+      { content, context }
+    );
     return res.data.data;
   },
 
-  async summarize(content: string, maxLength?: number): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/summarize', { content, maxLength });
+  async summarize(
+    content: string,
+    maxLength?: number
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/summarize',
+      { content, maxLength }
+    );
     return res.data.data;
   },
 
-  async generateFaq(content: string, numQuestions?: number): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/faq', { content, numQuestions });
+  async generateFaq(
+    content: string,
+    numQuestions?: number
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/faq', {
+      content,
+      numQuestions,
+    });
     return res.data.data;
   },
 
-  async generateSocialPost(content: string, platform?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/social', { content, platform });
+  async generateSocialPost(
+    content: string,
+    platform?: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/social',
+      { content, platform }
+    );
     return res.data.data;
   },
 
-  async getSuggestions(content: string, context?: string): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/suggestions', { content, context });
+  async getSuggestions(
+    content: string,
+    context?: string
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/suggestions',
+      { content, context }
+    );
     return res.data.data;
   },
 
-  async applySuggestions(content: string, suggestions: string[]): Promise<AiGenerationResponse> {
-    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>('/ai/suggestions/apply', { content, suggestions });
+  async applySuggestions(
+    content: string,
+    suggestions: string[]
+  ): Promise<AiGenerationResponse> {
+    const res = await aiApi.post<ApiResponse<AiGenerationResponse>>(
+      '/ai/suggestions/apply',
+      { content, suggestions }
+    );
     return res.data.data;
   },
 };

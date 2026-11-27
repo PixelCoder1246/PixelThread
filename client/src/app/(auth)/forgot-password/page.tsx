@@ -47,7 +47,10 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <AuthLayout title="Reset your password" subtitle="Enter your email and we'll send you a reset link">
+    <AuthLayout
+      title="Reset your password"
+      subtitle="Enter your email and we'll send you a reset link"
+    >
       {isSubmitted ? (
         <div className={styles.successState}>
           <div className={styles.successIcon}>
@@ -55,8 +58,8 @@ export default function ForgotPasswordPage() {
           </div>
           <h2 className={styles.successTitle}>Check your email</h2>
           <p className={styles.successMessage}>
-            We&apos;ve sent a password reset link to your email address. Please check your inbox and
-            follow the instructions.
+            We&apos;ve sent a password reset link to your email address. Please
+            check your inbox and follow the instructions.
           </p>
           <Link href="/login" className={styles.backLink}>
             <ArrowLeft size={16} />
@@ -83,7 +86,12 @@ export default function ForgotPasswordPage() {
 
           <div className={styles.fieldSpacer} />
 
-          <Button type="submit" fullWidth isLoading={isLoading} className={styles.submitButton}>
+          <Button
+            type="submit"
+            fullWidth
+            isLoading={isLoading}
+            className={styles.submitButton}
+          >
             Send reset link
           </Button>
 

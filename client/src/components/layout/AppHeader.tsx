@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useUIStore } from '@/store';
+import { useUIStore, useAuthStore } from '@/store';
 import { Menu, Search, Bell, Plus } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -15,16 +15,28 @@ interface AppHeaderProps {
   className?: string;
 }
 
-export default function AppHeader({ notificationCount = 0, className }: AppHeaderProps) {
+export default function AppHeader({
+  notificationCount = 0,
+  className,
+}: AppHeaderProps) {
   const router = useRouter();
-  const { sidebarOpen, toggleSidebar, toggleCommandPalette } = useUIStore();
+  const { sidebarOpen, toggleSidebar } = useUIStore();
+  const { isAuthenticated } = useAuthStore();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   return (
     <header
       className={cn(
         styles.header,
         !sidebarOpen && styles.headerCollapsed,
-        className,
+        className
       )}
     >
       <div className={styles.inner}>
@@ -37,43 +49,60 @@ export default function AppHeader({ notificationCount = 0, className }: AppHeade
           >
             <Menu size={20} />
           </button>
-          <button
-            type="button"
-            className={styles.searchButton}
-            onClick={toggleCommandPalette}
-          >
-            <Search size={16} />
-            <span>Search...</span>
-            <span className={styles.searchHint}>
-              <kbd>Ctrl</kbd> <kbd>K</kbd>
-            </span>
-          </button>
+          <form onSubmit={handleSearch} className={styles.searchForm}>
+            <Search size={16} className={styles.searchIcon} />
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Search stories, topics, authors..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search PixelThread"
+            />
+          </form>
         </div>
 
         <div className={styles.right}>
-          <Link
-            href="/notifications"
-            className={styles.notificationBtn}
-            aria-label={`Notifications${notificationCount > 0 ? ` (${notificationCount} unread)` : ''}`}
-          >
-            <Bell size={18} />
-            {notificationCount > 0 && (
-              <span className={styles.badge}>
-                {notificationCount > 99 ? '99+' : notificationCount}
-              </span>
-            )}
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                href="/notifications"
+                className={styles.notificationBtn}
+                aria-label={`Notifications${notificationCount > 0 ? ` (${notificationCount} unread)` : ''}`}
+              >
+                <Bell size={18} />
+                {notificationCount > 0 && (
+                  <span className={styles.badge}>
+                    {notificationCount > 99 ? '99+' : notificationCount}
+                  </span>
+                )}
+              </Link>
 
-          <Button
-            variant="primary"
-            size="sm"
-            leftIcon={<Plus size={16} />}
-            onClick={() => router.push('/posts/create')}
-          >
-            Create Post
-          </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Plus size={16} />}
+                onClick={() => router.push('/posts/create')}
+              >
+                Create Post
+              </Button>
 
-          <UserMenu />
+              <UserMenu />
+            </>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link href="/login">
+                <Button variant="ghost" size="sm">
+                  Log in
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="primary" size="sm">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>

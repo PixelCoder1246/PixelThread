@@ -54,7 +54,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       setShowLinkInput(false);
       setLinkUrl('');
     },
-    [editor, linkUrl],
+    [editor, linkUrl]
   );
 
   const handleImageInsert = useCallback(() => {
@@ -91,7 +91,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       <>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('bold') && styles.active)}
+          className={cn(
+            styles.button,
+            editor.isActive('bold') && styles.active
+          )}
           onClick={() => editor.chain().focus().toggleBold().run()}
           aria-label="Bold"
         >
@@ -99,7 +102,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         </button>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('italic') && styles.active)}
+          className={cn(
+            styles.button,
+            editor.isActive('italic') && styles.active
+          )}
           onClick={() => editor.chain().focus().toggleItalic().run()}
           aria-label="Italic"
         >
@@ -107,7 +113,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         </button>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('strike') && styles.active)}
+          className={cn(
+            styles.button,
+            editor.isActive('strike') && styles.active
+          )}
           onClick={() => editor.chain().focus().toggleStrike().run()}
           aria-label="Strikethrough"
         >
@@ -115,7 +124,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         </button>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('code') && styles.active)}
+          className={cn(
+            styles.button,
+            editor.isActive('code') && styles.active
+          )}
           onClick={() => editor.chain().focus().toggleCode().run()}
           aria-label="Code"
         >
@@ -123,7 +135,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         </button>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('highlight') && styles.active)}
+          className={cn(
+            styles.button,
+            editor.isActive('highlight') && styles.active
+          )}
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           aria-label="Highlight"
         >
@@ -137,7 +152,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           type="button"
           className={cn(
             styles.button,
-            editor.isActive('heading', { level: 1 }) && styles.active,
+            editor.isActive('heading', { level: 1 }) && styles.active
           )}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
@@ -150,7 +165,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           type="button"
           className={cn(
             styles.button,
-            editor.isActive('heading', { level: 2 }) && styles.active,
+            editor.isActive('heading', { level: 2 }) && styles.active
           )}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
@@ -163,7 +178,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           type="button"
           className={cn(
             styles.button,
-            editor.isActive('heading', { level: 3 }) && styles.active,
+            editor.isActive('heading', { level: 3 }) && styles.active
           )}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
@@ -176,7 +191,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           type="button"
           className={cn(
             styles.button,
-            editor.isActive('blockquote') && styles.active,
+            editor.isActive('blockquote') && styles.active
           )}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           aria-label="Blockquote"
@@ -187,7 +202,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           type="button"
           className={cn(
             styles.button,
-            editor.isActive('codeBlock') && styles.active,
+            editor.isActive('codeBlock') && styles.active
           )}
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           aria-label="Code block"
@@ -198,7 +213,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           type="button"
           className={cn(
             styles.button,
-            editor.isActive('bulletList') && styles.active,
+            editor.isActive('bulletList') && styles.active
           )}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           aria-label="Bullet list"
@@ -209,7 +224,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           type="button"
           className={cn(
             styles.button,
-            editor.isActive('orderedList') && styles.active,
+            editor.isActive('orderedList') && styles.active
           )}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           aria-label="Ordered list"
@@ -229,7 +244,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           <Image size={16} />
         </button>
         {showLinkInput ? (
-          <form onSubmit={handleLinkSubmit} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+          <form
+            onSubmit={handleLinkSubmit}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+          >
             <input
               type="url"
               value={linkUrl}
@@ -273,7 +291,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
             type="button"
             className={cn(
               styles.button,
-              editor.isActive('link') && styles.active,
+              editor.isActive('link') && styles.active
             )}
             onClick={() => {
               if (editor.isActive('link')) {
@@ -312,7 +330,6 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
         </button>
       </>
     ),
-
   };
 
   return (

@@ -1,7 +1,10 @@
 :root {
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
+  --font-sans:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+    sans-serif;
+  --font-mono:
+    'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
 
   /* Font sizes */
   --fs-xs: 0.75rem;
@@ -80,8 +83,10 @@
   --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
   /* Transitions */
@@ -216,11 +221,19 @@
   --scrollbar-thumb: #3f3f46;
   --scrollbar-track: #121214;
 
-  /* Gradient */
-  --gradient-primary: linear-gradient(135deg, #3f51b5, #7e22ce);
-  --gradient-accent: linear-gradient(135deg, #7e22ce, #a855f7);
-  --gradient-hero: linear-gradient(135deg, rgba(63, 81, 181, 0.15), rgba(126, 34, 206, 0.15));
-  --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+  /* Gradient - Minimal, clean editorial depth without loud neon clashing */
+  --gradient-primary: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
+  --gradient-accent: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  --gradient-hero: radial-gradient(
+    ellipse at 50% 20%,
+    rgba(99, 102, 241, 0.08) 0%,
+    transparent 70%
+  );
+  --gradient-card: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    transparent 100%
+  );
 
   /* Code */
   --code-bg: #1a1a2e;
@@ -333,8 +346,16 @@
 
   --gradient-primary: linear-gradient(135deg, #6366f1, #a855f7);
   --gradient-accent: linear-gradient(135deg, #a855f7, #c084fc);
-  --gradient-hero: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
-  --gradient-card: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, transparent 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08),
+    rgba(168, 85, 247, 0.08)
+  );
+  --gradient-card: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    transparent 100%
+  );
 
   --code-bg: #f4f4f5;
   --code-text: #3f3f46;

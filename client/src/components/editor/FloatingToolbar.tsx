@@ -46,7 +46,7 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
         const toolbarWidth = toolbarRef.current.offsetWidth;
         left = Math.max(
           editorRect.left + 8,
-          Math.min(left - toolbarWidth / 2, editorRect.right - toolbarWidth - 8),
+          Math.min(left - toolbarWidth / 2, editorRect.right - toolbarWidth - 8)
         );
       }
       const top = start.top - 8;
@@ -96,7 +96,7 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
       setShowLinkInput(false);
       return;
     }
-    const previousUrl = editor.getAttributes('link').href as string || '';
+    const previousUrl = (editor.getAttributes('link').href as string) || '';
     setLinkUrl(previousUrl);
     setShowLinkInput(true);
   }, [editor]);
@@ -117,7 +117,7 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
       setShowLinkInput(false);
       setLinkUrl('');
     },
-    [editor, linkUrl],
+    [editor, linkUrl]
   );
 
   if (!show) return null;
@@ -147,7 +147,10 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
           />
           <button
             type="button"
-            className={cn(styles.button, editor.isActive('link') && styles.active)}
+            className={cn(
+              styles.button,
+              editor.isActive('link') && styles.active
+            )}
             onClick={() => {
               editor.chain().focus().unsetLink().run();
               setShowLinkInput(false);
@@ -162,7 +165,10 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
           <div className={styles.group}>
             <button
               type="button"
-              className={cn(styles.button, editor.isActive('bold') && styles.active)}
+              className={cn(
+                styles.button,
+                editor.isActive('bold') && styles.active
+              )}
               onClick={() => editor.chain().focus().toggleBold().run()}
               aria-label="Bold"
             >
@@ -170,7 +176,10 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
             </button>
             <button
               type="button"
-              className={cn(styles.button, editor.isActive('italic') && styles.active)}
+              className={cn(
+                styles.button,
+                editor.isActive('italic') && styles.active
+              )}
               onClick={() => editor.chain().focus().toggleItalic().run()}
               aria-label="Italic"
             >
@@ -178,7 +187,10 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
             </button>
             <button
               type="button"
-              className={cn(styles.button, editor.isActive('strike') && styles.active)}
+              className={cn(
+                styles.button,
+                editor.isActive('strike') && styles.active
+              )}
               onClick={() => editor.chain().focus().toggleStrike().run()}
               aria-label="Strikethrough"
             >
@@ -191,7 +203,10 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
           <div className={styles.group}>
             <button
               type="button"
-              className={cn(styles.button, editor.isActive('code') && styles.active)}
+              className={cn(
+                styles.button,
+                editor.isActive('code') && styles.active
+              )}
               onClick={() => editor.chain().focus().toggleCode().run()}
               aria-label="Inline code"
             >
@@ -203,11 +218,18 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
               onClick={handleLinkClick}
               aria-label="Link"
             >
-              {editor.isActive('link') ? <Link2Off size={16} /> : <Link size={16} />}
+              {editor.isActive('link') ? (
+                <Link2Off size={16} />
+              ) : (
+                <Link size={16} />
+              )}
             </button>
             <button
               type="button"
-              className={cn(styles.button, editor.isActive('highlight') && styles.active)}
+              className={cn(
+                styles.button,
+                editor.isActive('highlight') && styles.active
+              )}
               onClick={() => editor.chain().focus().toggleHighlight().run()}
               aria-label="Highlight"
             >
@@ -217,6 +239,6 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
         </>
       )}
     </div>,
-    document.body,
+    document.body
   );
 }

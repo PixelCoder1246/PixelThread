@@ -29,9 +29,15 @@
   color: var(--text-primary);
 }
 
-.content h1 { font-size: var(--fs-xl); }
-.content h2 { font-size: var(--fs-lg); }
-.content h3 { font-size: var(--fs-base); }
+.content h1 {
+  font-size: var(--fs-xl);
+}
+.content h2 {
+  font-size: var(--fs-lg);
+}
+.content h3 {
+  font-size: var(--fs-base);
+}
 
 .content p {
   margin-bottom: var(--space-2);

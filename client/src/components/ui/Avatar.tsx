@@ -15,7 +15,13 @@ interface AvatarProps {
   className?: string;
 }
 
-export default function Avatar({ src, name, size = 'md', status, className }: AvatarProps) {
+export default function Avatar({
+  src,
+  name,
+  size = 'md',
+  status,
+  className,
+}: AvatarProps) {
   const [imgError, setImgError] = useState(false);
   const initials = getInitials(name);
   const bgColor = getRandomColor(name);

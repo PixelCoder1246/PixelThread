@@ -55,8 +55,15 @@ function groupByDate(entries: HistoryEntry[]): GroupedEntries[] {
     })
     .map(([date, entries]) => ({
       date,
-      label: order.includes(date) ? (date === 'today' ? 'Today' : 'Yesterday') : formatDate(date),
-      entries: entries.sort((a, b) => new Date(b.viewedAt).getTime() - new Date(a.viewedAt).getTime()),
+      label: order.includes(date)
+        ? date === 'today'
+          ? 'Today'
+          : 'Yesterday'
+        : formatDate(date),
+      entries: entries.sort(
+        (a, b) =>
+          new Date(b.viewedAt).getTime() - new Date(a.viewedAt).getTime()
+      ),
     }));
 }
 
@@ -143,7 +150,14 @@ export default function HistoryPage() {
         </div>
       ) : error ? (
         <div className={styles.error}>
-          <p style={{ color: 'var(--color-error)', marginBottom: 'var(--space-3)' }}>{error}</p>
+          <p
+            style={{
+              color: 'var(--color-error)',
+              marginBottom: 'var(--space-3)',
+            }}
+          >
+            {error}
+          </p>
           <Button variant="secondary" onClick={fetchHistory}>
             Try Again
           </Button>
@@ -175,7 +189,9 @@ export default function HistoryPage() {
                     <div
                       key={entry.id ?? post?.id}
                       className={styles.postItem}
-                      onClick={() => post?.slug && router.push(ROUTES.POST(post.slug))}
+                      onClick={() =>
+                        post?.slug && router.push(ROUTES.POST(post.slug))
+                      }
                     >
                       <Avatar
                         src={author?.image ?? undefined}
@@ -186,7 +202,9 @@ export default function HistoryPage() {
                         <div className={styles.postTitle}>{post?.title}</div>
                         <div className={styles.postMeta}>
                           {author?.name ?? 'Unknown'}
-                          {post?.tags && post.tags.length > 0 && ` · #${post.tags[0].name}`}
+                          {post?.tags &&
+                            post.tags.length > 0 &&
+                            ` · #${post.tags[0].name}`}
                         </div>
                       </div>
                       <span className={styles.postTime}>

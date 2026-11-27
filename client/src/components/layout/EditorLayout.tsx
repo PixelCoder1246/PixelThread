@@ -52,7 +52,12 @@ export default function EditorLayout({
         </div>
         <div className={styles.headerRight}>
           {onPreview && (
-            <Button variant="ghost" size="sm" leftIcon={<Eye size={16} />} onClick={onPreview}>
+            <Button
+              variant="ghost"
+              size="sm"
+              leftIcon={<Eye size={16} />}
+              onClick={onPreview}
+            >
               Preview
             </Button>
           )}

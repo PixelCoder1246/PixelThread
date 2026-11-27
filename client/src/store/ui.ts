@@ -22,12 +22,19 @@ export const useUIStore = create<UIState>((set) => ({
   mobileMenuOpen: false,
   searchOpen: false,
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  toggleCommandPalette: () => set((state) => ({ commandPaletteOpen: !state.commandPaletteOpen })),
-  toggleMobileMenu: () => set((state) => ({ mobileMenuOpen: !state.mobileMenuOpen })),
+  toggleCommandPalette: () =>
+    set((state) => ({ commandPaletteOpen: !state.commandPaletteOpen })),
+  toggleMobileMenu: () =>
+    set((state) => ({ mobileMenuOpen: !state.mobileMenuOpen })),
   toggleSearch: () => set((state) => ({ searchOpen: !state.searchOpen })),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
   setCommandPaletteOpen: (open) => set({ commandPaletteOpen: open }),
   setMobileMenuOpen: (open) => set({ mobileMenuOpen: open }),
   setSearchOpen: (open) => set({ searchOpen: open }),
-  closeAll: () => set({ commandPaletteOpen: false, mobileMenuOpen: false, searchOpen: false }),
+  closeAll: () =>
+    set({
+      commandPaletteOpen: false,
+      mobileMenuOpen: false,
+      searchOpen: false,
+    }),
 }));

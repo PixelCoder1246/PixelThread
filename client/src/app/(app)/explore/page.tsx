@@ -15,19 +15,35 @@ import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
 import styles from './page.module.css';
 
+const DEFAULT_EXPLORE_TAGS: Tag[] = [
+  { id: 'tag-1', name: 'ai', postCount: 14 },
+  { id: 'tag-2', name: 'technology', postCount: 12 },
+  { id: 'tag-3', name: 'webdev', postCount: 9 },
+  { id: 'tag-4', name: 'react', postCount: 8 },
+  { id: 'tag-5', name: 'design', postCount: 7 },
+  { id: 'tag-6', name: 'productivity', postCount: 6 },
+  { id: 'tag-7', name: 'writing', postCount: 5 },
+  { id: 'tag-8', name: 'career', postCount: 4 },
+];
+
 export default function ExplorePage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>(DEFAULT_EXPLORE_TAGS);
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isPostsLoading, setIsPostsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    tagsService.getAll({ limit: 30 })
-      .then((res) => setTags(res.tags))
+    tagsService
+      .getAll({ limit: 30 })
+      .then((res) => {
+        if (res?.tags?.length > 0) {
+          setTags(res.tags);
+        }
+      })
       .catch(() => {});
   }, []);
 
@@ -64,7 +80,9 @@ export default function ExplorePage() {
 
   const handleSearchSubmit = () => {
     if (searchQuery.trim().length >= 2) {
-      router.push(`${ROUTES.SEARCH}?q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(
+        `${ROUTES.SEARCH}?q=${encodeURIComponent(searchQuery.trim())}`
+      );
     }
   };
 
@@ -79,7 +97,13 @@ export default function ExplorePage() {
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
-        <Compass size={40} style={{ color: 'var(--primary-500)', margin: '0 auto var(--space-4)' }} />
+        <Compass
+          size={40}
+          style={{
+            color: 'var(--primary-500)',
+            margin: '0 auto var(--space-4)',
+          }}
+        />
         <h1 className={styles.heroTitle}>Explore</h1>
         <p className={styles.heroDescription}>
           Discover posts, follow topics, and find your next read.
@@ -105,7 +129,10 @@ export default function ExplorePage() {
                 key={tag.id}
                 variant={activeTag === tag.name ? 'primary' : 'default'}
                 size="md"
-                className={cn(styles.tagBadge, activeTag === tag.name && styles.tagBadgeActive)}
+                className={cn(
+                  styles.tagBadge,
+                  activeTag === tag.name && styles.tagBadgeActive
+                )}
                 onClick={() => handleTagClick(tag.name)}
               >
                 #{tag.name}
@@ -136,7 +163,14 @@ export default function ExplorePage() {
           <LoadingState message="Loading posts..." />
         ) : error ? (
           <div className={styles.error}>
-            <p style={{ color: 'var(--color-error)', marginBottom: 'var(--space-3)' }}>{error}</p>
+            <p
+              style={{
+                color: 'var(--color-error)',
+                marginBottom: 'var(--space-3)',
+              }}
+            >
+              {error}
+            </p>
             <Button variant="secondary" onClick={() => fetchPosts(activeTag)}>
               Try Again
             </Button>
@@ -145,7 +179,11 @@ export default function ExplorePage() {
           <EmptyState
             icon={Search}
             title="No posts found"
-            description={activeTag ? `No posts tagged with "${activeTag}".` : 'No posts available yet.'}
+            description={
+              activeTag
+                ? `No posts tagged with "${activeTag}".`
+                : 'No posts available yet.'
+            }
           />
         ) : (
           <div className={styles.postGrid}>
@@ -163,7 +201,9 @@ export default function ExplorePage() {
                   <div className={styles.postCardAuthor}>
                     <span>{post.author.name}</span>
                     <span>&middot;</span>
-                    <span>{formatRelativeDate(post.publishedAt ?? post.createdAt)}</span>
+                    <span>
+                      {formatRelativeDate(post.publishedAt ?? post.createdAt)}
+                    </span>
                   </div>
                   <span>{formatNumber(post.analytics.views)} views</span>
                 </div>

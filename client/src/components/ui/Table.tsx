@@ -26,7 +26,11 @@ export default function Table<T extends Record<string, unknown>>({
   emptyMessage = 'No data found',
   className,
 }: TableProps<T>) {
-  const renderCell = (item: T, column: TableColumn<T>, index: number): React.ReactNode => {
+  const renderCell = (
+    item: T,
+    column: TableColumn<T>,
+    index: number
+  ): React.ReactNode => {
     if (column.render) return column.render(item, index);
     return String(item[column.key] ?? '');
   };
@@ -44,33 +48,33 @@ export default function Table<T extends Record<string, unknown>>({
           </tr>
         </thead>
         <tbody className={styles.tbody}>
-          {isLoading
-            ? Array.from({ length: 5 }).map((_, rowIdx) => (
-                <tr key={rowIdx}>
-                  {columns.map((col) => (
-                    <td key={col.key} className={styles.td}>
-                      <Skeleton variant="text" width="80%" />
-                    </td>
-                  ))}
-                </tr>
-              ))
-            : data.length === 0
-              ? (
-                <tr>
-                  <td colSpan={columns.length} className={styles.empty}>
-                    {emptyMessage}
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, rowIdx) => (
+              <tr key={rowIdx}>
+                {columns.map((col) => (
+                  <td key={col.key} className={styles.td}>
+                    <Skeleton variant="text" width="80%" />
                   </td>
-                </tr>
-              )
-              : data.map((item, rowIdx) => (
-                  <tr key={rowIdx} className={styles.tr}>
-                    {columns.map((col) => (
-                      <td key={col.key} className={styles.td}>
-                        {renderCell(item, col, rowIdx)}
-                      </td>
-                    ))}
-                  </tr>
                 ))}
+              </tr>
+            ))
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length} className={styles.empty}>
+                {emptyMessage}
+              </td>
+            </tr>
+          ) : (
+            data.map((item, rowIdx) => (
+              <tr key={rowIdx} className={styles.tr}>
+                {columns.map((col) => (
+                  <td key={col.key} className={styles.td}>
+                    {renderCell(item, col, rowIdx)}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

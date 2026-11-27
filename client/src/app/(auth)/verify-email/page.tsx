@@ -14,13 +14,17 @@ function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  const [state, setState] = useState<'verifying' | 'success' | 'error'>('verifying');
+  const [state, setState] = useState<'verifying' | 'success' | 'error'>(
+    'verifying'
+  );
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     if (!token) {
       setState('error');
-      setErrorMessage('No verification token found. Please check the link you clicked.');
+      setErrorMessage(
+        'No verification token found. Please check the link you clicked.'
+      );
       return;
     }
 
@@ -33,7 +37,12 @@ function VerifyEmailContent() {
       } catch (err: unknown) {
         if (!cancelled) {
           setState('error');
-          setErrorMessage(getErrorMessage(err, 'Verification failed. The link may have expired.'));
+          setErrorMessage(
+            getErrorMessage(
+              err,
+              'Verification failed. The link may have expired.'
+            )
+          );
         }
       }
     }
@@ -46,7 +55,10 @@ function VerifyEmailContent() {
 
   if (state === 'verifying') {
     return (
-      <AuthLayout title="Verifying your email" subtitle="Please wait while we verify your email address.">
+      <AuthLayout
+        title="Verifying your email"
+        subtitle="Please wait while we verify your email address."
+      >
         <div className={styles.statusState}>
           <Loader2 size={48} className={styles.spinner} />
           <p className={styles.statusText}>Verifying your email address...</p>
@@ -57,13 +69,17 @@ function VerifyEmailContent() {
 
   if (state === 'success') {
     return (
-      <AuthLayout title="Email verified!" subtitle="Your email address has been successfully verified.">
+      <AuthLayout
+        title="Email verified!"
+        subtitle="Your email address has been successfully verified."
+      >
         <div className={styles.statusState}>
           <div className={styles.successIcon}>
             <CheckCircle size={48} />
           </div>
           <p className={styles.statusText}>
-            Thank you for verifying your email. You can now sign in and start creating.
+            Thank you for verifying your email. You can now sign in and start
+            creating.
           </p>
           <Button fullWidth onClick={() => router.push('/login')}>
             Sign in
@@ -74,7 +90,10 @@ function VerifyEmailContent() {
   }
 
   return (
-    <AuthLayout title="Verification failed" subtitle="We couldn&apos;t verify your email address.">
+    <AuthLayout
+      title="Verification failed"
+      subtitle="We couldn't verify your email address."
+    >
       <div className={styles.statusState}>
         <div className={styles.errorIcon}>
           <XCircle size={48} />

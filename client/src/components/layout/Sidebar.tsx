@@ -13,7 +13,7 @@ import {
   Bookmark,
   History,
   BarChart3,
-  Settings,
+  LogIn,
 } from 'lucide-react';
 import styles from './Sidebar.module.css';
 
@@ -35,6 +35,13 @@ export default function Sidebar() {
   const initials = user ? getInitials(user.name) : '';
   const avatarColor = user ? getRandomColor(user.name) : '';
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === '/feed') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <aside
@@ -46,8 +53,10 @@ export default function Sidebar() {
       >
         <div className={styles.logoSection}>
           <Link
-            href="/"
+            href={user ? '/feed' : '/'}
             className={cn(styles.logo, isCollapsed && styles.logoCollapsed)}
+            onClick={handleLogoClick}
+            title="PixelThread Feed"
           >
             {isCollapsed ? 'PT' : 'PixelThread'}
           </Link>
@@ -81,18 +90,7 @@ export default function Sidebar() {
         </nav>
 
         <div className={styles.bottomSection}>
-          <Link
-            href="/settings"
-            className={cn(styles.navItem)}
-            onClick={() => mobileMenuOpen && toggleMobileMenu()}
-          >
-            <span className={styles.navIcon}>
-              <Settings size={18} />
-            </span>
-            <span className={styles.navText}>Settings</span>
-          </Link>
-
-          {user && (
+          {user ? (
             <Link
               href="/profile"
               className={styles.userInfo}
@@ -118,6 +116,17 @@ export default function Sidebar() {
                   {user.role === 'ADMIN' ? 'Admin' : 'Member'}
                 </span>
               </div>
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className={cn(styles.navItem)}
+              onClick={() => mobileMenuOpen && toggleMobileMenu()}
+            >
+              <span className={styles.navIcon}>
+                <LogIn size={18} />
+              </span>
+              <span className={styles.navText}>Sign In</span>
             </Link>
           )}
         </div>

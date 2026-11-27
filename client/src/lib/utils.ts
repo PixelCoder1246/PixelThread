@@ -4,7 +4,10 @@ export function cn(...classes: unknown[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
+export function formatDate(
+  date: string | Date,
+  options?: Intl.DateTimeFormatOptions
+): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   return dateObj.toLocaleDateString('en-US', {
     month: 'short',
@@ -14,7 +17,9 @@ export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOpt
   });
 }
 
-export function formatRelativeDate(date: string | Date | null | undefined): string {
+export function formatRelativeDate(
+  date: string | Date | null | undefined
+): string {
   if (!date) return '';
   const now = new Date();
   const dateObj = typeof date === 'string' ? new Date(date) : date;
@@ -59,8 +64,10 @@ export function slugify(str: string): string {
 
 export function extractTextFromContent(content: unknown): string {
   if (typeof content === 'string') return content;
-  if (typeof content === 'number' || typeof content === 'boolean') return String(content);
-  if (Array.isArray(content)) return content.map(extractTextFromContent).join(' ');
+  if (typeof content === 'number' || typeof content === 'boolean')
+    return String(content);
+  if (Array.isArray(content))
+    return content.map(extractTextFromContent).join(' ');
   if (content && typeof content === 'object') {
     const obj = content as Record<string, unknown>;
     if (obj.text && typeof obj.text === 'string') return obj.text;
@@ -105,7 +112,10 @@ export function blocksToMarkdown(content: unknown): string {
         return '```\n' + text + '\n```';
       }
       if (type === 'blockquote' || type === 'quote') {
-        return text.split('\n').map((l) => `> ${l}`).join('\n');
+        return text
+          .split('\n')
+          .map((l) => `> ${l}`)
+          .join('\n');
       }
       return text;
     })
@@ -120,7 +130,10 @@ export function calculateReadingTime(content: unknown): number {
   return Math.max(1, Math.ceil(words / READING_SPEED));
 }
 
-export function parseJsonSafe<T>(value: string | null | undefined, fallback: T): T {
+export function parseJsonSafe<T>(
+  value: string | null | undefined,
+  fallback: T
+): T {
   if (!value) return fallback;
   try {
     return JSON.parse(value) as T;
@@ -181,7 +194,10 @@ export function copyToClipboard(text: string): Promise<void> {
   return navigator.clipboard.writeText(text);
 }
 
-export function getErrorMessage(err: unknown, fallback = 'Something went wrong. Please try again.'): string {
+export function getErrorMessage(
+  err: unknown,
+  fallback = 'Something went wrong. Please try again.'
+): string {
   if (err && typeof err === 'object' && 'response' in err) {
     const axiosErr = err as { response?: { data?: { message?: string } } };
     if (axiosErr.response?.data?.message) return axiosErr.response.data.message;
@@ -194,7 +210,9 @@ export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-export function buildQueryString(params: Record<string, string | number | boolean | undefined | null>): string {
+export function buildQueryString(
+  params: Record<string, string | number | boolean | undefined | null>
+): string {
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {

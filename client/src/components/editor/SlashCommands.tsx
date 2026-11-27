@@ -177,7 +177,7 @@ const CommandsList = forwardRef<CommandsListRef, CommandsListProps>(
           command(item);
         }
       },
-      [items, command],
+      [items, command]
     );
 
     useImperativeHandle(
@@ -186,7 +186,7 @@ const CommandsList = forwardRef<CommandsListRef, CommandsListProps>(
         onKeyDown: ({ event }: SuggestionKeyDownProps) => {
           if (event.key === 'ArrowUp') {
             setSelectedIndex(
-              (prev) => (prev - 1 + items.length) % items.length,
+              (prev) => (prev - 1 + items.length) % items.length
             );
             return true;
           }
@@ -201,7 +201,7 @@ const CommandsList = forwardRef<CommandsListRef, CommandsListProps>(
           return false;
         },
       }),
-      [items, selectedIndex, selectItem],
+      [items, selectedIndex, selectItem]
     );
 
     return (
@@ -227,7 +227,7 @@ const CommandsList = forwardRef<CommandsListRef, CommandsListProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 CommandsList.displayName = 'CommandsList';
@@ -252,7 +252,7 @@ export const SlashCommandExtension = Extension.create({
         },
         items: ({ query }: { query: string }) => {
           return commandItems.filter((item) =>
-            item.title.toLowerCase().includes(query.toLowerCase()),
+            item.title.toLowerCase().includes(query.toLowerCase())
           );
         },
         render: () => {

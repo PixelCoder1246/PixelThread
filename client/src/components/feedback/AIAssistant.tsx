@@ -24,13 +24,7 @@ import AITypingIndicator from './AITypingIndicator';
 import AIResponseBlock from './AIResponseBlock';
 import styles from './AIAssistant.module.css';
 
-type AiAction =
-  | 'generate'
-  | 'improve'
-  | 'title'
-  | 'tags'
-  | 'excerpt'
-  | 'seo';
+type AiAction = 'generate' | 'improve' | 'title' | 'tags' | 'excerpt' | 'seo';
 
 interface AiTrigger {
   key: AiAction;
@@ -159,8 +153,7 @@ function getAiResponseText(response: AiGenerationResponse): string {
   }
   if (response.metaTitle || response.metaDescription) {
     const parts: string[] = [];
-    if (response.metaTitle)
-      parts.push(`**Meta Title:** ${response.metaTitle}`);
+    if (response.metaTitle) parts.push(`**Meta Title:** ${response.metaTitle}`);
     if (response.metaDescription)
       parts.push(`**Meta Description:** ${response.metaDescription}`);
     if (response.keywords)
@@ -169,8 +162,7 @@ function getAiResponseText(response: AiGenerationResponse): string {
       parts.push(`**Suggestions:**\n${response.suggestions.join('\n')}`);
     return parts.join('\n\n');
   }
-  if (response.suggestions)
-    return response.suggestions.join('\n');
+  if (response.suggestions) return response.suggestions.join('\n');
   return JSON.stringify(response, null, 2);
 }
 
@@ -238,12 +230,9 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
     setIsStreaming(false);
   }, []);
 
-  const handleInputChange = useCallback(
-    (name: string, value: string) => {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    },
-    [],
-  );
+  const handleInputChange = useCallback((name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   const handleStop = useCallback(() => {
     abortRef.current?.abort();
@@ -267,7 +256,12 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
     if (!editor || !response) return;
     const { from, to } = editor.state.selection;
     if (from === to) return;
-    editor.chain().focus().deleteRange({ from, to }).insertContent(response).run();
+    editor
+      .chain()
+      .focus()
+      .deleteRange({ from, to })
+      .insertContent(response)
+      .run();
   }, [editor, response]);
 
   const handleRegenerate = useCallback(async () => {
@@ -312,10 +306,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
           break;
         }
         case 'seo': {
-          result = await aiService.generateSeo(
-            formData.title || '',
-            content,
-          );
+          result = await aiService.generateSeo(formData.title || '', content);
           break;
         }
         default:
@@ -339,7 +330,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
       e.preventDefault();
       await handleRegenerate();
     },
-    [handleRegenerate],
+    [handleRegenerate]
   );
 
   const activeTrigger = activeAction
@@ -378,7 +369,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
               type="button"
               className={cn(
                 styles.triggerButton,
-                activeAction === trigger.key && styles.active,
+                activeAction === trigger.key && styles.active
               )}
               onClick={(e) => {
                 e.stopPropagation();
@@ -395,9 +386,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
         {activeAction && activeTrigger && (
           <div className={styles.content}>
             <div className={styles.formArea}>
-              <div className={styles.formTitle}>
-                {activeTrigger.label}
-              </div>
+              <div className={styles.formTitle}>{activeTrigger.label}</div>
               <form onSubmit={handleSubmit}>
                 {activeTrigger.fields.map((field) => (
                   <div key={field.name} className={styles.formGroup}>
@@ -472,9 +461,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
             </div>
 
             <div className={styles.responseArea} ref={responseAreaRef}>
-              {error && (
-                <div className={styles.errorText}>{error}</div>
-              )}
+              {error && <div className={styles.errorText}>{error}</div>}
 
               {isLoading && !response && (
                 <div className={styles.loadingArea}>
@@ -525,11 +512,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
                     className={styles.actionButton}
                     onClick={handleInsertAtCursor}
                   >
-                    <span
-                      style={{ fontSize: 14, lineHeight: 1 }}
-                    >
-                      ↓
-                    </span>
+                    <span style={{ fontSize: 14, lineHeight: 1 }}>↓</span>
                     Insert
                   </button>
                   <button
@@ -537,11 +520,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
                     className={styles.actionButton}
                     onClick={handleReplaceSelection}
                   >
-                    <span
-                      style={{ fontSize: 14, lineHeight: 1 }}
-                    >
-                      ↕
-                    </span>
+                    <span style={{ fontSize: 14, lineHeight: 1 }}>↕</span>
                     Replace
                   </button>
                   <button
@@ -579,9 +558,7 @@ export default function AIAssistant({ editor, className }: AIAssistantProps) {
             : 'AI Assistant'}
         </div>
         {tokenUsage && (
-          <span className={styles.tokenBadge}>
-            {tokenUsage.model}
-          </span>
+          <span className={styles.tokenBadge}>{tokenUsage.model}</span>
         )}
       </div>
     </div>

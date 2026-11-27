@@ -38,7 +38,7 @@ function Button({
         styles[size],
         fullWidth && styles.fullWidth,
         isLoading && styles.loading,
-        className,
+        className
       )}
       disabled={disabled || isLoading}
       {...props}
@@ -49,7 +49,9 @@ function Button({
         leftIcon && <span className={styles.leftIcon}>{leftIcon}</span>
       )}
       <span className={styles.content}>{children}</span>
-      {!isLoading && rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}
+      {!isLoading && rightIcon && (
+        <span className={styles.rightIcon}>{rightIcon}</span>
+      )}
     </button>
   );
 }

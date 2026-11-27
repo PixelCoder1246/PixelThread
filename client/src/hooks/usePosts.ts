@@ -1,6 +1,11 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 import { postsService } from '@/services/posts';
 import type { PostFormData } from '@/types';
 
@@ -17,7 +22,10 @@ export function useInfinitePosts(limit = 10) {
     queryFn: ({ pageParam }) => postsService.getAll({ page: pageParam, limit }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      const pagination = lastPage.pagination as { hasNextPage: boolean; page: number };
+      const pagination = lastPage.pagination as {
+        hasNextPage: boolean;
+        page: number;
+      };
       return pagination.hasNextPage ? pagination.page + 1 : undefined;
     },
   });
@@ -92,7 +100,8 @@ export function useUpdatePostSeo(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Parameters<typeof postsService.updateSeo>[1]) => postsService.updateSeo(id, data),
+    mutationFn: (data: Parameters<typeof postsService.updateSeo>[1]) =>
+      postsService.updateSeo(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['post', id, 'seo'] });
     },

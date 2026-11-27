@@ -40,8 +40,12 @@ export default function AdminLogsPage() {
     enabled: !authLoading,
   });
 
-  const logs: AuditLog[] = (data as { logs?: AuditLog[] })?.logs ?? (Array.isArray(data) ? data as AuditLog[] : []);
-  const pagination = (data as { pagination?: Pagination })?.pagination as Pagination | undefined;
+  const logs: AuditLog[] =
+    (data as { logs?: AuditLog[] })?.logs ??
+    (Array.isArray(data) ? (data as AuditLog[]) : []);
+  const pagination = (data as { pagination?: Pagination })?.pagination as
+    | Pagination
+    | undefined;
 
   if (authLoading) {
     return (
@@ -68,8 +72,12 @@ export default function AdminLogsPage() {
       <div className={styles.page}>
         <div className={styles.error}>
           <div className={styles.errorTitle}>Failed to load audit logs</div>
-          <p className={styles.errorMessage}>Something went wrong. Please try again.</p>
-          <Button variant="primary" onClick={() => refetch()}>Retry</Button>
+          <p className={styles.errorMessage}>
+            Something went wrong. Please try again.
+          </p>
+          <Button variant="primary" onClick={() => refetch()}>
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -98,26 +106,49 @@ export default function AdminLogsPage() {
           <tbody>
             {logs.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-tertiary)' }}>
+                <td
+                  colSpan={5}
+                  style={{
+                    textAlign: 'center',
+                    padding: 'var(--space-8)',
+                    color: 'var(--text-tertiary)',
+                  }}
+                >
                   No audit logs found.
                 </td>
               </tr>
             ) : (
               logs.map((log) => {
                 const actionKey = log.action.toUpperCase();
-                const actionClass = Object.keys(actionClassMap).find((k) => actionKey.includes(k))
-                  ? actionClassMap[Object.keys(actionClassMap).find((k) => actionKey.includes(k))!]
+                const actionClass = Object.keys(actionClassMap).find((k) =>
+                  actionKey.includes(k)
+                )
+                  ? actionClassMap[
+                      Object.keys(actionClassMap).find((k) =>
+                        actionKey.includes(k)
+                      )!
+                    ]
                   : '';
                 return (
                   <tr key={log.id}>
                     <td>
-                      <span className={styles.logTimestamp}>{formatDate(log.createdAt, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                      <span className={styles.logTimestamp}>
+                        {formatDate(log.createdAt, {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
                     </td>
                     <td>
                       <span className={styles.logUser}>{log.user}</span>
                     </td>
                     <td>
-                      <span className={`${styles.logAction} ${actionClass ? styles[actionClass] : ''}`}>
+                      <span
+                        className={`${styles.logAction} ${actionClass ? styles[actionClass] : ''}`}
+                      >
                         {log.action}
                       </span>
                     </td>
@@ -144,16 +175,18 @@ export default function AdminLogsPage() {
             >
               Prev
             </button>
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                type="button"
-                className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
-                onClick={() => setPage(p)}
-              >
-                {p}
-              </button>
-            ))}
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+              (p) => (
+                <button
+                  key={p}
+                  type="button"
+                  className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              )
+            )}
             <button
               type="button"
               className={styles.pageBtn}
@@ -162,9 +195,7 @@ export default function AdminLogsPage() {
             >
               Next
             </button>
-            <span className={styles.pageInfo}>
-              {pagination.total} total
-            </span>
+            <span className={styles.pageInfo}>{pagination.total} total</span>
           </div>
         )}
       </div>

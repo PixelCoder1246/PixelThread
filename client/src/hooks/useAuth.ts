@@ -8,7 +8,8 @@ import { useAuthStore } from '@/store';
 import type { LoginFormData, RegisterFormData } from '@/types';
 
 export function useAuth() {
-  const { user, isAuthenticated, isLoading, setUser, clearAuth } = useAuthStore();
+  const { user, isAuthenticated, isLoading, setUser, clearAuth } =
+    useAuthStore();
   const queryClient = useQueryClient();
   const router = useRouter();
 

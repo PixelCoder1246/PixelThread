@@ -36,7 +36,7 @@ function CodeBlockWithShiki({
       },
       () => {
         if (!cancelled) setHtml(null);
-      },
+      }
     );
     return () => {
       cancelled = true;
@@ -82,9 +82,7 @@ export default function AIResponseBlock({
               const match = /language-(\w+)/.exec(codeClassName || '');
               const code = String(children).replace(/\n$/, '');
               if (match) {
-                return (
-                  <CodeBlockWithShiki language={match[1]} code={code} />
-                );
+                return <CodeBlockWithShiki language={match[1]} code={code} />;
               }
               return (
                 <code className={codeClassName} {...props}>

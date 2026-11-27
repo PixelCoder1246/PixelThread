@@ -2,7 +2,12 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from 'lucide-react';
 import styles from './Pagination.module.css';
 
 interface PaginationProps {
@@ -12,7 +17,10 @@ interface PaginationProps {
   className?: string;
 }
 
-function getPageNumbers(current: number, total: number): (number | 'ellipsis')[] {
+function getPageNumbers(
+  current: number,
+  total: number
+): (number | 'ellipsis')[] {
   if (total <= 7) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }

@@ -1,5 +1,10 @@
 import api from '@/lib/api';
-import type { Analytics, PostAnalyticsItem, TopPost, AdminAnalytics } from '@/types';
+import type {
+  Analytics,
+  PostAnalyticsItem,
+  TopPost,
+  AdminAnalytics,
+} from '@/types';
 
 export const analyticsService = {
   async getMyAnalytics(): Promise<Analytics> {

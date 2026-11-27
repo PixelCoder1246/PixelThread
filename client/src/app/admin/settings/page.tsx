@@ -23,21 +23,31 @@ export default function AdminSettingsPage() {
 
   const [form, setForm] = useState<PlatformSettings>({
     siteName: 'PixelThread',
-    siteDescription: 'AI-powered blogging platform for thinkers, creators, and storytellers.',
+    siteDescription:
+      'AI-powered blogging platform for thinkers, creators, and storytellers.',
     logo: '',
     allowRegistration: true,
     defaultUserRole: 'USER',
   });
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
 
-  const showToast = useCallback((type: 'success' | 'error', message: string) => {
-    setToast({ type, message });
-    setTimeout(() => setToast(null), 3000);
-  }, []);
+  const showToast = useCallback(
+    (type: 'success' | 'error', message: string) => {
+      setToast({ type, message });
+      setTimeout(() => setToast(null), 3000);
+    },
+    []
+  );
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['admin', 'settings'],
-    queryFn: () => adminService.getSettings().then((res) => res as unknown as PlatformSettings),
+    queryFn: () =>
+      adminService
+        .getSettings()
+        .then((res) => res as unknown as PlatformSettings),
     enabled: !authLoading,
   });
 
@@ -48,7 +58,8 @@ export default function AdminSettingsPage() {
   }, [data]);
 
   const updateMutation = useMutation({
-    mutationFn: (settings: PlatformSettings) => adminService.updateSettings(settings),
+    mutationFn: (settings: PlatformSettings) =>
+      adminService.updateSettings(settings),
     onSuccess: () => {
       showToast('success', 'Settings saved successfully');
     },
@@ -87,8 +98,12 @@ export default function AdminSettingsPage() {
       <div className={styles.page}>
         <div className={styles.error}>
           <div className={styles.errorTitle}>Failed to load settings</div>
-          <p className={styles.errorMessage}>Something went wrong. Please try again.</p>
-          <Button variant="primary" onClick={() => refetch()}>Retry</Button>
+          <p className={styles.errorMessage}>
+            Something went wrong. Please try again.
+          </p>
+          <Button variant="primary" onClick={() => refetch()}>
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -107,34 +122,49 @@ export default function AdminSettingsPage() {
             <h2 className={styles.sectionTitle}>General</h2>
 
             <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="siteName">Site Name</label>
+              <label className={styles.label} htmlFor="siteName">
+                Site Name
+              </label>
               <input
                 id="siteName"
                 type="text"
                 value={form.siteName}
-                onChange={(e) => setForm((prev) => ({ ...prev, siteName: e.target.value }))}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, siteName: e.target.value }))
+                }
                 className={styles.input}
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="siteDescription">Site Description</label>
+              <label className={styles.label} htmlFor="siteDescription">
+                Site Description
+              </label>
               <textarea
                 id="siteDescription"
                 value={form.siteDescription}
-                onChange={(e) => setForm((prev) => ({ ...prev, siteDescription: e.target.value }))}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    siteDescription: e.target.value,
+                  }))
+                }
                 className={styles.textarea}
               />
               <p className={styles.hint}>Used for SEO and meta descriptions.</p>
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="logo">Logo URL</label>
+              <label className={styles.label} htmlFor="logo">
+                Logo URL
+              </label>
               <input
                 id="logo"
                 type="text"
                 value={form.logo ?? ''}
-                onChange={(e) => setForm((prev) => ({ ...prev, logo: e.target.value }))}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, logo: e.target.value }))
+                }
                 className={styles.input}
                 placeholder="https://example.com/logo.png"
               />
@@ -150,13 +180,20 @@ export default function AdminSettingsPage() {
             <div className={styles.toggleRow}>
               <div>
                 <div className={styles.toggleLabel}>Allow Registration</div>
-                <div className={styles.toggleDesc}>Enable or disable new user registration</div>
+                <div className={styles.toggleDesc}>
+                  Enable or disable new user registration
+                </div>
               </div>
               <label className={styles.toggle}>
                 <input
                   type="checkbox"
                   checked={form.allowRegistration}
-                  onChange={(e) => setForm((prev) => ({ ...prev, allowRegistration: e.target.checked }))}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      allowRegistration: e.target.checked,
+                    }))
+                  }
                 />
                 <div className={styles.toggleTrack} />
                 <div className={styles.toggleThumb} />
@@ -166,17 +203,26 @@ export default function AdminSettingsPage() {
             <hr className={styles.divider} />
 
             <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="defaultRole">Default User Role</label>
+              <label className={styles.label} htmlFor="defaultRole">
+                Default User Role
+              </label>
               <select
                 id="defaultRole"
                 value={form.defaultUserRole}
-                onChange={(e) => setForm((prev) => ({ ...prev, defaultUserRole: e.target.value as 'USER' | 'ADMIN' }))}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    defaultUserRole: e.target.value as 'USER' | 'ADMIN',
+                  }))
+                }
                 className={styles.select}
               >
                 <option value="USER">User</option>
                 <option value="ADMIN">Admin</option>
               </select>
-              <p className={styles.hint}>Role assigned to newly registered users.</p>
+              <p className={styles.hint}>
+                Role assigned to newly registered users.
+              </p>
             </div>
           </div>
         </div>
@@ -194,7 +240,9 @@ export default function AdminSettingsPage() {
       </form>
 
       {toast && (
-        <div className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}>
+        <div
+          className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}
+        >
           <span className={styles.toastMessage}>{toast.message}</span>
         </div>
       )}

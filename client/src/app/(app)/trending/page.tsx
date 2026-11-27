@@ -83,7 +83,14 @@ export default function TrendingPage() {
           className={cn(styles.tab, sortMode === 'views' && styles.tabActive)}
           onClick={() => setSortMode('views')}
         >
-          <Eye size={14} style={{ display: 'inline', marginRight: 'var(--space-1_5)', verticalAlign: 'middle' }} />
+          <Eye
+            size={14}
+            style={{
+              display: 'inline',
+              marginRight: 'var(--space-1_5)',
+              verticalAlign: 'middle',
+            }}
+          />
           Most Viewed
         </button>
         <button
@@ -91,7 +98,14 @@ export default function TrendingPage() {
           className={cn(styles.tab, sortMode === 'likes' && styles.tabActive)}
           onClick={() => setSortMode('likes')}
         >
-          <Heart size={14} style={{ display: 'inline', marginRight: 'var(--space-1_5)', verticalAlign: 'middle' }} />
+          <Heart
+            size={14}
+            style={{
+              display: 'inline',
+              marginRight: 'var(--space-1_5)',
+              verticalAlign: 'middle',
+            }}
+          />
           Most Liked
         </button>
       </div>
@@ -99,8 +113,20 @@ export default function TrendingPage() {
       {isLoading ? (
         <TrendingSkeleton />
       ) : error ? (
-        <div style={{ textAlign: 'center', padding: 'var(--space-12) var(--space-6)' }}>
-          <p style={{ color: 'var(--color-error)', marginBottom: 'var(--space-3)' }}>{error}</p>
+        <div
+          style={{
+            textAlign: 'center',
+            padding: 'var(--space-12) var(--space-6)',
+          }}
+        >
+          <p
+            style={{
+              color: 'var(--color-error)',
+              marginBottom: 'var(--space-3)',
+            }}
+          >
+            {error}
+          </p>
           <button
             type="button"
             className={styles.tab}
@@ -139,7 +165,9 @@ export default function TrendingPage() {
                   />
                   <span>{post.author.name}</span>
                   <span>&middot;</span>
-                  <span>{formatRelativeDate(post.publishedAt ?? post.createdAt)}</span>
+                  <span>
+                    {formatRelativeDate(post.publishedAt ?? post.createdAt)}
+                  </span>
                 </div>
 
                 <div className={styles.cardStats}>

@@ -18,7 +18,11 @@ interface AdminLayoutProps {
   breadcrumbs?: Breadcrumb[];
 }
 
-export default function AdminLayout({ children, title, breadcrumbs }: AdminLayoutProps) {
+export default function AdminLayout({
+  children,
+  title,
+  breadcrumbs,
+}: AdminLayoutProps) {
   return (
     <div className={styles.layout}>
       <AdminSidebar />
@@ -36,14 +40,19 @@ export default function AdminLayout({ children, title, breadcrumbs }: AdminLayou
             {breadcrumbs.map((crumb, index) => (
               <React.Fragment key={crumb.label}>
                 {index > 0 && (
-                  <ChevronRight size={14} className={styles.breadcrumbSeparator} />
+                  <ChevronRight
+                    size={14}
+                    className={styles.breadcrumbSeparator}
+                  />
                 )}
                 {crumb.href ? (
                   <Link href={crumb.href} className={styles.breadcrumbLink}>
                     {crumb.label}
                   </Link>
                 ) : (
-                  <span className={styles.breadcrumbCurrent}>{crumb.label}</span>
+                  <span className={styles.breadcrumbCurrent}>
+                    {crumb.label}
+                  </span>
                 )}
               </React.Fragment>
             ))}

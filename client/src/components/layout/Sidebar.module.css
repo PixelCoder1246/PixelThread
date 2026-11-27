@@ -9,7 +9,9 @@
   width: 16rem;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-primary);
-  transition: width var(--transition-slow), transform var(--transition-slow);
+  transition:
+    width var(--transition-slow),
+    transform var(--transition-slow);
   overflow: hidden;
 }
 
@@ -37,6 +39,22 @@
   text-decoration: none;
   white-space: nowrap;
   letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+  cursor: pointer;
+  user-select: none;
+}
+
+.logo:hover {
+  opacity: 0.85;
+  transform: translateY(-0.5px);
+}
+
+.logo:active {
+  transform: translateY(0);
 }
 
 .logoCollapsed {

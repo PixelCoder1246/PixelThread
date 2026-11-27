@@ -42,9 +42,7 @@ export default function FormField({
           {error}
         </p>
       )}
-      {helperText && !error && (
-        <p className={styles.helper}>{helperText}</p>
-      )}
+      {helperText && !error && <p className={styles.helper}>{helperText}</p>}
     </div>
   );
 }

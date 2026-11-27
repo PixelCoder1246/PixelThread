@@ -17,7 +17,9 @@ async function getPostData(slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostData(slug);
 
@@ -25,9 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Post Not Found' };
   }
 
-  const ogImage = post.analytics?.views
-    ? undefined
-    : undefined;
+  const ogImage = post.analytics?.views ? undefined : undefined;
 
   return {
     title: post.title,

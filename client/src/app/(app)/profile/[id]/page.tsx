@@ -2,13 +2,26 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Heart, MessageCircle, Eye, UserPlus, UserCheck, FileText } from 'lucide-react';
+import {
+  Heart,
+  MessageCircle,
+  Eye,
+  UserPlus,
+  UserCheck,
+  FileText,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
 import EmptyState from '@/components/common/EmptyState';
 import { usersService } from '@/services/users';
-import { formatRelativeDate, formatNumber, getInitials, getRandomColor, cn } from '@/lib/utils';
+import {
+  formatRelativeDate,
+  formatNumber,
+  getInitials,
+  getRandomColor,
+  cn,
+} from '@/lib/utils';
 import type { User, Post } from '@/types';
 import styles from './page.module.css';
 
@@ -33,7 +46,8 @@ export default function PublicProfilePage({ params }: PublicProfilePageProps) {
     setIsLoading(true);
     setIsError(false);
 
-    usersService.getUserPosts(userId, { limit: 20, sort: 'newest' })
+    usersService
+      .getUserPosts(userId, { limit: 20, sort: 'newest' })
       .then((postsData) => {
         const postsList = postsData.posts || [];
         setPosts(postsList);
@@ -88,7 +102,10 @@ export default function PublicProfilePage({ params }: PublicProfilePageProps) {
           {user.image ? (
             <img src={user.image} alt={user.name} className={styles.avatar} />
           ) : (
-            <div className={styles.avatarPlaceholder} style={{ background: avatarBg }}>
+            <div
+              className={styles.avatarPlaceholder}
+              style={{ background: avatarBg }}
+            >
               {initials}
             </div>
           )}
@@ -99,7 +116,10 @@ export default function PublicProfilePage({ params }: PublicProfilePageProps) {
           <div className={styles.headerActions}>
             <button
               type="button"
-              className={cn(styles.followButton, isFollowing ? styles.following : styles.follow)}
+              className={cn(
+                styles.followButton,
+                isFollowing ? styles.following : styles.follow
+              )}
               onClick={handleFollow}
             >
               {isFollowing ? (
@@ -119,7 +139,9 @@ export default function PublicProfilePage({ params }: PublicProfilePageProps) {
 
         <div className={styles.stats}>
           <div className={styles.stat}>
-            <span className={styles.statValue}>{formatNumber(posts.length)}</span>
+            <span className={styles.statValue}>
+              {formatNumber(posts.length)}
+            </span>
             <span className={styles.statLabel}>Posts</span>
           </div>
           <div className={styles.stat}>
@@ -147,21 +169,47 @@ export default function PublicProfilePage({ params }: PublicProfilePageProps) {
             {posts
               .filter((p) => p.status === 'PUBLISHED')
               .map((post) => (
-                <Link key={post.id} href={`/posts/${post.slug}`} className={styles.postCard}>
+                <Link
+                  key={post.id}
+                  href={`/posts/${post.slug}`}
+                  className={styles.postCard}
+                >
                   <h3 className={styles.postCardTitle}>{post.title}</h3>
-                  {post.excerpt && <p className={styles.postCardExcerpt}>{post.excerpt}</p>}
+                  {post.excerpt && (
+                    <p className={styles.postCardExcerpt}>{post.excerpt}</p>
+                  )}
                   <div className={styles.postCardMeta}>
-                    <span>{formatRelativeDate(post.publishedAt || post.createdAt)}</span>
+                    <span>
+                      {formatRelativeDate(post.publishedAt || post.createdAt)}
+                    </span>
                     <div className={styles.postCardStats}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4,
+                        }}
+                      >
                         <Eye size={12} />
                         {formatNumber(post.analytics?.views || 0)}
                       </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4,
+                        }}
+                      >
                         <Heart size={12} />
                         {formatNumber(post.analytics?.likes || 0)}
                       </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4,
+                        }}
+                      >
                         <MessageCircle size={12} />
                         {formatNumber(post.analytics?.comments || 0)}
                       </span>

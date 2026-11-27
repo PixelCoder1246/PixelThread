@@ -47,7 +47,10 @@ function toHistoryEntry(raw: RawHistoryEntry): HistoryEntry {
 }
 
 export const historyService = {
-  async getAll(params?: { page?: number; limit?: number }): Promise<{ entries: HistoryEntry[]; pagination: unknown }> {
+  async getAll(params?: {
+    page?: number;
+    limit?: number;
+  }): Promise<{ entries: HistoryEntry[]; pagination: unknown }> {
     const res = await api.get('/me/history', { params });
     const raw: RawHistoryEntry[] = res.data.data.posts ?? [];
     return {
@@ -66,4 +69,3 @@ export const historyService = {
 };
 
 export type { HistoryEntry };
-

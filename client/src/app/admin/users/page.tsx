@@ -21,23 +21,35 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState('');
   const [search, setSearch] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
   const limit = 10;
 
-  const showToast = useCallback((type: 'success' | 'error', message: string) => {
-    setToast({ type, message });
-    setTimeout(() => setToast(null), 3000);
-  }, []);
+  const showToast = useCallback(
+    (type: 'success' | 'error', message: string) => {
+      setToast({ type, message });
+      setTimeout(() => setToast(null), 3000);
+    },
+    []
+  );
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['admin', 'users', page, roleFilter, search],
-    queryFn: () => adminService.getUsers({ page, limit, role: roleFilter || undefined }),
+    queryFn: () =>
+      adminService.getUsers({ page, limit, role: roleFilter || undefined }),
     enabled: !authLoading,
   });
 
   const updateRoleMutation = useMutation({
-    mutationFn: ({ userId, role }: { userId: string; role: 'USER' | 'ADMIN' }) =>
-      adminService.updateUserRole(userId, role),
+    mutationFn: ({
+      userId,
+      role,
+    }: {
+      userId: string;
+      role: 'USER' | 'ADMIN';
+    }) => adminService.updateUserRole(userId, role),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
       showToast('success', 'User role updated');
@@ -87,8 +99,12 @@ export default function AdminUsersPage() {
       <div className={styles.page}>
         <div className={styles.error}>
           <div className={styles.errorTitle}>Failed to load users</div>
-          <p className={styles.errorMessage}>Something went wrong. Please try again.</p>
-          <Button variant="primary" onClick={() => refetch()}>Retry</Button>
+          <p className={styles.errorMessage}>
+            Something went wrong. Please try again.
+          </p>
+          <Button variant="primary" onClick={() => refetch()}>
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -103,19 +119,34 @@ export default function AdminUsersPage() {
         </div>
         <div className={styles.filters}>
           <div style={{ position: 'relative' }}>
-            <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-quaternary)' }} />
+            <Search
+              size={14}
+              style={{
+                position: 'absolute',
+                left: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'var(--text-quaternary)',
+              }}
+            />
             <input
               type="text"
               placeholder="Search users..."
               value={search}
-              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               className={styles.searchInput}
               style={{ paddingLeft: 32 }}
             />
           </div>
           <select
             value={roleFilter}
-            onChange={(e) => { setRoleFilter(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setRoleFilter(e.target.value);
+              setPage(1);
+            }}
             className={styles.roleSelect}
           >
             <option value="">All Roles</option>
@@ -140,7 +171,14 @@ export default function AdminUsersPage() {
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-tertiary)' }}>
+                <td
+                  colSpan={6}
+                  style={{
+                    textAlign: 'center',
+                    padding: 'var(--space-8)',
+                    color: 'var(--text-tertiary)',
+                  }}
+                >
                   No users found.
                 </td>
               </tr>
@@ -150,9 +188,15 @@ export default function AdminUsersPage() {
                   <td>
                     <div className={styles.userCell}>
                       {user.image ? (
-                        <img src={user.image} alt="" className={styles.userAvatar} />
+                        <img
+                          src={user.image}
+                          alt=""
+                          className={styles.userAvatar}
+                        />
                       ) : (
-                        <div className={styles.userAvatarPlaceholder}>{getInitials(user.name)}</div>
+                        <div className={styles.userAvatarPlaceholder}>
+                          {getInitials(user.name)}
+                        </div>
                       )}
                       <span className={styles.userName}>{user.name}</span>
                     </div>
@@ -163,7 +207,12 @@ export default function AdminUsersPage() {
                   <td>
                     <select
                       value={user.role}
-                      onChange={(e) => updateRoleMutation.mutate({ userId: user.id, role: e.target.value as 'USER' | 'ADMIN' })}
+                      onChange={(e) =>
+                        updateRoleMutation.mutate({
+                          userId: user.id,
+                          role: e.target.value as 'USER' | 'ADMIN',
+                        })
+                      }
                       className={styles.roleSelectCell}
                       disabled={updateRoleMutation.isPending}
                     >
@@ -172,17 +221,28 @@ export default function AdminUsersPage() {
                     </select>
                   </td>
                   <td>
-                    <Badge variant={user.isEmailVerified ? 'success' : 'warning'} size="sm">
+                    <Badge
+                      variant={user.isEmailVerified ? 'success' : 'warning'}
+                      size="sm"
+                    >
                       {user.isEmailVerified ? 'Verified' : 'Unverified'}
                     </Badge>
                   </td>
                   <td>
-                    <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)' }}>
+                    <span
+                      style={{
+                        fontSize: 'var(--fs-xs)',
+                        color: 'var(--text-tertiary)',
+                      }}
+                    >
                       {formatDate(user.createdAt)}
                     </span>
                   </td>
                   <td>
-                    <div className={styles.actionButtons} style={{ justifyContent: 'flex-end' }}>
+                    <div
+                      className={styles.actionButtons}
+                      style={{ justifyContent: 'flex-end' }}
+                    >
                       <button
                         type="button"
                         className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
@@ -209,16 +269,18 @@ export default function AdminUsersPage() {
             >
               Prev
             </button>
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                type="button"
-                className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
-                onClick={() => setPage(p)}
-              >
-                {p}
-              </button>
-            ))}
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+              (p) => (
+                <button
+                  key={p}
+                  type="button"
+                  className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              )
+            )}
             <button
               type="button"
               className={styles.pageBtn}
@@ -227,22 +289,29 @@ export default function AdminUsersPage() {
             >
               Next
             </button>
-            <span className={styles.pageInfo}>
-              {pagination.total} total
-            </span>
+            <span className={styles.pageInfo}>{pagination.total} total</span>
           </div>
         )}
       </div>
 
       {deleteTarget && (
-        <div className={styles.confirmOverlay} onClick={() => setDeleteTarget(null)}>
-          <div className={styles.confirmDialog} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={styles.confirmOverlay}
+          onClick={() => setDeleteTarget(null)}
+        >
+          <div
+            className={styles.confirmDialog}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className={styles.confirmTitle}>Ban User</h3>
             <p className={styles.confirmMessage}>
-              Are you sure you want to ban <strong>{deleteTarget.name}</strong> ({deleteTarget.email})?
+              Are you sure you want to ban <strong>{deleteTarget.name}</strong>{' '}
+              ({deleteTarget.email})?
             </p>
             <div className={styles.confirmActions}>
-              <Button variant="ghost" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+              <Button variant="ghost" onClick={() => setDeleteTarget(null)}>
+                Cancel
+              </Button>
               <Button
                 variant="danger"
                 isLoading={deleteMutation.isPending}
@@ -256,7 +325,9 @@ export default function AdminUsersPage() {
       )}
 
       {toast && (
-        <div className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}>
+        <div
+          className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}
+        >
           <span className={styles.toastMessage}>{toast.message}</span>
         </div>
       )}

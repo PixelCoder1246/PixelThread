@@ -97,12 +97,15 @@ const getMe = async (req, res, next) => {
 const refreshToken = async (req, res, next) => {
   try {
     const token = req.cookies.refreshToken;
-    const { accessToken, refreshToken: newRefreshToken, persistent } =
-      await authService.refreshUserSession(
-        token,
-        req.ip,
-        req.headers['user-agent']
-      );
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+      persistent,
+    } = await authService.refreshUserSession(
+      token,
+      req.ip,
+      req.headers['user-agent']
+    );
 
     res.cookie('accessToken', accessToken, accessTokenCookieOptions);
     res.cookie(

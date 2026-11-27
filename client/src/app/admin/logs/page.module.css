@@ -85,10 +85,18 @@
   font-weight: var(--fw-medium);
 }
 
-.logActionCreate { color: var(--color-success); }
-.logActionUpdate { color: var(--color-info); }
-.logActionDelete { color: var(--color-error); }
-.logActionLogin { color: var(--primary-500); }
+.logActionCreate {
+  color: var(--color-success);
+}
+.logActionUpdate {
+  color: var(--color-info);
+}
+.logActionDelete {
+  color: var(--color-error);
+}
+.logActionLogin {
+  color: var(--primary-500);
+}
 
 .logDetails {
   font-size: var(--fs-xs);

@@ -13,7 +13,12 @@ interface TooltipProps {
   delay?: number;
 }
 
-export default function Tooltip({ content, children, position = 'top', delay = 300 }: TooltipProps) {
+export default function Tooltip({
+  content,
+  children,
+  position = 'top',
+  delay = 300,
+}: TooltipProps) {
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
@@ -28,7 +33,13 @@ export default function Tooltip({ content, children, position = 'top', delay = 3
   }, []);
 
   return (
-    <div className={styles.wrapper} onMouseEnter={show} onMouseLeave={hide} onFocus={show} onBlur={hide}>
+    <div
+      className={styles.wrapper}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={hide}
+    >
       {children}
       {visible && (
         <div className={cn(styles.tooltip, styles[position])} role="tooltip">

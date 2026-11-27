@@ -12,7 +12,21 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 }
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, helperText, rows = 4, maxLength, showCharCount, className, id, onChange, ...props }, ref) => {
+  (
+    {
+      label,
+      error,
+      helperText,
+      rows = 4,
+      maxLength,
+      showCharCount,
+      className,
+      id,
+      onChange,
+      ...props
+    },
+    ref
+  ) => {
     const generatedId = useId();
     const textareaId = id || generatedId;
     const [charCount, setCharCount] = useState(0);

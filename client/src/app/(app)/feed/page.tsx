@@ -6,7 +6,12 @@ import { Heart, Bookmark, Eye, MessageCircle, Clock, Plus } from 'lucide-react';
 import { usePosts } from '@/hooks/usePosts';
 import { useTogglePostLike } from '@/hooks/useLikes';
 import { bookmarksService } from '@/services/bookmarks';
-import { cn, formatRelativeDate, formatNumber, calculateReadingTime } from '@/lib/utils';
+import {
+  cn,
+  formatRelativeDate,
+  formatNumber,
+  calculateReadingTime,
+} from '@/lib/utils';
 import { PAGINATION, ROUTES } from '@/constants';
 import type { Post } from '@/types';
 import Button from '@/components/ui/Button';
@@ -30,12 +35,18 @@ function FeedSkeleton() {
         <div key={i} className={styles.skeleton}>
           <div className={styles.skeletonHeader}>
             <div className={styles.skeletonAvatar} />
-            <div className={cn(styles.skeletonLine, styles.skeletonLineShort)} />
+            <div
+              className={cn(styles.skeletonLine, styles.skeletonLineShort)}
+            />
           </div>
           <div className={styles.skeletonTitle} />
           <div className={styles.skeletonExcerpt}>
-            <div className={cn(styles.skeletonLine, styles.skeletonLineMedium)} />
-            <div className={cn(styles.skeletonLine, styles.skeletonLineShort)} />
+            <div
+              className={cn(styles.skeletonLine, styles.skeletonLineMedium)}
+            />
+            <div
+              className={cn(styles.skeletonLine, styles.skeletonLineShort)}
+            />
           </div>
           <div className={styles.skeletonTags}>
             <div className={styles.skeletonTag} />
@@ -43,8 +54,12 @@ function FeedSkeleton() {
             <div className={styles.skeletonTag} />
           </div>
           <div className={styles.skeletonFooter}>
-            <div className={cn(styles.skeletonLine, styles.skeletonLineShort)} />
-            <div className={cn(styles.skeletonLine, styles.skeletonLineShort)} />
+            <div
+              className={cn(styles.skeletonLine, styles.skeletonLineShort)}
+            />
+            <div
+              className={cn(styles.skeletonLine, styles.skeletonLineShort)}
+            />
           </div>
         </div>
       ))}
@@ -65,7 +80,10 @@ function PostCard({
   const readingTime = calculateReadingTime(post.content || post.excerpt || '');
 
   return (
-    <article className={styles.card} onClick={() => router.push(ROUTES.POST(post.slug))}>
+    <article
+      className={styles.card}
+      onClick={() => router.push(ROUTES.POST(post.slug))}
+    >
       <div className={styles.cardHeader}>
         <div className={styles.cardAuthor}>
           <Avatar
@@ -82,9 +100,7 @@ function PostCard({
 
       <h3 className={styles.cardTitle}>{post.title}</h3>
 
-      {post.excerpt && (
-        <p className={styles.cardExcerpt}>{post.excerpt}</p>
-      )}
+      {post.excerpt && <p className={styles.cardExcerpt}>{post.excerpt}</p>}
 
       {post.tags?.length > 0 && (
         <div className={styles.cardTags}>
@@ -119,19 +135,34 @@ function PostCard({
         <div className={styles.cardActions}>
           <button
             type="button"
-            className={cn(styles.actionButton, post.isLiked && styles.actionButtonLiked)}
-            onClick={(e) => { e.stopPropagation(); onLike(post.id); }}
+            className={cn(
+              styles.actionButton,
+              post.isLiked && styles.actionButtonLiked
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              onLike(post.id);
+            }}
             aria-label={post.isLiked ? 'Unlike' : 'Like'}
           >
             <Heart size={16} fill={post.isLiked ? 'currentColor' : 'none'} />
           </button>
           <button
             type="button"
-            className={cn(styles.actionButton, post.isBookmarked && styles.actionButtonBookmarked)}
-            onClick={(e) => { e.stopPropagation(); onBookmark(post.id, !!post.isBookmarked); }}
+            className={cn(
+              styles.actionButton,
+              post.isBookmarked && styles.actionButtonBookmarked
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              onBookmark(post.id, !!post.isBookmarked);
+            }}
             aria-label={post.isBookmarked ? 'Remove bookmark' : 'Bookmark'}
           >
-            <Bookmark size={16} fill={post.isBookmarked ? 'currentColor' : 'none'} />
+            <Bookmark
+              size={16}
+              fill={post.isBookmarked ? 'currentColor' : 'none'}
+            />
           </button>
         </div>
       </div>
@@ -144,23 +175,34 @@ export default function FeedPage() {
   const [activeTab, setActiveTab] = useState('for-you');
   const [page, setPage] = useState<number>(PAGINATION.DEFAULT_PAGE);
 
-  const { data, isLoading, isError, error, refetch } = usePosts({ page, limit: PAGINATION.DEFAULT_LIMIT });
+  const { data, isLoading, isError, error, refetch } = usePosts({
+    page,
+    limit: PAGINATION.DEFAULT_LIMIT,
+  });
   const toggleLike = useTogglePostLike();
 
   const posts = data?.posts ?? [];
-  const pagination = data?.pagination as { totalPages: number; total: number; page: number } | undefined;
+  const pagination = data?.pagination as
+    | { totalPages: number; total: number; page: number }
+    | undefined;
 
-  const handleLike = useCallback((postId: string) => {
-    toggleLike.mutate(postId);
-  }, [toggleLike]);
+  const handleLike = useCallback(
+    (postId: string) => {
+      toggleLike.mutate(postId);
+    },
+    [toggleLike]
+  );
 
-  const handleBookmark = useCallback(async (postId: string, currentlyBookmarked: boolean) => {
-    try {
-      await bookmarksService.toggle(postId);
-    } catch {
-      // silently fail
-    }
-  }, []);
+  const handleBookmark = useCallback(
+    async (postId: string, currentlyBookmarked: boolean) => {
+      try {
+        await bookmarksService.toggle(postId);
+      } catch {
+        // silently fail
+      }
+    },
+    []
+  );
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
@@ -201,7 +243,8 @@ export default function FeedPage() {
         <div className={styles.error}>
           <h2 className={styles.errorTitle}>Failed to load feed</h2>
           <p className={styles.errorMessage}>
-            {(error as Error)?.message || 'Something went wrong. Please try again.'}
+            {(error as Error)?.message ||
+              'Something went wrong. Please try again.'}
           </p>
           <Button variant="secondary" onClick={() => refetch()}>
             Try Again
@@ -213,7 +256,10 @@ export default function FeedPage() {
           title="No posts yet"
           description="Follow users or check back later for new content."
           action={
-            <Button variant="primary" onClick={() => router.push(ROUTES.EXPLORE)}>
+            <Button
+              variant="primary"
+              onClick={() => router.push(ROUTES.EXPLORE)}
+            >
               Explore Posts
             </Button>
           }

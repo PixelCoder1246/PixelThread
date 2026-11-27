@@ -25,10 +25,14 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
-      <span className={cn(styles.icon, isDark ? styles.visible : styles.hidden)}>
+      <span
+        className={cn(styles.icon, isDark ? styles.visible : styles.hidden)}
+      >
         <Sun size={18} />
       </span>
-      <span className={cn(styles.icon, !isDark ? styles.visible : styles.hidden)}>
+      <span
+        className={cn(styles.icon, !isDark ? styles.visible : styles.hidden)}
+      >
         <Moon size={18} />
       </span>
     </button>

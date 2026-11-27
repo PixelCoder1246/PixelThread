@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import AuthLoader from '@/components/common/AuthLoader';
 import { useAuthStore } from '@/store';
@@ -14,29 +14,42 @@ export default function AppRouteLayout({
 }) {
   const { isAuthenticated, isLoading } = useAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
   const [notificationCount, setNotificationCount] = useState(0);
 
+  const isPublicRoute =
+    pathname.startsWith('/feed') ||
+    pathname.startsWith('/explore') ||
+    pathname.startsWith('/trending') ||
+    pathname.startsWith('/search') ||
+    (pathname.startsWith('/profile/') && pathname !== '/profile');
+
+  const requiresAuth = !isPublicRoute;
+
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
+    if (!isLoading && !isAuthenticated && requiresAuth) {
+      router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, requiresAuth, pathname, router]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      notificationsService.getUnreadCount()
+      notificationsService
+        .getUnreadCount()
         .then(setNotificationCount)
         .catch(() => setNotificationCount(0));
     }
   }, [isAuthenticated]);
 
   if (isLoading) {
-    return <AuthLoader fullPage message="Checking your session" />;
+    return <AuthLoader fullPage message="Loading..." />;
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && requiresAuth) {
     return null;
   }
 
-  return <AppLayout notificationCount={notificationCount}>{children}</AppLayout>;
+  return (
+    <AppLayout notificationCount={notificationCount}>{children}</AppLayout>
+  );
 }

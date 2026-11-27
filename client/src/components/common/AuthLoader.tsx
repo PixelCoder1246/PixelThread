@@ -21,7 +21,7 @@ export default function AuthLoader({
       className={cn(
         styles.wrapper,
         fullPage && !compact ? styles.fullPage : styles.compact,
-        className,
+        className
       )}
       role="status"
       aria-live="polite"

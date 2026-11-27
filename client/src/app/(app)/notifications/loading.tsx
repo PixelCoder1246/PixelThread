@@ -4,7 +4,13 @@ export default function NotificationsLoading() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-3)',
+          }}
+        >
           <div
             style={{
               width: 28,
@@ -26,7 +32,14 @@ export default function NotificationsLoading() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 'var(--space-1)', borderBottom: '1px solid var(--border-primary)', marginBottom: 'var(--space-4)' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: 'var(--space-1)',
+          borderBottom: '1px solid var(--border-primary)',
+          marginBottom: 'var(--space-4)',
+        }}
+      >
         {Array.from({ length: 2 }).map((_, i) => (
           <div
             key={i}

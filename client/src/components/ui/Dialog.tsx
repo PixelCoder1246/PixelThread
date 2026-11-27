@@ -36,9 +36,10 @@ export default function Dialog({
       }
 
       if (e.key === 'Tab' && dialogRef.current) {
-        const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
+        const focusableElements =
+          dialogRef.current.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
 
@@ -97,10 +98,17 @@ export default function Dialog({
           <div className={styles.header}>
             <div>
               {title && <h2 className={styles.title}>{title}</h2>}
-              {description && <p className={styles.description}>{description}</p>}
+              {description && (
+                <p className={styles.description}>{description}</p>
+              )}
             </div>
             {showClose && (
-              <button type="button" onClick={onClose} className={styles.close} aria-label="Close">
+              <button
+                type="button"
+                onClick={onClose}
+                className={styles.close}
+                aria-label="Close"
+              >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path
                     d="M15 5L5 15M5 5L15 15"

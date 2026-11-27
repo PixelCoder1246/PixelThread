@@ -61,12 +61,30 @@
   border-radius: var(--radius-xl);
 }
 
-.statIconUsers { background: color-mix(in srgb, var(--primary-500) 12%, transparent); color: var(--primary-500); }
-.statIconPosts { background: color-mix(in srgb, var(--accent-500) 12%, transparent); color: var(--accent-500); }
-.statIconPublished { background: color-mix(in srgb, var(--emerald-500) 12%, transparent); color: var(--emerald-500); }
-.statIconDrafts { background: color-mix(in srgb, var(--amber-500) 12%, transparent); color: var(--amber-500); }
-.statIconComments { background: color-mix(in srgb, var(--color-info) 12%, transparent); color: var(--color-info); }
-.statIconViews { background: color-mix(in srgb, var(--rose-500) 12%, transparent); color: var(--rose-500); }
+.statIconUsers {
+  background: color-mix(in srgb, var(--primary-500) 12%, transparent);
+  color: var(--primary-500);
+}
+.statIconPosts {
+  background: color-mix(in srgb, var(--accent-500) 12%, transparent);
+  color: var(--accent-500);
+}
+.statIconPublished {
+  background: color-mix(in srgb, var(--emerald-500) 12%, transparent);
+  color: var(--emerald-500);
+}
+.statIconDrafts {
+  background: color-mix(in srgb, var(--amber-500) 12%, transparent);
+  color: var(--amber-500);
+}
+.statIconComments {
+  background: color-mix(in srgb, var(--color-info) 12%, transparent);
+  color: var(--color-info);
+}
+.statIconViews {
+  background: color-mix(in srgb, var(--rose-500) 12%, transparent);
+  color: var(--rose-500);
+}
 
 .statValue {
   font-size: var(--fs-3xl);
@@ -117,10 +135,22 @@
   flex-shrink: 0;
 }
 
-.quickActionIconUsers { background: color-mix(in srgb, var(--primary-500) 12%, transparent); color: var(--primary-500); }
-.quickActionIconPosts { background: color-mix(in srgb, var(--accent-500) 12%, transparent); color: var(--accent-500); }
-.quickActionIconReports { background: color-mix(in srgb, var(--amber-500) 12%, transparent); color: var(--amber-500); }
-.quickActionIconSettings { background: color-mix(in srgb, var(--emerald-500) 12%, transparent); color: var(--emerald-500); }
+.quickActionIconUsers {
+  background: color-mix(in srgb, var(--primary-500) 12%, transparent);
+  color: var(--primary-500);
+}
+.quickActionIconPosts {
+  background: color-mix(in srgb, var(--accent-500) 12%, transparent);
+  color: var(--accent-500);
+}
+.quickActionIconReports {
+  background: color-mix(in srgb, var(--amber-500) 12%, transparent);
+  color: var(--amber-500);
+}
+.quickActionIconSettings {
+  background: color-mix(in srgb, var(--emerald-500) 12%, transparent);
+  color: var(--emerald-500);
+}
 
 .quickActionInfo {
   flex: 1;

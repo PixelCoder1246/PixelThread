@@ -29,13 +29,19 @@ export default function AdminReportsPage() {
   const queryClient = useQueryClient();
 
   const [page, setPage] = useState(1);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
   const limit = 10;
 
-  const showToast = useCallback((type: 'success' | 'error', message: string) => {
-    setToast({ type, message });
-    setTimeout(() => setToast(null), 3000);
-  }, []);
+  const showToast = useCallback(
+    (type: 'success' | 'error', message: string) => {
+      setToast({ type, message });
+      setTimeout(() => setToast(null), 3000);
+    },
+    []
+  );
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['admin', 'reports', page],
@@ -44,7 +50,13 @@ export default function AdminReportsPage() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ reportId, action }: { reportId: string; action: 'resolve' | 'dismiss' }) =>
+    mutationFn: ({
+      reportId,
+      action,
+    }: {
+      reportId: string;
+      action: 'resolve' | 'dismiss';
+    }) =>
       action === 'resolve'
         ? adminService.resolveReport(reportId)
         : adminService.rejectReport(reportId),
@@ -57,8 +69,12 @@ export default function AdminReportsPage() {
     },
   });
 
-  const reports: Report[] = (data as { reports?: Report[] })?.reports ?? (Array.isArray(data) ? data as Report[] : []);
-  const pagination = (data as { pagination?: Pagination })?.pagination as Pagination | undefined;
+  const reports: Report[] =
+    (data as { reports?: Report[] })?.reports ??
+    (Array.isArray(data) ? (data as Report[]) : []);
+  const pagination = (data as { pagination?: Pagination })?.pagination as
+    | Pagination
+    | undefined;
 
   if (authLoading) {
     return (
@@ -85,8 +101,12 @@ export default function AdminReportsPage() {
       <div className={styles.page}>
         <div className={styles.error}>
           <div className={styles.errorTitle}>Failed to load reports</div>
-          <p className={styles.errorMessage}>Something went wrong. Please try again.</p>
-          <Button variant="primary" onClick={() => refetch()}>Retry</Button>
+          <p className={styles.errorMessage}>
+            Something went wrong. Please try again.
+          </p>
+          <Button variant="primary" onClick={() => refetch()}>
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -117,7 +137,14 @@ export default function AdminReportsPage() {
           <tbody>
             {reports.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--text-tertiary)' }}>
+                <td
+                  colSpan={7}
+                  style={{
+                    textAlign: 'center',
+                    padding: 'var(--space-8)',
+                    color: 'var(--text-tertiary)',
+                  }}
+                >
                   No reports found.
                 </td>
               </tr>
@@ -126,22 +153,41 @@ export default function AdminReportsPage() {
                 <tr key={report.id}>
                   <td>
                     <div className={styles.reportReason}>{report.reason}</div>
-                    {report.details && <div className={styles.reportDetails}>{report.details}</div>}
+                    {report.details && (
+                      <div className={styles.reportDetails}>
+                        {report.details}
+                      </div>
+                    )}
                   </td>
                   <td>
-                    <span className={styles.reportedContent}>{report.contentTitle}</span>
+                    <span className={styles.reportedContent}>
+                      {report.contentTitle}
+                    </span>
                   </td>
                   <td>
-                    <Badge variant="default" size="sm">{report.contentType}</Badge>
+                    <Badge variant="default" size="sm">
+                      {report.contentType}
+                    </Badge>
                   </td>
                   <td>
-                    <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)' }}>
+                    <span
+                      style={{
+                        fontSize: 'var(--fs-xs)',
+                        color: 'var(--text-tertiary)',
+                      }}
+                    >
                       {report.reportedBy.name}
                     </span>
                   </td>
                   <td>
                     <Badge
-                      variant={report.status === 'PENDING' ? 'warning' : report.status === 'RESOLVED' ? 'success' : 'default'}
+                      variant={
+                        report.status === 'PENDING'
+                          ? 'warning'
+                          : report.status === 'RESOLVED'
+                            ? 'success'
+                            : 'default'
+                      }
                       size="sm"
                     >
                       <span className={styles.statusBadge}>
@@ -151,7 +197,13 @@ export default function AdminReportsPage() {
                     </Badge>
                   </td>
                   <td>
-                    <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>
+                    <span
+                      style={{
+                        fontSize: 'var(--fs-xs)',
+                        color: 'var(--text-tertiary)',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       {formatDate(report.createdAt)}
                     </span>
                   </td>
@@ -162,7 +214,12 @@ export default function AdminReportsPage() {
                           <button
                             type="button"
                             className={`${styles.actionBtn} ${styles.actionBtnResolve}`}
-                            onClick={() => updateMutation.mutate({ reportId: report.id, action: 'resolve' })}
+                            onClick={() =>
+                              updateMutation.mutate({
+                                reportId: report.id,
+                                action: 'resolve',
+                              })
+                            }
                             disabled={updateMutation.isPending}
                           >
                             <CheckCircle size={14} />
@@ -171,7 +228,12 @@ export default function AdminReportsPage() {
                           <button
                             type="button"
                             className={`${styles.actionBtn} ${styles.actionBtnDismiss}`}
-                            onClick={() => updateMutation.mutate({ reportId: report.id, action: 'dismiss' })}
+                            onClick={() =>
+                              updateMutation.mutate({
+                                reportId: report.id,
+                                action: 'dismiss',
+                              })
+                            }
                             disabled={updateMutation.isPending}
                           >
                             <XCircle size={14} />
@@ -197,16 +259,18 @@ export default function AdminReportsPage() {
             >
               Prev
             </button>
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                type="button"
-                className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
-                onClick={() => setPage(p)}
-              >
-                {p}
-              </button>
-            ))}
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+              (p) => (
+                <button
+                  key={p}
+                  type="button"
+                  className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              )
+            )}
             <button
               type="button"
               className={styles.pageBtn}
@@ -215,15 +279,15 @@ export default function AdminReportsPage() {
             >
               Next
             </button>
-            <span className={styles.pageInfo}>
-              {pagination.total} total
-            </span>
+            <span className={styles.pageInfo}>{pagination.total} total</span>
           </div>
         )}
       </div>
 
       {toast && (
-        <div className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}>
+        <div
+          className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}
+        >
           <span className={styles.toastMessage}>{toast.message}</span>
         </div>
       )}

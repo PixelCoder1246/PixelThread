@@ -22,7 +22,10 @@ const resetSchema = z
       .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
       .regex(/[0-9]/, 'Password must contain at least one number')
-      .regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, 'Password must contain at least one special character'),
+      .regex(
+        /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+        'Password must contain at least one special character'
+      ),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -52,7 +55,9 @@ function ResetPasswordForm() {
 
   async function onSubmit(data: ResetFormValues) {
     if (!token) {
-      setSubmitError('Invalid or missing reset token. Please request a new password reset.');
+      setSubmitError(
+        'Invalid or missing reset token. Please request a new password reset.'
+      );
       return;
     }
     try {
@@ -61,7 +66,12 @@ function ResetPasswordForm() {
       await authService.resetPassword(token, data.password);
       setIsSubmitted(true);
     } catch (err: unknown) {
-      setSubmitError(getErrorMessage(err, 'Failed to reset password. The link may have expired.'));
+      setSubmitError(
+        getErrorMessage(
+          err,
+          'Failed to reset password. The link may have expired.'
+        )
+      );
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +79,10 @@ function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <AuthLayout title="Invalid link" subtitle="This password reset link is invalid or has expired.">
+      <AuthLayout
+        title="Invalid link"
+        subtitle="This password reset link is invalid or has expired."
+      >
         <div className={styles.backRow}>
           <Link href="/forgot-password" className={styles.backLink}>
             <ArrowLeft size={16} />
@@ -82,14 +95,18 @@ function ResetPasswordForm() {
 
   if (isSubmitted) {
     return (
-      <AuthLayout title="Password reset" subtitle="Your password has been updated successfully.">
+      <AuthLayout
+        title="Password reset"
+        subtitle="Your password has been updated successfully."
+      >
         <div className={styles.successState}>
           <div className={styles.successIcon}>
             <CheckCircle size={48} />
           </div>
           <h2 className={styles.successTitle}>All done!</h2>
           <p className={styles.successMessage}>
-            Your password has been reset successfully. You can now sign in with your new password.
+            Your password has been reset successfully. You can now sign in with
+            your new password.
           </p>
           <Button fullWidth onClick={() => router.push('/login')}>
             Sign in with new password
@@ -100,7 +117,10 @@ function ResetPasswordForm() {
   }
 
   return (
-    <AuthLayout title="Set new password" subtitle="Enter your new password below.">
+    <AuthLayout
+      title="Set new password"
+      subtitle="Enter your new password below."
+    >
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         {submitError && (
           <div className={styles.errorAlert} role="alert">
@@ -132,7 +152,12 @@ function ResetPasswordForm() {
 
         <div className={styles.fieldSpacer} />
 
-        <Button type="submit" fullWidth isLoading={isLoading} className={styles.submitButton}>
+        <Button
+          type="submit"
+          fullWidth
+          isLoading={isLoading}
+          className={styles.submitButton}
+        >
           Reset password
         </Button>
       </form>

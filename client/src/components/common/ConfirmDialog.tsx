@@ -47,10 +47,21 @@ export default function ConfirmDialog({
   if (!open) return null;
 
   return (
-    <div className={styles.overlay} onClick={onClose} role="dialog" aria-modal="true" aria-label={title}>
+    <div
+      className={styles.overlay}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+    >
       <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
-          <div className={cn(styles.iconWrapper, variant === 'danger' && styles.iconDanger)}>
+          <div
+            className={cn(
+              styles.iconWrapper,
+              variant === 'danger' && styles.iconDanger
+            )}
+          >
             <AlertTriangle size={20} />
           </div>
           <button
@@ -75,7 +86,10 @@ export default function ConfirmDialog({
           <button
             type="button"
             onClick={onConfirm}
-            className={cn(styles.confirmButton, variant === 'danger' && styles.confirmDanger)}
+            className={cn(
+              styles.confirmButton,
+              variant === 'danger' && styles.confirmDanger
+            )}
           >
             {confirmLabel}
           </button>

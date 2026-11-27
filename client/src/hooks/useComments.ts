@@ -26,8 +26,13 @@ export function useReplyToComment(postId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ commentId, content }: { commentId: string; content: string }) =>
-      commentsService.reply(commentId, content),
+    mutationFn: ({
+      commentId,
+      content,
+    }: {
+      commentId: string;
+      content: string;
+    }) => commentsService.reply(commentId, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', postId] });
     },
@@ -49,8 +54,13 @@ export function useUpdateComment(postId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ commentId, content }: { commentId: string; content: string }) =>
-      commentsService.update(commentId, content),
+    mutationFn: ({
+      commentId,
+      content,
+    }: {
+      commentId: string;
+      content: string;
+    }) => commentsService.update(commentId, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', postId] });
     },

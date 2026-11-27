@@ -32,9 +32,7 @@ const navItems = [
   },
   {
     section: 'System',
-    items: [
-      { href: '/admin/settings', label: 'Settings', icon: Settings },
-    ],
+    items: [{ href: '/admin/settings', label: 'Settings', icon: Settings }],
   },
 ];
 
@@ -63,7 +61,10 @@ export default function AdminSidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={cn(styles.navItem, isActive && styles.navItemActive)}
+                  className={cn(
+                    styles.navItem,
+                    isActive && styles.navItemActive
+                  )}
                 >
                   <span className={styles.navIcon}>
                     <Icon size={16} />

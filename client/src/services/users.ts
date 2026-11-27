@@ -3,9 +3,19 @@ import type { User, Post, ApiResponse, ProfileFormData } from '@/types';
 
 export const usersService = {
   async getProfile(id: string): Promise<User> {
-    const res = await api.get<ApiResponse<{ posts: Post[]; pagination: unknown }>>(`/users/${id}/posts`, { params: { limit: 1 } });
+    const res = await api.get<
+      ApiResponse<{ posts: Post[]; pagination: unknown }>
+    >(`/users/${id}/posts`, { params: { limit: 1 } });
     const author = res.data.data.posts?.[0]?.author;
-    if (author) return { ...author, email: '', role: 'USER', isEmailVerified: false, bio: null, updatedAt: '' } as User;
+    if (author)
+      return {
+        ...author,
+        email: '',
+        role: 'USER',
+        isEmailVerified: false,
+        bio: null,
+        updatedAt: '',
+      } as User;
     throw new Error('User not found');
   },
 
@@ -15,17 +25,24 @@ export const usersService = {
     if (data.bio) formData.append('bio', data.bio);
     if (data.image) formData.append('image', data.image);
 
-    const res = await api.patch<ApiResponse<{ user: User }>>('/me/profile', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const res = await api.patch<ApiResponse<{ user: User }>>(
+      '/me/profile',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
     return res.data.data.user;
   },
 
-  async getUserPosts(id: string, params?: {
-    page?: number;
-    limit?: number;
-    sort?: string;
-  }): Promise<{ posts: Post[]; pagination: unknown }> {
+  async getUserPosts(
+    id: string,
+    params?: {
+      page?: number;
+      limit?: number;
+      sort?: string;
+    }
+  ): Promise<{ posts: Post[]; pagination: unknown }> {
     const res = await api.get(`/users/${id}/posts`, { params });
     return res.data.data;
   },
@@ -39,15 +56,24 @@ export const usersService = {
     name?: string;
     bio?: string;
   }): Promise<User> {
-    const res = await api.patch<ApiResponse<{ user: User }>>('/me/profile', data);
+    const res = await api.patch<ApiResponse<{ user: User }>>(
+      '/me/profile',
+      data
+    );
     return res.data.data.user;
   },
 
-  async changePassword(data: { currentPassword: string; newPassword: string }): Promise<void> {
+  async changePassword(data: {
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<void> {
     await api.patch('/me/password', data);
   },
 
-  async updateEmail(data: { email: string; currentPassword: string }): Promise<void> {
+  async updateEmail(data: {
+    email: string;
+    currentPassword: string;
+  }): Promise<void> {
     await api.patch('/me/email', data);
   },
 
@@ -55,7 +81,9 @@ export const usersService = {
     await api.patch('/me/privacy', data);
   },
 
-  async updateNotificationPreferences(data: Record<string, boolean>): Promise<void> {
+  async updateNotificationPreferences(
+    data: Record<string, boolean>
+  ): Promise<void> {
     await api.patch('/me/notifications', data);
   },
 
@@ -66,7 +94,10 @@ export const usersService = {
   async uploadAvatar(file: File): Promise<User> {
     const formData = new FormData();
     formData.append('avatar', file);
-    const res = await api.post<ApiResponse<{ user: User }>>('/me/avatar', formData);
+    const res = await api.post<ApiResponse<{ user: User }>>(
+      '/me/avatar',
+      formData
+    );
     return res.data.data.user;
   },
 
@@ -77,7 +108,10 @@ export const usersService = {
   async uploadCover(file: File): Promise<User> {
     const formData = new FormData();
     formData.append('cover', file);
-    const res = await api.post<ApiResponse<{ user: User }>>('/me/cover', formData);
+    const res = await api.post<ApiResponse<{ user: User }>>(
+      '/me/cover',
+      formData
+    );
     return res.data.data.user;
   },
 

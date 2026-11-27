@@ -15,7 +15,12 @@ const navItems = [
   { href: '/feed', label: 'Feed', icon: Rss },
   { href: '/explore', label: 'Explore', icon: Compass },
   { href: '/posts/new', label: 'Create', icon: Plus, isCreate: true },
-  { href: '/notifications', label: 'Notifications', icon: Bell, hasBadge: true },
+  {
+    href: '/notifications',
+    label: 'Notifications',
+    icon: Bell,
+    hasBadge: true,
+  },
   { href: '/profile', label: 'Profile', icon: User },
 ];
 
@@ -23,10 +28,15 @@ export default function MobileNav({ notificationCount = 0 }: MobileNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className={styles.nav} role="navigation" aria-label="Mobile navigation">
+    <nav
+      className={styles.nav}
+      role="navigation"
+      aria-label="Mobile navigation"
+    >
       {navItems.map((item) => {
         const Icon = item.icon;
-        const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+        const isActive =
+          pathname === item.href || pathname.startsWith(item.href + '/');
 
         if (item.isCreate) {
           return (

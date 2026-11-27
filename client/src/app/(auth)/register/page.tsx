@@ -16,7 +16,10 @@ import styles from './page.module.css';
 
 const registerSchema = z
   .object({
-    name: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Name is too long'),
+    name: z
+      .string()
+      .min(2, 'Name must be at least 2 characters')
+      .max(50, 'Name is too long'),
     email: z.string().email('Please enter a valid email address'),
     password: z
       .string()
@@ -24,7 +27,10 @@ const registerSchema = z
       .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
       .regex(/[0-9]/, 'Password must contain at least one number')
-      .regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, 'Password must contain at least one special character'),
+      .regex(
+        /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+        'Password must contain at least one special character'
+      ),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -53,14 +59,23 @@ export default function RegisterPage() {
   async function onSubmit(data: RegisterFormValues) {
     try {
       setSubmitError(null);
-      await registerUser({ name: data.name, email: data.email, password: data.password });
+      await registerUser({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
     } catch (err: unknown) {
-      setSubmitError(getErrorMessage(err, 'Registration failed. Please try again.'));
+      setSubmitError(
+        getErrorMessage(err, 'Registration failed. Please try again.')
+      );
     }
   }
 
   return (
-    <AuthLayout title="Create an account" subtitle="Start your journey as a creator today">
+    <AuthLayout
+      title="Create an account"
+      subtitle="Start your journey as a creator today"
+    >
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         {submitError && (
           <div className={styles.errorAlert} role="alert">
@@ -116,7 +131,12 @@ export default function RegisterPage() {
 
         <div className={styles.fieldSpacer} />
 
-        <Button type="submit" fullWidth isLoading={isRegistering} className={styles.submitButton}>
+        <Button
+          type="submit"
+          fullWidth
+          isLoading={isRegistering}
+          className={styles.submitButton}
+        >
           Create account
         </Button>
       </form>

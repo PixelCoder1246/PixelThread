@@ -36,21 +36,49 @@ import AuthLoader from '@/components/common/AuthLoader';
 import styles from './page.module.css';
 
 const CHART_AXIS_STYLE = { fontSize: 12, fill: 'var(--text-tertiary)' };
-const CHART_GRID_STYLE = { stroke: 'var(--border-primary)', strokeDasharray: '4 4' };
+const CHART_GRID_STYLE = {
+  stroke: 'var(--border-primary)',
+  strokeDasharray: '4 4',
+};
 
-function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number; color?: string; name?: string }[]; label?: string }) {
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: { value: number; color?: string; name?: string }[];
+  label?: string;
+}) {
   if (!active || !payload?.length) return null;
   return (
-    <div style={{
-      background: 'var(--bg-elevated)',
-      border: '1px solid var(--border-secondary)',
-      borderRadius: 'var(--radius-xl)',
-      padding: 'var(--space-3) var(--space-4)',
-      boxShadow: 'var(--shadow-lg)',
-    }}>
-      <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)', marginBottom: 'var(--space-1)' }}>{label}</p>
+    <div
+      style={{
+        background: 'var(--bg-elevated)',
+        border: '1px solid var(--border-secondary)',
+        borderRadius: 'var(--radius-xl)',
+        padding: 'var(--space-3) var(--space-4)',
+        boxShadow: 'var(--shadow-lg)',
+      }}
+    >
+      <p
+        style={{
+          fontSize: 'var(--fs-xs)',
+          color: 'var(--text-tertiary)',
+          marginBottom: 'var(--space-1)',
+        }}
+      >
+        {label}
+      </p>
       {payload.map((entry, i) => (
-        <p key={i} style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: 'var(--text-primary)' }}>
+        <p
+          key={i}
+          style={{
+            fontSize: 'var(--fs-sm)',
+            fontWeight: 600,
+            color: 'var(--text-primary)',
+          }}
+        >
           {entry.name}: {formatNumber(entry.value)}
         </p>
       ))}
@@ -62,7 +90,12 @@ export default function AnalyticsPage() {
   const { isAuthenticated, isLoading: isAuthLoading } = useRequireAuth();
   const router = useRouter();
 
-  const { data: analytics, isLoading, isError, refetch } = useQuery({
+  const {
+    data: analytics,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ['analytics'],
     queryFn: analyticsService.getMyAnalytics,
     enabled: isAuthenticated,
@@ -149,7 +182,8 @@ export default function AnalyticsPage() {
   const chartData = useMemo(() => {
     if (!topPosts) return [];
     return topPosts.map((post, i) => ({
-      title: post.title.length > 20 ? post.title.slice(0, 20) + '…' : post.title,
+      title:
+        post.title.length > 20 ? post.title.slice(0, 20) + '…' : post.title,
       views: post.views,
       likes: post.likes,
       comments: post.comments,
@@ -182,7 +216,9 @@ export default function AnalyticsPage() {
               </button>
               <div>
                 <div className={styles.title}>Analytics</div>
-                <div className={styles.subtitle}>Track your content performance</div>
+                <div className={styles.subtitle}>
+                  Track your content performance
+                </div>
               </div>
             </div>
           </div>
@@ -218,7 +254,10 @@ export default function AnalyticsPage() {
           <div className={styles.topPostsTable}>
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className={styles.skeletonRow}>
-                <div className={styles.skeletonCell} style={{ width: 24, height: 24, borderRadius: '50%' }} />
+                <div
+                  className={styles.skeletonCell}
+                  style={{ width: 24, height: 24, borderRadius: '50%' }}
+                />
                 <div className={styles.skeletonCell} />
                 <div className={styles.skeletonCell} style={{ width: 60 }} />
                 <div className={styles.skeletonCell} style={{ width: 60 }} />
@@ -236,8 +275,14 @@ export default function AnalyticsPage() {
               <div key={i} className={styles.skeletonActivity}>
                 <div className={styles.skeletonActivityIcon} />
                 <div className={styles.skeletonActivityLines}>
-                  <div className={styles.skeletonActivityLine} style={{ width: '70%' }} />
-                  <div className={styles.skeletonActivityLine} style={{ width: '40%' }} />
+                  <div
+                    className={styles.skeletonActivityLine}
+                    style={{ width: '70%' }}
+                  />
+                  <div
+                    className={styles.skeletonActivityLine}
+                    style={{ width: '40%' }}
+                  />
                 </div>
               </div>
             ))}
@@ -252,8 +297,13 @@ export default function AnalyticsPage() {
       <div className={styles.page}>
         <div className={styles.error}>
           <div className={styles.errorTitle}>Failed to load analytics</div>
-          <p className={styles.errorMessage}>Something went wrong while fetching your analytics data. Please try again.</p>
-          <Button variant="primary" onClick={() => refetch()}>Retry</Button>
+          <p className={styles.errorMessage}>
+            Something went wrong while fetching your analytics data. Please try
+            again.
+          </p>
+          <Button variant="primary" onClick={() => refetch()}>
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -289,13 +339,20 @@ export default function AnalyticsPage() {
           const Icon = stat.icon;
           const TrendIcon = stat.trend >= 0 ? TrendingUp : TrendingDown;
           return (
-            <Card key={stat.key} className={`${styles.statCard} ${styles[stat.cardClass]}`}>
+            <Card
+              key={stat.key}
+              className={`${styles.statCard} ${styles[stat.cardClass]}`}
+            >
               <div className={styles.statHeader}>
-                <div className={`${styles.statIconWrapper} ${styles[stat.iconClass]}`}>
+                <div
+                  className={`${styles.statIconWrapper} ${styles[stat.iconClass]}`}
+                >
                   <Icon size={18} />
                 </div>
                 {stat.trend !== 0 && (
-                  <span className={`${styles.statTrend} ${stat.trend >= 0 ? styles.trendUp : styles.trendDown}`}>
+                  <span
+                    className={`${styles.statTrend} ${stat.trend >= 0 ? styles.trendUp : styles.trendDown}`}
+                  >
                     <TrendIcon size={12} />
                     {Math.abs(stat.trend)}%
                   </span>
@@ -316,17 +373,41 @@ export default function AnalyticsPage() {
           <div className={styles.chartContainer}>
             {chartData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }} layout="vertical">
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+                  layout="vertical"
+                >
                   <CartesianGrid {...CHART_GRID_STYLE} />
-                  <XAxis type="number" tick={CHART_AXIS_STYLE} axisLine={false} tickLine={false} />
-                  <YAxis type="category" dataKey="title" tick={CHART_AXIS_STYLE} axisLine={false} tickLine={false} width={120} />
+                  <XAxis
+                    type="number"
+                    tick={CHART_AXIS_STYLE}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="title"
+                    tick={CHART_AXIS_STYLE}
+                    axisLine={false}
+                    tickLine={false}
+                    width={120}
+                  />
                   <RechartsTooltip content={<CustomTooltip />} />
-                  <Bar dataKey="views" name="Views" fill="var(--primary-500)" radius={[0, 4, 4, 0]} maxBarSize={20} />
+                  <Bar
+                    dataKey="views"
+                    name="Views"
+                    fill="var(--primary-500)"
+                    radius={[0, 4, 4, 0]}
+                    maxBarSize={20}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className={styles.emptyChart}>
-                <p>No post data yet. Create your first post to see analytics.</p>
+                <p>
+                  No post data yet. Create your first post to see analytics.
+                </p>
               </div>
             )}
           </div>
@@ -339,13 +420,41 @@ export default function AnalyticsPage() {
           <div className={styles.chartContainer}>
             {chartData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }} layout="vertical">
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+                  layout="vertical"
+                >
                   <CartesianGrid {...CHART_GRID_STYLE} />
-                  <XAxis type="number" tick={CHART_AXIS_STYLE} axisLine={false} tickLine={false} />
-                  <YAxis type="category" dataKey="title" tick={CHART_AXIS_STYLE} axisLine={false} tickLine={false} width={120} />
+                  <XAxis
+                    type="number"
+                    tick={CHART_AXIS_STYLE}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="title"
+                    tick={CHART_AXIS_STYLE}
+                    axisLine={false}
+                    tickLine={false}
+                    width={120}
+                  />
                   <RechartsTooltip content={<CustomTooltip />} />
-                  <Bar dataKey="likes" name="Likes" fill="var(--rose-500)" radius={[0, 4, 4, 0]} maxBarSize={20} />
-                  <Bar dataKey="comments" name="Comments" fill="var(--color-info)" radius={[0, 4, 4, 0]} maxBarSize={20} />
+                  <Bar
+                    dataKey="likes"
+                    name="Likes"
+                    fill="var(--rose-500)"
+                    radius={[0, 4, 4, 0]}
+                    maxBarSize={20}
+                  />
+                  <Bar
+                    dataKey="comments"
+                    name="Comments"
+                    fill="var(--color-info)"
+                    radius={[0, 4, 4, 0]}
+                    maxBarSize={20}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -371,18 +480,47 @@ export default function AnalyticsPage() {
           </div>
           {topPosts && topPosts.length > 0 ? (
             topPosts.map((post, i) => (
-              <Link key={post.id} href={`/posts/${post.slug}`} className={styles.topPostRow}>
-                <span className={`${styles.topPostRank} ${i === 0 ? styles.topPostRankGold : i === 1 ? styles.topPostRankSilver : i === 2 ? styles.topPostRankBronze : ''}`}>
+              <Link
+                key={post.id}
+                href={`/posts/${post.slug}`}
+                className={styles.topPostRow}
+              >
+                <span
+                  className={`${styles.topPostRank} ${i === 0 ? styles.topPostRankGold : i === 1 ? styles.topPostRankSilver : i === 2 ? styles.topPostRankBronze : ''}`}
+                >
                   #{i + 1}
                 </span>
                 <span className={styles.topPostTitle}>{post.title}</span>
-                <span className={styles.topPostStat} style={{ textAlign: 'right' }}>{formatNumber(post.views)}</span>
-                <span className={styles.topPostStat} style={{ textAlign: 'right' }}>{formatNumber(post.likes)}</span>
-                <span className={styles.topPostStat} style={{ textAlign: 'right' }}>{formatNumber(post.comments)}</span>
+                <span
+                  className={styles.topPostStat}
+                  style={{ textAlign: 'right' }}
+                >
+                  {formatNumber(post.views)}
+                </span>
+                <span
+                  className={styles.topPostStat}
+                  style={{ textAlign: 'right' }}
+                >
+                  {formatNumber(post.likes)}
+                </span>
+                <span
+                  className={styles.topPostStat}
+                  style={{ textAlign: 'right' }}
+                >
+                  {formatNumber(post.comments)}
+                </span>
               </Link>
             ))
           ) : (
-            <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-sm)', padding: 'var(--space-4)' }}>No posts yet.</p>
+            <p
+              style={{
+                color: 'var(--text-tertiary)',
+                fontSize: 'var(--fs-sm)',
+                padding: 'var(--space-4)',
+              }}
+            >
+              No posts yet.
+            </p>
           )}
         </div>
       </div>
@@ -395,17 +533,31 @@ export default function AnalyticsPage() {
           {notifications.length > 0 ? (
             notifications.map((item) => (
               <div key={item.id} className={styles.activityItem}>
-                <div className={`${styles.activityIcon} ${styles.activityIconNotice}`}>
+                <div
+                  className={`${styles.activityIcon} ${styles.activityIconNotice}`}
+                >
                   <Bell size={14} />
                 </div>
                 <div className={styles.activityContent}>
-                  <p className={styles.activityText}>{item.title}: {item.message}</p>
-                  <span className={styles.activityTime}>{formatRelativeDate(item.createdAt)}</span>
+                  <p className={styles.activityText}>
+                    {item.title}: {item.message}
+                  </p>
+                  <span className={styles.activityTime}>
+                    {formatRelativeDate(item.createdAt)}
+                  </span>
                 </div>
               </div>
             ))
           ) : (
-            <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--fs-sm)', padding: 'var(--space-4)' }}>No recent notifications.</p>
+            <p
+              style={{
+                color: 'var(--text-tertiary)',
+                fontSize: 'var(--fs-sm)',
+                padding: 'var(--space-4)',
+              }}
+            >
+              No recent notifications.
+            </p>
           )}
         </div>
       </div>

@@ -70,7 +70,10 @@ export default function UserMenu({ className }: UserMenuProps) {
           <span className={styles.userName}>{user.name}</span>
           <span className={styles.userEmail}>{user.email}</span>
         </div>
-        <ChevronDown size={14} className={cn(styles.chevron, open && styles.chevronOpen)} />
+        <ChevronDown
+          size={14}
+          className={cn(styles.chevron, open && styles.chevronOpen)}
+        />
       </button>
 
       {open && (

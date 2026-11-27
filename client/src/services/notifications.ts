@@ -12,7 +12,9 @@ export const notificationsService = {
   },
 
   async getUnreadCount(): Promise<number> {
-    const res = await api.get<ApiResponse<{ count: number }>>('/notifications/unread-count');
+    const res = await api.get<ApiResponse<{ count: number }>>(
+      '/notifications/unread-count'
+    );
     return res.data.data.count;
   },
 

@@ -100,24 +100,39 @@ export default function BubbleMenu({ editor }: BubbleMenuProps) {
       <div className={styles.group}>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('heading', { level: 1 }) && styles.active)}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          className={cn(
+            styles.button,
+            editor.isActive('heading', { level: 1 }) && styles.active
+          )}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
           aria-label="Heading 1"
         >
           <Heading1 size={16} />
         </button>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('heading', { level: 2 }) && styles.active)}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          className={cn(
+            styles.button,
+            editor.isActive('heading', { level: 2 }) && styles.active
+          )}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
           aria-label="Heading 2"
         >
           <Heading2 size={16} />
         </button>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('heading', { level: 3 }) && styles.active)}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          className={cn(
+            styles.button,
+            editor.isActive('heading', { level: 3 }) && styles.active
+          )}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
           aria-label="Heading 3"
         >
           <Heading3 size={16} />
@@ -129,7 +144,10 @@ export default function BubbleMenu({ editor }: BubbleMenuProps) {
       <div className={styles.group}>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('blockquote') && styles.active)}
+          className={cn(
+            styles.button,
+            editor.isActive('blockquote') && styles.active
+          )}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           aria-label="Blockquote"
         >
@@ -137,7 +155,10 @@ export default function BubbleMenu({ editor }: BubbleMenuProps) {
         </button>
         <button
           type="button"
-          className={cn(styles.button, editor.isActive('codeBlock') && styles.active)}
+          className={cn(
+            styles.button,
+            editor.isActive('codeBlock') && styles.active
+          )}
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           aria-label="Code block"
         >
@@ -158,6 +179,6 @@ export default function BubbleMenu({ editor }: BubbleMenuProps) {
         </button>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }

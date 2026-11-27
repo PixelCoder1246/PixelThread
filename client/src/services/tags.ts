@@ -11,10 +11,13 @@ export const tagsService = {
     return res.data.data;
   },
 
-  async getPosts(name: string, params?: {
-    page?: number;
-    limit?: number;
-  }): Promise<{ tag: Tag; posts: Post[]; pagination: unknown }> {
+  async getPosts(
+    name: string,
+    params?: {
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<{ tag: Tag; posts: Post[]; pagination: unknown }> {
     const res = await api.get(`/tags/${name}/posts`, { params });
     return res.data.data;
   },

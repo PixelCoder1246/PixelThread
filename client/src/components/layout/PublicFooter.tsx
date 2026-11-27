@@ -38,8 +38,8 @@ export default function PublicFooter() {
               PixelThread
             </Link>
             <p className={styles.tagline}>
-              The modern platform for creators to write, share, and grow their audience with
-              intelligent tools and beautiful publishing.
+              The modern platform for creators to write, share, and grow their
+              audience with intelligent tools and beautiful publishing.
             </p>
           </div>
 
