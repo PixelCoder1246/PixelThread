@@ -1,6 +1,11 @@
+function normalizeApiBaseUrl(url?: string): string {
+  const raw = (url || 'http://localhost:5000/api').trim().replace(/\/+$/, '');
+  return raw.endsWith('/api') ? raw : `${raw}/api`;
+}
+
 export const config = {
   api: {
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+    baseUrl: normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL),
     timeout: 30000,
     withCredentials: true,
   },
