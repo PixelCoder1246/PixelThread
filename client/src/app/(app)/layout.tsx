@@ -22,6 +22,8 @@ export default function AppRouteLayout({
     pathname.startsWith('/explore') ||
     pathname.startsWith('/trending') ||
     pathname.startsWith('/search') ||
+    pathname.startsWith('/bookmarks') ||
+    pathname.startsWith('/history') ||
     (pathname.startsWith('/profile/') && pathname !== '/profile');
 
   const requiresAuth = !isPublicRoute;

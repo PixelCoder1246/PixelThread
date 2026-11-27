@@ -11,12 +11,15 @@ import Badge from '@/components/ui/Badge';
 import Avatar from '@/components/ui/Avatar';
 import Button from '@/components/ui/Button';
 import EmptyState from '@/components/common/EmptyState';
+import GuestPrompt from '@/components/common/GuestPrompt';
 import LoadingState from '@/components/common/LoadingState';
 import Pagination from '@/components/common/Pagination';
+import { useAuthStore } from '@/store';
 import styles from './page.module.css';
 
 export default function BookmarksPage() {
   const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
   const [bookmarks, setBookmarks] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,8 +47,12 @@ export default function BookmarksPage() {
   }, []);
 
   useEffect(() => {
-    fetchBookmarks(page);
-  }, [page, fetchBookmarks]);
+    if (isAuthenticated) {
+      fetchBookmarks(page);
+    } else {
+      setIsLoading(false);
+    }
+  }, [page, fetchBookmarks, isAuthenticated]);
 
   const handleRemoveBookmark = useCallback(
     async (postId: string, e: React.MouseEvent) => {
@@ -77,7 +84,14 @@ export default function BookmarksPage() {
         </div>
       </div>
 
-      {isLoading ? (
+      {!isAuthenticated ? (
+        <GuestPrompt
+          icon={Bookmark}
+          title="Sign in to view your bookmarks"
+          description="Save your favorite stories and access them anytime, or keep browsing the feed."
+          redirectPath="/bookmarks"
+        />
+      ) : isLoading ? (
         <div className={styles.loadingGrid}>
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className={styles.skeletonCard}>

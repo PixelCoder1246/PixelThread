@@ -9,6 +9,8 @@ import { ROUTES } from '@/constants';
 import Avatar from '@/components/ui/Avatar';
 import Button from '@/components/ui/Button';
 import EmptyState from '@/components/common/EmptyState';
+import GuestPrompt from '@/components/common/GuestPrompt';
+import { useAuthStore } from '@/store';
 import styles from './page.module.css';
 
 import type { HistoryEntry } from '@/services/history';
@@ -69,6 +71,7 @@ function groupByDate(entries: HistoryEntry[]): GroupedEntries[] {
 
 export default function HistoryPage() {
   const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -96,9 +99,12 @@ export default function HistoryPage() {
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    fetchHistory();
-  }, [fetchHistory]);
+    if (isAuthenticated) {
+      fetchHistory();
+    } else {
+      setIsLoading(false);
+    }
+  }, [fetchHistory, isAuthenticated]);
 
   const grouped = useMemo(() => groupByDate(entries), [entries]);
 
@@ -122,7 +128,14 @@ export default function HistoryPage() {
         )}
       </div>
 
-      {isLoading ? (
+      {!isAuthenticated ? (
+        <GuestPrompt
+          icon={History}
+          title="Sign in to view your reading history"
+          description="Keep track of stories you have read and pick up right where you left off, or continue exploring."
+          redirectPath="/history"
+        />
+      ) : isLoading ? (
         <div className={styles.timeline}>
           {Array.from({ length: 3 }).map((_, groupIdx) => (
             <div key={groupIdx} className={styles.dateGroup}>

@@ -31,8 +31,9 @@ import { notificationsService } from '@/services/notifications';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { formatNumber, formatRelativeDate } from '@/lib/utils';
-import { useRequireAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import AuthLoader from '@/components/common/AuthLoader';
+import GuestPrompt from '@/components/common/GuestPrompt';
 import styles from './page.module.css';
 
 const CHART_AXIS_STYLE = { fontSize: 12, fill: 'var(--text-tertiary)' };
@@ -87,7 +88,7 @@ function CustomTooltip({
 }
 
 export default function AnalyticsPage() {
-  const { isAuthenticated, isLoading: isAuthLoading } = useRequireAuth();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
   const {
@@ -197,7 +198,36 @@ export default function AnalyticsPage() {
   }
 
   if (!isAuthenticated) {
-    return <AuthLoader fullPage message="Redirecting to login" />;
+    return (
+      <div className={styles.page}>
+        <div className={styles.header}>
+          <div className={styles.headerLeft}>
+            <div className={styles.headerTopRow}>
+              <button
+                type="button"
+                className={styles.backButton}
+                onClick={() => router.back()}
+                aria-label="Go back"
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <div>
+                <div className={styles.title}>Analytics</div>
+                <div className={styles.subtitle}>
+                  Track your content performance
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <GuestPrompt
+          icon={Activity}
+          title="Sign in to view your analytics"
+          description="Track views, likes, comments, and top-performing posts for your account, or continue browsing."
+          redirectPath="/analytics"
+        />
+      </div>
+    );
   }
 
   if (isLoading) {
